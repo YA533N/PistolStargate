@@ -1,0 +1,37 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/player/player.gd" id="1_player"]
+[ext_resource type="Script" path="res://scripts/systems/health.gd" id="2_health"]
+[ext_resource type="PackedScene" path="res://scenes/weapons/laugo_alien_pistol.tscn" id="3_pistol"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_body"]
+radius = 0.4
+height = 1.8
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_body"]
+albedo_color = Color(0.95, 0.8, 0.4, 1)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_body"]
+material = SubResource("StandardMaterial3D_body")
+radius = 0.4
+height = 1.8
+
+[node name="Player" type="CharacterBody3D" groups=["player"]]
+collision_layer = 2
+script = ExtResource("1_player")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+shape = SubResource("CapsuleShape3D_body")
+
+[node name="Body" type="Node3D" parent="."]
+
+[node name="Mesh" type="MeshInstance3D" parent="Body"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+mesh = SubResource("CapsuleMesh_body")
+
+[node name="Weapon" parent="Body" instance=ExtResource("3_pistol")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.45, 1.1, -0.3)
+
+[node name="Health" type="Node" parent="."]
+script = ExtResource("2_health")

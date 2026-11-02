@@ -1,0 +1,19 @@
+# Godot 4 cache (rebuilt on open; never commit)
+.godot/
+/android/
+
+# .NET leftovers. The project is GDScript-only, but the .NET editor can create these.
+.mono/
+data_*/
+mono_crash.*.json
+
+# Exported builds
+/builds/
+
+# Per-machine editor settings (each teammate's Godot path differs)
+.vscode/settings.json
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini

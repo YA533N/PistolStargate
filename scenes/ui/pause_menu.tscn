@@ -1,0 +1,60 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/pause_menu.gd" id="1_pause"]
+
+[node name="PauseMenu" type="CanvasLayer"]
+process_mode = 3
+layer = 10
+script = ExtResource("1_pause")
+
+[node name="Dim" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.6)
+
+[node name="Center" type="CenterContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Buttons" type="VBoxContainer" parent="Center"]
+custom_minimum_size = Vector2(360, 0)
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="Title" type="Label" parent="Center/Buttons"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 64
+text = "PAUSED"
+horizontal_alignment = 1
+
+[node name="ResumeButton" type="Button" parent="Center/Buttons"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Resume"
+
+[node name="RestartButton" type="Button" parent="Center/Buttons"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Restart"
+
+[node name="MainMenuButton" type="Button" parent="Center/Buttons"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Main Menu"
+
+[node name="QuitButton" type="Button" parent="Center/Buttons"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Quit"
+
+[connection signal="pressed" from="Center/Buttons/ResumeButton" to="." method="_on_resume_pressed"]
+[connection signal="pressed" from="Center/Buttons/RestartButton" to="." method="_on_restart_pressed"]
+[connection signal="pressed" from="Center/Buttons/MainMenuButton" to="." method="_on_main_menu_pressed"]
+[connection signal="pressed" from="Center/Buttons/QuitButton" to="." method="_on_quit_pressed"]
