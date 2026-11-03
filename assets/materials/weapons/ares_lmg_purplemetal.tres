@@ -1,0 +1,7 @@
+[gd_resource type="StandardMaterial3D" format=3]
+
+[resource]
+resource_name = "ares_lmg_purplemetal"
+albedo_color = Color(0.35, 0.15, 0.55, 1)
+metallic = 0.8
+roughness = 0.35

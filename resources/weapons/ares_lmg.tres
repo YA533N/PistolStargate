@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="WeaponData" format=3]
+
+[ext_resource type="Script" path="res://scripts/weapons/weapon_data.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://assets/models/weapons/ares_lmg.glb" id="2_model"]
+
+[resource]
+script = ExtResource("1_script")
+id = &"ares_lmg"
+display_name = "Ares Invader"
+weapon_type = "LMG"
+rarity = 3
+level = 10
+description = "Spins up: the longer you hold the trigger, the faster it fires (5 up to 18 shots per second)."
+flavor_text = "Brrrrrrrrrrrrrrrrt."
+model = ExtResource("2_model")
+hold_offset = Vector3(0, 0, -0.24)
+automatic = true
+fire_rate = 5.0
+max_fire_rate = 18.0
+spin_up_time = 1.6
+damage = 9
+spread_degrees = 6.0
+projectile_speed = 40.0
+projectile_size = 0.11
+projectile_color = Color(1, 0.3, 0.8, 1)
+max_ammo = 300

@@ -1,0 +1,23 @@
+[gd_resource type="StandardMaterial3D" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/textures/arc_charger/Blaster_Base_BaseColor.jpg" id="1_tex"]
+[ext_resource type="Texture2D" path="res://assets/textures/arc_charger/Blaster_Base_Metallic.jpg" id="2_tex"]
+[ext_resource type="Texture2D" path="res://assets/textures/arc_charger/Blaster_Base_Roughness.jpg" id="3_tex"]
+[ext_resource type="Texture2D" path="res://assets/textures/arc_charger/Blaster_Base_Emissive.jpg" id="4_tex"]
+[ext_resource type="Texture2D" path="res://assets/textures/arc_charger/Blaster_Base_Normal.jpg" id="5_tex"]
+
+[resource]
+resource_name = "arc_charger_base"
+albedo_texture = ExtResource("1_tex")
+metallic = 1.0
+metallic_texture = ExtResource("2_tex")
+metallic_texture_channel = 0
+roughness_texture = ExtResource("3_tex")
+roughness_texture_channel = 0
+emission_enabled = true
+emission_operator = 1
+emission = Color(1, 1, 1, 1)
+emission_energy_multiplier = 2
+emission_texture = ExtResource("4_tex")
+normal_enabled = true
+normal_texture = ExtResource("5_tex")

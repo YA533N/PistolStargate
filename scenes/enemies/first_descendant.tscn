@@ -1,0 +1,48 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/enemies/first_descendant.gd" id="1_boss"]
+[ext_resource type="Script" path="res://scripts/systems/health.gd" id="2_health"]
+[ext_resource type="PackedScene" path="res://assets/models/characters/first_descendant/first_descendant.glb" id="3_model"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_body"]
+radius = 0.95
+height = 3.2
+
+[node name="FirstDescendant" type="CharacterBody3D"]
+collision_layer = 4
+collision_mask = 3
+script = ExtResource("1_boss")
+display_name = "THE FIRST DESCENDANT"
+tier = 2
+money_drop = Vector2i(40, 60)
+ammo_drop_chance = 1.0
+health_drop_chance = 1.0
+weapon_drop_chance = 0.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, 0)
+shape = SubResource("CapsuleShape3D_body")
+
+[node name="Model" parent="." instance=ExtResource("3_model")]
+transform = Transform3D(0.95, 0, 0, 0, 0.95, 0, 0, 0, 0.95, 0, 0, 0)
+
+[node name="Warning" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.2, 0)
+pixel_size = 0.012
+billboard = 1
+no_depth_test = true
+modulate = Color(1, 0.2, 0.1, 1)
+text = "!"
+font_size = 110
+outline_size = 24
+
+[node name="WarningLight" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, 0.8)
+light_color = Color(1, 0.15, 0.05, 1)
+light_energy = 3.0
+omni_range = 6.0
+
+[node name="Health" type="Node" parent="."]
+script = ExtResource("2_health")
+max_health = 500
+number_height = 4.0

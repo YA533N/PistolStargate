@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="WeaponData" format=3]
+
+[ext_resource type="Script" path="res://scripts/weapons/weapon_data.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://assets/models/weapons/cyber_smg.glb" id="2_model"]
+
+[resource]
+script = ExtResource("1_script")
+id = &"cyber_smg"
+display_name = "Neon Hornet"
+weapon_type = "SMG"
+rarity = 1
+level = 4
+description = "Sprays a storm of tiny neon rounds. Huge fire rate, poor accuracy."
+flavor_text = "Bzzzzzzzzzt."
+model = ExtResource("2_model")
+hold_offset = Vector3(0, 0, -0.16)
+automatic = true
+fire_rate = 13.0
+damage = 5
+spread_degrees = 9.0
+projectile_speed = 36.0
+projectile_size = 0.09
+projectile_color = Color(0.7, 1, 0.2, 1)
+max_ammo = 240

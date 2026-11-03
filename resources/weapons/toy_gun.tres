@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="WeaponData" format=3]
+
+[ext_resource type="Script" path="res://scripts/weapons/weapon_data.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://assets/models/weapons/toy_gun.glb" id="2_model"]
+
+[resource]
+script = ExtResource("1_script")
+id = &"toy_gun"
+display_name = "Mr. Wiggles' Blaster"
+weapon_type = "Toy Launcher"
+rarity = 4
+level = 14
+description = "A children's toy. Fires bouncy balls that ricochet 4 times and explode on every impact."
+flavor_text = "Ages 3 and up. Batteries not included. War crimes not covered by the warranty."
+model = ExtResource("2_model")
+hold_offset = Vector3(0, 0, -0.16)
+fire_rate = 2.5
+damage = 20
+explosion_radius = 2.2
+explosion_damage = 22
+bounces = 4
+projectile_speed = 20.0
+projectile_size = 0.26
+projectile_color = Color(1, 0.85, 0.2, 1)
+projectile_range = 60.0
+max_ammo = 50

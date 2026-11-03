@@ -1,0 +1,8 @@
+[gd_resource type="StandardMaterial3D" format=3]
+
+[resource]
+resource_name = "ares_lmg_pink_neon"
+albedo_color = Color(1, 0.25, 0.75, 1)
+emission_enabled = true
+emission = Color(1, 0.25, 0.75, 1)
+emission_energy_multiplier = 3

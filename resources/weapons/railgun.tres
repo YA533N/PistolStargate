@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="WeaponData" format=3]
+
+[ext_resource type="Script" path="res://scripts/weapons/weapon_data.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://assets/models/weapons/railgun.glb" id="2_model"]
+
+[resource]
+script = ExtResource("1_script")
+id = &"railgun"
+display_name = "RS-422 Railgun"
+weapon_type = "Railgun"
+rarity = 3
+level = 11
+description = "Fires an instant beam that punches through every enemy in a line."
+flavor_text = "Physics, but violent."
+model = ExtResource("2_model")
+hold_offset = Vector3(0, 0, -0.23)
+fire_rate = 0.8
+damage = 120
+hitscan = true
+pierce = -1
+projectile_color = Color(0.4, 0.8, 1, 1)
+projectile_range = 60.0
+max_ammo = 16

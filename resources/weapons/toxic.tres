@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="WeaponData" format=3]
+
+[ext_resource type="Script" path="res://scripts/weapons/weapon_data.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://assets/models/weapons/toxic.glb" id="2_model"]
+
+[resource]
+script = ExtResource("1_script")
+id = &"toxic"
+display_name = "Toxic Stinger"
+weapon_type = "Rifle"
+rarity = 1
+level = 5
+description = "Every hit poisons the target for 3 s (8 damage per second). Poisoned enemies glow green."
+flavor_text = "Do not lick."
+model = ExtResource("2_model")
+hold_offset = Vector3(0, 0, -0.2)
+automatic = true
+fire_rate = 6.0
+damage = 6
+spread_degrees = 3.0
+projectile_speed = 30.0
+projectile_size = 0.12
+projectile_color = Color(0.4, 1, 0.3, 1)
+poison_dps = 8
+poison_duration = 3.0
+max_ammo = 120

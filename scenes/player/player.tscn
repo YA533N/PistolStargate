@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://scripts/player/player.gd" id="1_player"]
 [ext_resource type="Script" path="res://scripts/systems/health.gd" id="2_health"]
-[ext_resource type="PackedScene" path="res://scenes/weapons/laugo_alien_pistol.tscn" id="3_pistol"]
+[ext_resource type="Script" path="res://scripts/weapons/arsenal.gd" id="3_arsenal"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_body"]
 radius = 0.4
@@ -18,6 +18,7 @@ height = 1.8
 
 [node name="Player" type="CharacterBody3D" groups=["player"]]
 collision_layer = 2
+collision_mask = 5
 script = ExtResource("1_player")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
@@ -30,8 +31,12 @@ shape = SubResource("CapsuleShape3D_body")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
 mesh = SubResource("CapsuleMesh_body")
 
-[node name="Weapon" parent="Body" instance=ExtResource("3_pistol")]
+[node name="Hand" type="Marker3D" parent="Body"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.45, 1.1, -0.3)
 
 [node name="Health" type="Node" parent="."]
 script = ExtResource("2_health")
+
+[node name="Arsenal" type="Node" parent="." node_paths=PackedStringArray("hand")]
+script = ExtResource("3_arsenal")
+hand = NodePath("../Body/Hand")

@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="WeaponData" format=3]
+
+[ext_resource type="Script" path="res://scripts/weapons/weapon_data.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://assets/models/weapons/arc_charger.glb" id="2_model"]
+
+[resource]
+script = ExtResource("1_script")
+id = &"arc_charger"
+display_name = "Arc Charger"
+weapon_type = "Arc Blaster"
+rarity = 4
+level = 13
+description = "Bolts arc lightning to 3 more enemies within 7 m, dealing 70% damage to each."
+flavor_text = "Shocking. Literally."
+model = ExtResource("2_model")
+hold_offset = Vector3(0, 0, -0.16)
+automatic = true
+fire_rate = 5.0
+damage = 14
+projectile_speed = 42.0
+projectile_size = 0.15
+projectile_color = Color(0.35, 0.85, 1, 1)
+chain_count = 3
+chain_range = 7.0
+chain_damage_factor = 0.7
+max_ammo = 120

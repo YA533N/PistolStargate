@@ -56,10 +56,17 @@ theme_override_font_sizes/font_size = 30
 text = "Dialogue text goes here."
 autowrap_mode = 3
 
+[node name="ChoiceRow" type="HBoxContainer" parent="Panel/Column"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 24
+alignment = 1
+
 [node name="ContinueHint" type="Label" parent="Panel/Column"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.7, 0.65, 0.85, 1)
 theme_override_font_sizes/font_size = 22
-text = "[F] continue"
+text = "[E] continue"
 horizontal_alignment = 2

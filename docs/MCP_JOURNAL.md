@@ -160,6 +160,65 @@ Windowed tests: trooper still at start, animating while talking, still after; he
 
 ---
 
+## Task 5: Weapons, rarity loot, Infinite Pistol, Proving Grounds tutorial and boss
+
+- **Date:** 2026-11-02
+- **Type:** Script development + asset pipeline + debugging + testing
+- **Tool:** Claude Code (AI coding assistant in VS Code), Blender 5.2 command line, Python (Pillow)
+- **Team member:** Mohamed Ashraf
+
+**Task description**
+Import the 12 weapons from the `weapons` folder with varying rarity; weapons on the floor shine a beam in their
+rarity colour; an item card with the weapon's silhouette, rarity rank and what it does; a cheat to spawn/equip
+any weapon to test it. The existing pistol becomes the Infinite Pistol: it one-shots normal enemies, which then
+drop 2-3 weapons, ammo and cash, and it only recharges after kills. New start: no weapon; the Orange Trooper
+teleports the player to a tutorial area, hands over the pistol, makes them shoot a chicken ("you have to be
+merciless... do you understand?"), then THE FIRST DESCENDANT boss with a machine gun, in a big arena with
+hide-spike traps and obstacles to jump.
+
+**Prompt / instruction used**
+The team's full feature description (weapons first, then the tutorial flow, then the arena hazards).
+
+**Relevant output**
+- Asset pipeline: Blender CLI script that bakes each gun (FBX/OBJ/glTF/.blend, some rigged) into one static mesh,
+  turns the barrel to -Z, scales it to a hand-held length, decimates the heavy ones and exports a texture-less GLB;
+  Python script that downscales every texture to 1K into `assets/textures/<gun>/` and writes one material per slot.
+- `WeaponData` resource per gun (`resources/weapons/`), `WeaponLibrary`, `Rarity` (5 tiers + Infinite).
+  Specials: poison, homing, explosions, pierce, ricochet, railgun beam, chain lightning, spin-up, shotgun spread.
+- `Arsenal` on the player: 2 slots + the Infinite Pistol, ammo, Q/wheel/1-2-3 swapping, F pickup/swap,
+  pistol kill-charge and miss refund, saved in `GameState` between scenes.
+- `WeaponPickup` (rarity beam + ring shaders, spinning model), `LootPickup` (ammo/cash/health), `Loot` (drops,
+  jackpot), HUD `WeaponCard` (silhouette rendered in a SubViewport) and `WeaponPanel`, boss health bar.
+- `Enemy` base, `Chicken` (code-animated), `FirstDescendant` boss (sweep and burst attacks with wind-up),
+  `TrainingDummy`, `SpikeTrap`, dialogue questions with answer buttons, `Transition` fades, F4 cheat menu.
+- `proving_grounds.tscn` with the scripted tutorial and a boss checkpoint.
+
+**Errors or incorrect suggestions**
+- Five guns rendered pure white: the material generator repeated bug B05 (emission operator Add). See B07.
+- The chicken and spike-trap FBX imports silently failed because new FBX files defaulted to the FBX2glTF importer (B08).
+- The chicken couldn't be hit: bullets fly at hand height, above its 0.9 m model (B06). Found by the end-to-end test.
+- The item card stretched to the bottom of the screen (B09). Found in a screenshot.
+- Test-harness mistakes (not game bugs): compiling the test before the autoloads existed; setting the trigger
+  flag directly instead of simulating the mouse button; a loop counted render frames instead of physics frames.
+
+**Testing performed**
+Two headless suites, both passing with 0 failures:
+- Weapons test (30 checks): every gun damages a dummy, poison, spin-up 5 -> 18/s, chain lightning, pistol
+  instakill + jackpot + miss refund + 3-kill recharge, pickup focus/swap/drop, ammo refill, spike trap damage,
+  loadout saving.
+- End-to-end test (21 checks): hub talk -> teleport -> pistol -> "No" re-asks -> chicken -> 3 weapons -> boss lands
+  and fires -> boss killed with the dropped guns -> portal opens -> checkpoint restart.
+
+Windowed screenshots were also checked for the beams, item card, HUD, boss, spike traps and cheat menu.
+
+**Student modifications** *(team)*
+
+**What was learned** *(team)*
+
+**Why suggestions were accepted / modified / rejected** *(team)*
+
+---
+
 ## Task template
 
 - **Date / Type / Tool / Team member:**

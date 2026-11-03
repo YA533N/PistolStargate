@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="WeaponData" format=3]
+
+[ext_resource type="Script" path="res://scripts/weapons/weapon_data.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://assets/models/weapons/plasma.glb" id="2_model"]
+
+[resource]
+script = ExtResource("1_script")
+id = &"plasma"
+display_name = "Plasma Popper"
+weapon_type = "Blaster"
+rarity = 2
+level = 7
+description = "Plasma balls burst on impact, hurting everything within 2.4 m."
+flavor_text = "Pop goes the alien."
+model = ExtResource("2_model")
+hold_offset = Vector3(0, 0, -0.12)
+fire_rate = 2.2
+damage = 16
+explosion_radius = 2.4
+explosion_damage = 24
+projectile_speed = 22.0
+projectile_size = 0.28
+projectile_color = Color(0.9, 0.3, 1, 1)
+max_ammo = 40
