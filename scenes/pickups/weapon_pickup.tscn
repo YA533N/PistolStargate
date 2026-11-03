@@ -1,0 +1,74 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/pickups/weapon_pickup.gd" id="1_pickup"]
+[ext_resource type="Shader" path="res://shaders/rarity_beam.gdshader" id="2_beam"]
+[ext_resource type="Shader" path="res://shaders/rarity_ring.gdshader" id="3_ring"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_reach"]
+radius = 1.5
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_beam"]
+render_priority = 0
+shader = ExtResource("2_beam")
+shader_parameter/beam_color = Color(1, 1, 1, 1)
+shader_parameter/intensity = 1.6
+shader_parameter/height = 7.0
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_beam"]
+material = SubResource("ShaderMaterial_beam")
+top_radius = 0.12
+bottom_radius = 0.32
+height = 7.0
+radial_segments = 16
+rings = 1
+cap_top = false
+cap_bottom = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ring"]
+render_priority = 0
+shader = ExtResource("3_ring")
+shader_parameter/ring_color = Color(1, 1, 1, 1)
+shader_parameter/intensity = 1.5
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_ring"]
+material = SubResource("ShaderMaterial_ring")
+size = Vector2(2.4, 2.4)
+
+[node name="WeaponPickup" type="Area3D"]
+collision_layer = 32
+collision_mask = 2
+monitorable = false
+script = ExtResource("1_pickup")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
+shape = SubResource("SphereShape3D_reach")
+
+[node name="Visual" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
+
+[node name="Beam" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.5, 0)
+cast_shadow = 0
+mesh = SubResource("CylinderMesh_beam")
+
+[node name="Ring" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.04, 0)
+cast_shadow = 0
+mesh = SubResource("PlaneMesh_ring")
+
+[node name="Light" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
+light_energy = 1.4
+omni_range = 3.5
+
+[node name="NameLabel" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.9, 0)
+pixel_size = 0.01
+billboard = 1
+no_depth_test = true
+render_priority = 5
+outline_render_priority = 4
+text = "Weapon"
+font_size = 44
+outline_size = 14

@@ -1,0 +1,24 @@
+[gd_resource type="StandardMaterial3D" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/textures/collector/material_baseColor.png" id="1_tex"]
+[ext_resource type="Texture2D" path="res://assets/textures/collector/material_metallicRoughness.jpg" id="2_tex"]
+[ext_resource type="Texture2D" path="res://assets/textures/collector/material_emissive.jpg" id="3_tex"]
+[ext_resource type="Texture2D" path="res://assets/textures/collector/material_normal.jpg" id="4_tex"]
+
+[resource]
+resource_name = "collector_material"
+transparency = 1
+cull_mode = 2
+albedo_texture = ExtResource("1_tex")
+metallic = 1.0
+metallic_texture = ExtResource("2_tex")
+metallic_texture_channel = 2
+roughness_texture = ExtResource("2_tex")
+roughness_texture_channel = 1
+emission_enabled = true
+emission_operator = 1
+emission = Color(1, 1, 1, 1)
+emission_energy_multiplier = 2
+emission_texture = ExtResource("3_tex")
+normal_enabled = true
+normal_texture = ExtResource("4_tex")

@@ -1,7 +1,8 @@
 class_name Player
 extends CharacterBody3D
 ## Isometric player controller (GDD 13.1): camera-relative movement, jump, dash and mouse aim.
-## Slide, grapple and weapon switching are not built yet; their input actions already exist in the Input Map.
+## Weapons live in the Arsenal child (slots, ammo, swapping, pickups). Slide and grapple are not built yet;
+## their input actions already exist in the Input Map.
 ## Values marked "placeholder" are TBD in the GDD and need tuning in playtests.
 
 signal dash_charges_changed(charges: int, max_charges: int)
@@ -34,13 +35,12 @@ signal dash_charges_changed(charges: int, max_charges: int)
 
 @onready var health: Health = $Health
 @onready var body: Node3D = $Body
-## The gun in the player's hand. Null if the player scene has none.
-@onready var weapon: Weapon = get_node_or_null("Body/Weapon")
+@onready var arsenal: Arsenal = $Arsenal
 
 ## Where the mouse cursor points on the player's ground plane. Weapons will fire toward it.
 var aim_point := Vector3.ZERO
 var dash_charges := 0
-## Turned off during dialogue. The player still falls and finishes a dash, but ignores move/jump/dash keys.
+## Turned off during dialogue. The player still falls and finishes a dash, but ignores move/jump/dash/shoot.
 var input_enabled := true
 
 var _dash_time_left := 0.0
@@ -75,9 +75,7 @@ func _physics_process(delta: float) -> void:
 	if was_dashing and not is_dashing():
 		_end_dash()
 
-	# Held, not tapped: the weapon's fire rate decides how often it actually shoots.
-	if input_enabled and weapon and Input.is_action_pressed("shoot"):
-		weapon.try_fire(aim_point)
+	arsenal.update(aim_point, input_enabled, delta)
 
 	if global_position.y < kill_height:
 		_respawn()

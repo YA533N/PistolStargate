@@ -1,0 +1,12 @@
+[gd_resource type="StandardMaterial3D" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/textures/first_descendant/MOB_CMN_1020_B001_PartB_C_1.jpg" id="1"]
+[ext_resource type="Texture2D" path="res://assets/textures/first_descendant/MOB_CMN_1020_B001_PartB_N_0.jpg" id="2"]
+
+[resource]
+resource_name = "FirstDescendantPartB"
+albedo_texture = ExtResource("1")
+metallic = 0.5
+roughness = 0.55
+normal_enabled = true
+normal_texture = ExtResource("2")

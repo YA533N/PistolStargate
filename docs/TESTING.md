@@ -13,21 +13,39 @@ Course requirement (brief §14): at least 10 test cases and at least 3 bugs (at 
 | T05 | Air dash | Jump, then dash across the gap | Player clears the 7 m gap that a jump alone can't | | |
 | T06 | Aim | Move the mouse around the player | Player and gun turn toward the cursor | | |
 | T07 | Pause menu | Press Esc | Game freezes and the pause menu appears; Esc or Resume continues | | |
-| T08 | Main menu | Launch, then click Play | Hub loads with the HUD shown | | |
+| T08 | Main menu | Launch, then click Play | Hub loads with the HUD shown and no weapon in hand (weapon panel says UNARMED) | | |
 | T09 | Health / HUD | Press F1 (debug) | HP bar and label drop by 10 | | |
 | T10 | Death | Press F1 ten times | Scene restarts with full HP | | |
 | T11 | Portal (locked) | Walk into the ARENA portal | "The arena isn't built yet." message appears | | |
 | T12 | Out of bounds | Fall below y = -20 | Player respawns at the start | | |
-| T13 | NPC prompt | Walk within 3 m of the Orange Trooper | "[F] Talk" appears above him; disappears when walking away | | |
+| T13 | NPC prompt | Walk within 3 m of the Orange Trooper | "[E] Talk" appears above him; disappears when walking away | | |
 | T14 | Dialogue open | Press F near the trooper | Box opens at the bottom, text types out, player can't move, trooper turns to face the player | | |
-| T15 | Dialogue advance | Press F while text is typing, then again | First press shows the whole line; second goes to the next line; last line says "[F] close" | | |
+| T15 | Dialogue advance | Press E while text is typing, then again | First press shows the whole line; second goes to the next line; last line says "[E] close" | | |
 | T16 | Dialogue close | Press F on the last line | Box closes and the player can move again | | |
 | T17 | Dialogue out of range | Press F far from the trooper | Nothing happens | | |
-| T18 | Shooting | Hold left mouse | Pistol fires 6 bullets per second toward the cursor | | |
+| T18 | Shooting | Equip the PX-9 (F4 menu) and hold left mouse | Fires 7 bullets per second toward the cursor; ammo counts down | | |
 | T19 | Bullet impact | Shoot a wall or crate | Bullet disappears on contact, never passes through | | |
-| T20 | Bullet damage | Shoot something with a Health component | Loses 10 HP per hit | | |
+| T20 | Bullet damage | Spawn a training dummy (F6) and shoot it | Damage numbers pop up; it heals 3 s after the last hit | | |
 | T21 | No shooting while talking | Hold left mouse during dialogue | No bullets fire | | |
 | T22 | NPC idle | Load the hub, then talk to the trooper | Stands still in his stance; animates only while the box is open; still again after | | |
+| T23 | Rarity beams | F4 -> Spawn ALL weapons around me | Each weapon floats in a beam + ring of its rarity colour (white, green, blue, purple, orange, cyan) | | |
+| T24 | Item card | Walk next to a weapon on the floor | Card shows its silhouette, rarity + RANK number, damage, stats with up/down arrows vs your gun, effect and flavour text | | |
+| T25 | Pick up / swap | With 2 weapons held, press F on a third | It replaces the active gun; the old one drops on the floor with its ammo | | |
+| T26 | Weapon switching | Press Q, scroll the wheel, press 1/2/3 | Active weapon changes; HUD panel and gun model update | | |
+| T27 | Out of ammo | Empty a gun, then click | "out of ammo" message; walking over an ammo pickup refills 35% | | |
+| T28 | Weapon effects | Try each gun on 2 dummies (F4) | Poison ticks green, Orbit Seeker homes, Plasma/Toy explode, sniper and railgun pierce, Collector/Toy ricochet, Arc Charger chains, Ares spins up | | |
+| T29 | Infinite Pistol instakill | Shoot a dummy or chicken with a loaded Infinite Pistol | INSTAKILL; it drops 2-3 weapons, ammo, cash and health ("JACKPOT!") | | |
+| T30 | Infinite Pistol miss | Fire the loaded pistol at nothing | "Missed! The bullet returns to the chamber" and it's loaded again | | |
+| T31 | Infinite Pistol recharge | With the pistol empty, kill 3 enemies with another gun | HUD dots fill up, "INFINITE PISTOL CHARGED!" | | |
+| T32 | Teleport | Finish talking to the Orange Trooper in the hub | Orange flash, the Proving Grounds loads | | |
+| T33 | Question | Answer "No" to "Do you understand?" | "Wrong answer" and he asks again; "Yes" continues | | |
+| T34 | Chicken | Shoot the chicken with the Infinite Pistol | It dies and spills Neon Hornet, Plasma Popper and Longshot X-80 | | |
+| T35 | Boss | Grab the guns and fight THE FIRST DESCENDANT | Drops from the sky, red "!" wind-up, then sweeping sprays and aimed bursts; crates and low walls block his bullets; boss bar at the top | | |
+| T36 | Spike trap | Stand on a spike plate | Red flash, spikes come up ~0.5 s later: 15 damage and a pop upwards; moving off in time avoids it | | |
+| T37 | Low walls | Jump over a grey low wall | Clears it; the orange crates are too tall to jump | | |
+| T38 | Boss checkpoint | Die during the boss fight | Restart at the boss with an empty pistol and the chicken's 3 weapons on the floor | | |
+| T39 | Exit portal | Kill the boss | Trooper returns, portal opens, it leads back to the hub | | |
+| T40 | Cheat menu | Press F4, click Equip / Spawn | Game pauses; weapon goes into your hands / onto the floor; F4 or Esc closes | | |
 
 ## Bugs
 
@@ -38,3 +56,10 @@ Course requirement (brief §14): at least 10 test cases and at least 3 bugs (at 
 | B03 | Orange Trooper stood in a T-pose | Medium | The FBX has two animations; the NPC played the first one, `Take 001`, which is just the bind pose | Set the NPC's `idle_animation` to `mixamo_com` (the fist-fight loop) | Close-up renders at 0.5 s / 1.6 s / 2.8 s show the fighting stance moving | Yes (Task 2) |
 | B04 | Bullets flew through walls and crates | High | Godot 4.7 uses Jolt physics, where an `Area3D` doesn't detect static bodies unless a project setting is on; the first bullets were `Area3D`s | Bullets now ray-cast along each frame's movement (`PhysicsRayQueryParameters3D`), which also stops fast bullets skipping through thin objects | Test: 0.5 s of fire on a dummy = 3 hits, 30 damage; a wall shot 21 m away is removed after 0.65 s (expected 0.7 s at 30 m/s) | Yes (Task 4) |
 | B05 | Portal frame rendered as a solid white glow | Medium | `StandardMaterial3D.emission_operator` defaults to Add, so white emission colour + an almost-black emission texture = white everywhere | Set `emission_operator = Multiply` so only the texture's glowing parts emit | Renders with emission off / on compared; stone arch and inlays now visible | Yes (Task 4) |
+| B06 | The tutorial chicken couldn't be shot | High | Bullets fly level at hand height (~1.2 m); the chicken model is only 0.9 m tall, so every shot passed over it | Chicken hitbox made 1.7 m tall (bigger than the model, as is common in top-down shooters) | End-to-end test: Infinite Pistol kills the chicken, which drops 3 weapons | Yes (Task 5, found by the automated test) |
+| B07 | Five imported guns rendered solid white | Medium | The script that generated the weapon materials repeated B05: emission texture with the default Add operator | Generator and materials set `emission_operator = Multiply` | Contact-sheet render of all 13 guns | Yes (Task 5) |
+| B08 | Chicken and spike trap models failed to load | High | New FBX files defaulted to the FBX2glTF importer, which isn't installed; the import was marked invalid with no visible error | Set `fbx/importer=0` (Godot's built-in ufbx) in their import settings | Both load; render shows the chicken and the spike animation | Yes (Task 5) |
+| B09 | Weapon item card stretched to the bottom of the screen | Low | Word-wrapped labels inside the card were measured at zero width, which made them very tall | Gave the wrapped labels a fixed width and shrink the card after each update | Screenshot: card fits its text | Yes (Task 5) |
+| B10 | The First Descendant's bullets flew over the low walls | Medium | His bullets flew level at 1.0 m; the low walls are 0.8 m, so they gave no cover | Bullets now leave the gun's muzzle and dip at 45° to 0.5 m, then fly level: low walls and crates block them, and a jump still clears them | Test with the boss pinned in place, two attack cycles per case: 0 hits behind low wall 1, low wall 3 and a crate; screenshot shows bullets stopping at the wall | Yes (reported by a team member) |
+| B11 | The First Descendant's aimed bursts mostly missed a player standing still | Medium | He aimed from the centre of his body, but his gun is held 0.6 m to the side, so bullets flew parallel past the player's shoulder | Aim from the muzzle (from the body if the player is closer than the gun's tip) | Same test, player in the open: 12 hits in 44 bullets, up from 4 in 43 | Yes (found while testing B10) |
+| B12 | Closing the F4 cheat menu with Esc left the game looking frozen | High | The level's pause menu also listens for Esc and received it first: it unpaused the game but left the cheat menu on screen, and the next Esc opened the pause menu hidden behind the cheat panel | The cheat menu now takes Esc before the pause menu does (`_input`), and F4 won't open it over the pause menu | Test in the hub and Proving Grounds: open, toggle Infinite Health (was "God mode"), Esc closes and unpauses, next Esc opens the pause menu, F4 does nothing while paused; every cheat button pressed with no errors | Yes (reported by a team member) |

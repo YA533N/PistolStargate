@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="WeaponData" format=3]
+
+[ext_resource type="Script" path="res://scripts/weapons/weapon_data.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://assets/models/weapons/scifi_rifle.glb" id="2_model"]
+
+[resource]
+script = ExtResource("1_script")
+id = &"scifi_rifle"
+display_name = "PX-9 Service Rifle"
+weapon_type = "Assault Rifle"
+rarity = 0
+level = 3
+description = "Standard-issue automatic rifle. Hold the trigger and keep it on target."
+flavor_text = "Boring. Reliable. Boringly reliable."
+model = ExtResource("2_model")
+hold_offset = Vector3(0, 0, -0.19)
+automatic = true
+fire_rate = 7.0
+damage = 8
+spread_degrees = 4.0
+projectile_speed = 38.0
+projectile_size = 0.1
+projectile_color = Color(1, 0.9, 0.5, 1)
+max_ammo = 140

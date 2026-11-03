@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="WeaponData" format=3]
+
+[ext_resource type="Script" path="res://scripts/weapons/weapon_data.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://assets/models/weapons/laugo_alien_pistol.glb" id="2_model"]
+
+[resource]
+script = ExtResource("1_script")
+id = &"infinite_pistol"
+display_name = "The Infinite Pistol"
+weapon_type = "Pistol"
+rarity = 5
+level = 99
+description = "One shot instantly kills any normal enemy and makes it spill 2-3 weapons, ammo and cash. Recharges after 3 kills with other guns. Missed shots return to the chamber."
+flavor_text = "Bullets: infinite. Patience: not so much."
+model = ExtResource("2_model")
+model_scale = 2.5
+model_rotation_degrees = Vector3(0, 180, 0)
+hold_offset = Vector3(0, 0, 0)
+muzzle_position = Vector3(0, 0.075, -0.27)
+fire_rate = 2.0
+damage = 0
+projectile_speed = 55.0
+projectile_size = 0.22
+projectile_color = Color(0.6, 1, 1, 1)
+projectile_range = 50.0
+max_ammo = 1
+instant_kill_normal = true
+elite_damage = 150
+kills_per_charge = 3
+refund_on_miss = true

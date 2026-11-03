@@ -1,9 +1,16 @@
 extends CanvasLayer
-## Gameplay HUD: health, dash charge, currencies, current objective and short pop-up messages.
-## Ammo and the style meter get added here when weapons and kills exist.
+## Gameplay HUD: health, dash charge, currencies, current objective and short pop-up messages,
+## plus the weapon panel, the item card for weapons on the floor, a boss health bar and a red flash when hurt.
+## The weapon card, panel and boss bar are built in code (see WeaponCard, WeaponPanel).
+## The style meter gets added here later.
+
+## Gap between a pickup's position on screen and its item card.
+const CARD_OFFSET := Vector2(70, -40)
+const SCREEN_MARGIN := 16.0
 
 @export var player: Player
 
+@onready var _root: Control = $Root
 @onready var _health_bar: ProgressBar = %HealthBar
 @onready var _health_label: Label = %HealthLabel
 @onready var _dash_bar: ProgressBar = %DashBar
@@ -12,11 +19,22 @@ extends CanvasLayer
 @onready var _message_label: Label = %MessageLabel
 
 var _message_tween: Tween
+var _weapon_panel: WeaponPanel
+var _card: WeaponCard
+var _card_target: WeaponPickup
+var _boss: Enemy
+var _boss_box: VBoxContainer
+var _boss_name: Label
+var _boss_bar: ProgressBar
+var _hurt_flash: ColorRect
 
 
 func _ready() -> void:
 	add_to_group("hud")
 	_message_label.modulate.a = 0.0
+	_build_weapon_ui()
+	_build_boss_bar()
+	_build_hurt_flash()
 	GameState.currency_changed.connect(_on_currency_changed)
 	_on_currency_changed(GameState.weapon_currency, GameState.relic_currency)
 
@@ -26,12 +44,19 @@ func _ready() -> void:
 	if not player.is_node_ready():
 		await player.ready
 	player.health.changed.connect(_on_health_changed)
+	player.health.damaged.connect(_on_player_damaged)
 	_on_health_changed(player.health.current, player.health.max_health)
+	player.arsenal.changed.connect(_refresh_weapons)
+	player.arsenal.focus_changed.connect(_on_focus_changed)
+	_refresh_weapons()
 
 
 func _process(_delta: float) -> void:
 	if player:
 		_dash_bar.value = player.dash_recharge_progress()
+	_place_card()
+	if _boss_box.visible and not is_instance_valid(_boss):
+		_boss_box.visible = false
 
 
 func set_objective(text: String) -> void:
@@ -49,11 +74,105 @@ func show_message(text: String, duration := 2.5) -> void:
 	_message_tween.tween_property(_message_label, "modulate:a", 0.0, 0.5)
 
 
+## Shows a health bar for this enemy at the top of the screen until it dies.
+func track_boss(enemy: Enemy) -> void:
+	_boss = enemy
+	_boss_name.text = enemy.display_name
+	_boss_bar.max_value = enemy.health.max_health
+	_boss_bar.value = enemy.health.current
+	_boss_box.visible = true
+	enemy.health.changed.connect(func(current: int, _maximum: int) -> void: _boss_bar.value = current)
+	enemy.killed.connect(func(_enemy: Enemy) -> void: _boss_box.visible = false)
+
+
+func _refresh_weapons() -> void:
+	_weapon_panel.refresh(player.arsenal)
+	if is_instance_valid(_card_target):
+		_on_focus_changed(_card_target)
+
+
+func _on_focus_changed(pickup: WeaponPickup) -> void:
+	_card_target = pickup
+	if pickup == null or pickup.slot == null:
+		_card.visible = false
+		return
+	_card.show_weapon(pickup.slot, player.arsenal.current(), player.arsenal.slot_to_replace())
+	_place_card()
+
+
+## Keeps the item card beside its pickup on screen, inside the screen edges.
+func _place_card() -> void:
+	if not _card.visible:
+		return
+	if not is_instance_valid(_card_target) or _card_target.slot == null:
+		_card.visible = false
+		return
+	var camera := get_viewport().get_camera_3d()
+	if camera == null:
+		return
+	var screen := camera.unproject_position(_card_target.global_position + Vector3.UP)
+	var view := _root.size
+	var position := screen + CARD_OFFSET
+	if position.x + _card.size.x > view.x - SCREEN_MARGIN:
+		position.x = screen.x - CARD_OFFSET.x - _card.size.x
+	position.x = clampf(position.x, SCREEN_MARGIN, view.x - _card.size.x - SCREEN_MARGIN)
+	position.y = clampf(position.y - _card.size.y * 0.5, SCREEN_MARGIN, view.y - _card.size.y - SCREEN_MARGIN)
+	_card.position = position
+
+
 func _on_health_changed(current: int, maximum: int) -> void:
 	_health_bar.max_value = maximum
 	_health_bar.value = current
 	_health_label.text = "HP  %d / %d" % [current, maximum]
 
 
+func _on_player_damaged(_amount: int, _kind: Health.Kind) -> void:
+	_hurt_flash.color.a = 0.35
+	create_tween().tween_property(_hurt_flash, "color:a", 0.0, 0.35)
+
+
 func _on_currency_changed(weapon: int, relic: int) -> void:
 	_currency_label.text = "Weapon $%d     Relic %d" % [weapon, relic]
+
+
+func _build_weapon_ui() -> void:
+	_weapon_panel = WeaponPanel.new()
+	_root.add_child(_weapon_panel)
+	_weapon_panel.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_RIGHT, Control.PRESET_MODE_MINSIZE, 32)
+	_weapon_panel.grow_horizontal = Control.GROW_DIRECTION_BEGIN
+	_weapon_panel.grow_vertical = Control.GROW_DIRECTION_BEGIN
+	_card = WeaponCard.new()
+	_root.add_child(_card)
+
+
+func _build_boss_bar() -> void:
+	_boss_box = UiKit.vbox(_root, 4)
+	_boss_box.set_anchors_and_offsets_preset(Control.PRESET_CENTER_TOP)
+	_boss_box.offset_left = -480.0
+	_boss_box.offset_right = 480.0
+	_boss_box.offset_top = 90.0
+	_boss_name = UiKit.label(_boss_box, 30, Color(1, 0.45, 0.3), 8)
+	_boss_name.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_boss_bar = ProgressBar.new()
+	_boss_bar.custom_minimum_size = Vector2(960, 24)
+	_boss_bar.show_percentage = false
+	_boss_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var background := StyleBoxFlat.new()
+	background.bg_color = Color(0.08, 0.04, 0.06, 0.85)
+	background.set_corner_radius_all(4)
+	var fill := StyleBoxFlat.new()
+	fill.bg_color = Color(0.9, 0.25, 0.15)
+	fill.set_corner_radius_all(4)
+	_boss_bar.add_theme_stylebox_override("background", background)
+	_boss_bar.add_theme_stylebox_override("fill", fill)
+	_boss_box.add_child(_boss_bar)
+	_boss_box.visible = false
+
+
+func _build_hurt_flash() -> void:
+	_hurt_flash = ColorRect.new()
+	_hurt_flash.color = Color(0.9, 0.05, 0.05, 0.0)
+	_hurt_flash.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_root.add_child(_hurt_flash)
+	_hurt_flash.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_root.move_child(_hurt_flash, 0)

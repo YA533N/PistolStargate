@@ -1,0 +1,377 @@
+[gd_scene format=3 uid="uid://doowvldy2ku3v"]
+
+[ext_resource type="Script" uid="uid://bbking58snec0" path="res://scripts/levels/proving_grounds.gd" id="1_level"]
+[ext_resource type="PackedScene" path="res://scenes/player/player.tscn" id="2_player"]
+[ext_resource type="PackedScene" path="res://scenes/systems/camera_rig.tscn" id="3_camera"]
+[ext_resource type="PackedScene" path="res://scenes/ui/hud.tscn" id="4_hud"]
+[ext_resource type="PackedScene" path="res://scenes/ui/pause_menu.tscn" id="5_pause"]
+[ext_resource type="PackedScene" path="res://scenes/ui/dialogue_box.tscn" id="6_dialogue"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/alien_orange_trooper.tscn" id="7_trooper"]
+[ext_resource type="PackedScene" path="res://scenes/levels/props/spike_trap.tscn" id="8_trap"]
+[ext_resource type="PackedScene" path="res://scenes/pickups/loot_pickup.tscn" id="9_loot"]
+[ext_resource type="Script" uid="uid://bqgn63f71n1y3" path="res://scripts/systems/portal.gd" id="10_portal"]
+[ext_resource type="PackedScene" uid="uid://dm8nsu5y804jf" path="res://assets/models/environment/portal_frame.fbx" id="11_frame"]
+[ext_resource type="Material" path="res://assets/materials/metal_plates_013.tres" id="12_floor"]
+[ext_resource type="Material" uid="uid://cwcsvn5cmyv3d" path="res://assets/materials/metal_044a.tres" id="13_wall"]
+[ext_resource type="Material" path="res://assets/materials/metal_062c.tres" id="14_low"]
+[ext_resource type="Material" path="res://assets/materials/crate_metal.tres" id="15_crate"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_arena"]
+sky_top_color = Color(0.42, 0.42, 0.48, 1)
+sky_horizon_color = Color(0.75, 0.72, 0.72, 1)
+ground_bottom_color = Color(0.4, 0.38, 0.4, 1)
+ground_horizon_color = Color(0.75, 0.72, 0.72, 1)
+
+[sub_resource type="Sky" id="Sky_arena"]
+sky_material = SubResource("ProceduralSkyMaterial_arena")
+
+[sub_resource type="Environment" id="Environment_arena"]
+background_mode = 1
+background_color = Color(0.06, 0.02, 0.03, 1)
+sky = SubResource("Sky_arena")
+ambient_light_source = 2
+ambient_light_color = Color(0.55, 0.42, 0.5, 1)
+ambient_light_energy = 0.6
+reflected_light_source = 2
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_floor"]
+size = Vector3(60, 1, 60)
+
+[sub_resource type="BoxMesh" id="BoxMesh_floor"]
+material = ExtResource("12_floor")
+size = Vector3(60, 1, 60)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_portal"]
+size = Vector3(3, 3.5, 1)
+
+[node name="ProvingGrounds" type="Node3D" unique_id=749632208]
+script = ExtResource("1_level")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1212451100]
+environment = SubResource("Environment_arena")
+
+[node name="Sun" type="DirectionalLight3D" parent="." unique_id=963044231]
+transform = Transform3D(0.8660253, -0.40957624, 0.2867883, 0, 0.57357633, 0.8191522, -0.50000024, -0.70940644, 0.4967316, 0, 10, 0)
+shadow_enabled = true
+
+[node name="Geometry" type="Node3D" parent="." unique_id=49704037]
+
+[node name="Floor" type="StaticBody3D" parent="Geometry" unique_id=951678549]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Geometry/Floor" unique_id=1611376596]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+shape = SubResource("BoxShape3D_floor")
+
+[node name="Mesh" type="MeshInstance3D" parent="Geometry/Floor" unique_id=810876645]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+mesh = SubResource("BoxMesh_floor")
+
+[node name="WallNorth" type="CSGBox3D" parent="Geometry" unique_id=115661399]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -30.5)
+use_collision = true
+size = Vector3(62, 4, 1)
+material = ExtResource("13_wall")
+
+[node name="WallSouth" type="CSGBox3D" parent="Geometry" unique_id=2144333750]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 30.5)
+use_collision = true
+size = Vector3(62, 4, 1)
+material = ExtResource("13_wall")
+
+[node name="WallEast" type="CSGBox3D" parent="Geometry" unique_id=1164414737]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30.5, 2, 0)
+use_collision = true
+size = Vector3(1, 4, 60)
+material = ExtResource("13_wall")
+
+[node name="WallWest" type="CSGBox3D" parent="Geometry" unique_id=234225613]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30.5, 2, 0)
+use_collision = true
+size = Vector3(1, 4, 60)
+material = ExtResource("13_wall")
+
+[node name="LowWalls" type="Node3D" parent="." unique_id=1409524719]
+
+[node name="LowWall1" type="CSGBox3D" parent="LowWalls" unique_id=487787266]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0.4, 4)
+use_collision = true
+size = Vector3(8, 0.8, 0.8)
+material = ExtResource("14_low")
+
+[node name="LowWall2" type="CSGBox3D" parent="LowWalls" unique_id=1775944366]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0.4, 4)
+use_collision = true
+size = Vector3(8, 0.8, 0.8)
+material = ExtResource("14_low")
+
+[node name="LowWall3" type="CSGBox3D" parent="LowWalls" unique_id=1998349290]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, -18)
+use_collision = true
+size = Vector3(12, 0.8, 0.8)
+material = ExtResource("14_low")
+
+[node name="LowWall4" type="CSGBox3D" parent="LowWalls" unique_id=124504770]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14, 0.4, -9)
+use_collision = true
+size = Vector3(0.8, 0.8, 10)
+material = ExtResource("14_low")
+
+[node name="LowWall5" type="CSGBox3D" parent="LowWalls" unique_id=2096747312]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 0.4, -5)
+use_collision = true
+size = Vector3(0.8, 0.8, 8)
+material = ExtResource("14_low")
+
+[node name="LowWall6" type="CSGBox3D" parent="LowWalls" unique_id=643158191]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22, 0.4, 14)
+use_collision = true
+size = Vector3(8, 0.8, 0.8)
+material = ExtResource("14_low")
+
+[node name="LowWall7" type="CSGBox3D" parent="LowWalls" unique_id=604345992]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22, 0.4, 14)
+use_collision = true
+size = Vector3(8, 0.8, 0.8)
+material = ExtResource("14_low")
+
+[node name="Crates" type="Node3D" parent="." unique_id=303380290]
+
+[node name="Crate1" type="CSGBox3D" parent="Crates" unique_id=771943824]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.5, 0.8, -6)
+use_collision = true
+size = Vector3(1.6, 1.6, 1.6)
+material = ExtResource("15_crate")
+
+[node name="Crate2" type="CSGBox3D" parent="Crates" unique_id=1595936003]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0.8, -8)
+use_collision = true
+size = Vector3(1.6, 1.6, 1.6)
+material = ExtResource("15_crate")
+
+[node name="Crate3" type="CSGBox3D" parent="Crates" unique_id=1987907186]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9, 0.8, -15)
+use_collision = true
+size = Vector3(1.6, 1.6, 1.6)
+material = ExtResource("15_crate")
+
+[node name="Crate4" type="CSGBox3D" parent="Crates" unique_id=1672193197]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0.8, -15)
+use_collision = true
+size = Vector3(1.6, 1.6, 1.6)
+material = ExtResource("15_crate")
+
+[node name="Crate5" type="CSGBox3D" parent="Crates" unique_id=470226903]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18, 0.8, 6)
+use_collision = true
+size = Vector3(1.6, 1.6, 1.6)
+material = ExtResource("15_crate")
+
+[node name="Crate6" type="CSGBox3D" parent="Crates" unique_id=1775383232]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18, 0.8, 4)
+use_collision = true
+size = Vector3(1.6, 1.6, 1.6)
+material = ExtResource("15_crate")
+
+[node name="Crate7" type="CSGBox3D" parent="Crates" unique_id=1723986322]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -24, 0.8, -20)
+use_collision = true
+size = Vector3(1.6, 1.6, 1.6)
+material = ExtResource("15_crate")
+
+[node name="Crate8" type="CSGBox3D" parent="Crates" unique_id=730947168]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24, 0.8, -20)
+use_collision = true
+size = Vector3(1.6, 1.6, 1.6)
+material = ExtResource("15_crate")
+
+[node name="SpikeTraps" type="Node3D" parent="." unique_id=600104429]
+
+[node name="West_m21_m2" parent="SpikeTraps" unique_id=1365455607 instance=ExtResource("8_trap")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -21, 0, -2)
+
+[node name="West_m21_0" parent="SpikeTraps" unique_id=1530258120 instance=ExtResource("8_trap")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -21, 0, 0)
+
+[node name="West_m21_2" parent="SpikeTraps" unique_id=111155547 instance=ExtResource("8_trap")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -21, 0, 2)
+
+[node name="West_m19_m2" parent="SpikeTraps" unique_id=723960277 instance=ExtResource("8_trap")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19, 0, -2)
+
+[node name="West_m19_0" parent="SpikeTraps" unique_id=1281142281 instance=ExtResource("8_trap")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19, 0, 0)
+
+[node name="West_m19_2" parent="SpikeTraps" unique_id=720833011 instance=ExtResource("8_trap")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19, 0, 2)
+
+[node name="West_m17_m2" parent="SpikeTraps" unique_id=1870416001 instance=ExtResource("8_trap")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17, 0, -2)
+
+[node name="West_m17_0" parent="SpikeTraps" unique_id=173215404 instance=ExtResource("8_trap")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17, 0, 0)
+
+[node name="West_m17_2" parent="SpikeTraps" unique_id=1099114665 instance=ExtResource("8_trap")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17, 0, 2)
+
+[node name="East_17_m14" parent="SpikeTraps" unique_id=1339056748 instance=ExtResource("8_trap")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17, 0, -14)
+cycle_time = 3
+
+[node name="East_17_m12" parent="SpikeTraps" unique_id=436191831 instance=ExtResource("8_trap")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17, 0, -12)
+cycle_time = 3
+cycle_offset = 0.25
+
+[node name="East_17_m10" parent="SpikeTraps" unique_id=1890287538 instance=ExtResource("8_trap")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17, 0, -10)
+cycle_time = 3
+cycle_offset = 0.5
+
+[node name="East_19_m14" parent="SpikeTraps" unique_id=1269373319 instance=ExtResource("8_trap")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19, 0, -14)
+cycle_time = 3
+cycle_offset = 0.5
+
+[node name="East_19_m12" parent="SpikeTraps" unique_id=1897406936 instance=ExtResource("8_trap")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19, 0, -12)
+cycle_time = 3
+cycle_offset = 0.75
+
+[node name="East_19_m10" parent="SpikeTraps" unique_id=367879657 instance=ExtResource("8_trap")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19, 0, -10)
+cycle_time = 3
+cycle_offset = 1
+
+[node name="East_21_m14" parent="SpikeTraps" unique_id=2114218350 instance=ExtResource("8_trap")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 21, 0, -14)
+cycle_time = 3
+cycle_offset = 1
+
+[node name="East_21_m12" parent="SpikeTraps" unique_id=1646027516 instance=ExtResource("8_trap")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 21, 0, -12)
+cycle_time = 3
+cycle_offset = 1.25
+
+[node name="East_21_m10" parent="SpikeTraps" unique_id=88419234 instance=ExtResource("8_trap")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 21, 0, -10)
+cycle_time = 3
+cycle_offset = 1.5
+
+[node name="Path_m13" parent="SpikeTraps" unique_id=1448419045 instance=ExtResource("8_trap")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13, 0, 9)
+
+[node name="Path_m11" parent="SpikeTraps" unique_id=1397804580 instance=ExtResource("8_trap")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11, 0, 9)
+
+[node name="Path_11" parent="SpikeTraps" unique_id=726804377 instance=ExtResource("8_trap")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11, 0, 9)
+
+[node name="Path_13" parent="SpikeTraps" unique_id=1350574011 instance=ExtResource("8_trap")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13, 0, 9)
+
+[node name="Center1" parent="SpikeTraps" unique_id=919019518 instance=ExtResource("8_trap")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0, -2)
+cycle_time = 4
+
+[node name="Center2" parent="SpikeTraps" unique_id=221651798 instance=ExtResource("8_trap")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, -2)
+cycle_time = 4
+cycle_offset = 1
+
+[node name="Center3" parent="SpikeTraps" unique_id=1238990458 instance=ExtResource("8_trap")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, -12)
+cycle_time = 4
+cycle_offset = 2
+
+[node name="Center4" parent="SpikeTraps" unique_id=1766581580 instance=ExtResource("8_trap")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0, -12)
+cycle_time = 4
+cycle_offset = 3
+
+[node name="AmmoCaches" type="Node3D" parent="." unique_id=206495125]
+
+[node name="Ammo1" parent="AmmoCaches" unique_id=260792915 instance=ExtResource("9_loot")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26, 0, -26)
+respawn_time = 18.0
+
+[node name="Ammo2" parent="AmmoCaches" unique_id=1356975174 instance=ExtResource("9_loot")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26, 0, -26)
+respawn_time = 18.0
+
+[node name="Ammo3" parent="AmmoCaches" unique_id=2127624310 instance=ExtResource("9_loot")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26, 0, 22)
+respawn_time = 18.0
+
+[node name="Ammo4" parent="AmmoCaches" unique_id=1826692636 instance=ExtResource("9_loot")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26, 0, 22)
+respawn_time = 18.0
+
+[node name="Signs" type="Node3D" parent="." unique_id=535182340]
+
+[node name="Title" type="Label3D" parent="Signs" unique_id=1347057864]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.5, 28)
+pixel_size = 0.012
+billboard = 1
+modulate = Color(1, 0.6, 0.25, 1)
+text = "PROVING GROUNDS"
+font_size = 110
+outline_size = 18
+
+[node name="Lights" type="Node3D" parent="." unique_id=2138979982]
+
+[node name="BossLight" type="OmniLight3D" parent="Lights" unique_id=1272431612]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6, -10)
+light_color = Color(1, 0.35, 0.2, 1)
+light_energy = 2.0
+omni_range = 20.0
+
+[node name="StartLight" type="OmniLight3D" parent="Lights" unique_id=1387687316]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 18)
+light_color = Color(1, 0.75, 0.45, 1)
+light_energy = 1.5
+omni_range = 14.0
+
+[node name="ChickenSpawn" type="Marker3D" parent="." unique_id=144703263]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.040300548, 13)
+
+[node name="BossSpawn" type="Marker3D" parent="." unique_id=674533005]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="ExitPortal" type="Area3D" parent="." unique_id=336852432]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -27)
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("10_portal")
+target_scene = "res://scenes/levels/hub.tscn"
+
+[node name="Frame" parent="ExitPortal" unique_id=2111291973 instance=ExtResource("11_frame")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ExitPortal" unique_id=619752618]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.75, 0)
+shape = SubResource("BoxShape3D_portal")
+
+[node name="Label" type="Label3D" parent="ExitPortal" unique_id=1563128185]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.6, 0)
+billboard = 1
+text = "HUB"
+font_size = 72
+outline_size = 18
+
+[node name="Player" parent="." unique_id=1446867873 instance=ExtResource("2_player")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 22)
+
+[node name="OrangeTrooper" parent="." unique_id=1256684224 instance=ExtResource("7_trooper")]
+transform = Transform3D(0.759257, 0, -0.650791, 0, 1, 0, 0.650791, 0, 0.759257, 3, 0, 18.5)
+can_talk = false
+
+[node name="CameraRig" parent="." unique_id=681824995 node_paths=PackedStringArray("target") instance=ExtResource("3_camera")]
+target = NodePath("../Player")
+
+[node name="HUD" parent="." unique_id=1670371416 node_paths=PackedStringArray("player") instance=ExtResource("4_hud")]
+player = NodePath("../Player")
+
+[node name="DialogueBox" parent="." unique_id=718759587 instance=ExtResource("6_dialogue")]
+
+[node name="PauseMenu" parent="." unique_id=1181416129 instance=ExtResource("5_pause")]

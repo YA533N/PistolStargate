@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="WeaponData" format=3]
+
+[ext_resource type="Script" path="res://scripts/weapons/weapon_data.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://assets/models/weapons/capper.glb" id="2_model"]
+
+[resource]
+script = ExtResource("1_script")
+id = &"capper"
+display_name = "C.A.P.P.E.R."
+weapon_type = "Ray Pistol"
+rarity = 0
+level = 2
+description = "A trusty ray pistol. Semi-automatic: one bolt per click."
+flavor_text = "Pew pew. Exactly as advertised."
+model = ExtResource("2_model")
+hold_offset = Vector3(0, 0, -0.12)
+fire_rate = 4.0
+damage = 14
+projectile_speed = 34.0
+projectile_size = 0.14
+projectile_color = Color(1, 0.35, 0.2, 1)
+max_ammo = 60

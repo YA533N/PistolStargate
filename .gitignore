@@ -17,3 +17,23 @@ mono_crash.*.json
 .DS_Store
 Thumbs.db
 desktop.ini
+
+# Downloaded asset archives: unzip the textures into assets/textures/<asset>/ and commit those instead
+*.zip
+*.7z
+*.rar
+
+# Blender backups and other temp files
+*.blend1
+*.blend2
+*.tmp
+*.log
+*.orig
+
+# Exported game files
+*.exe
+*.pck
+
+# Other editors' per-machine folders
+.idea/
+.vs/

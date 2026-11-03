@@ -1,0 +1,21 @@
+[gd_resource type="StandardMaterial3D" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/textures/railgun/RS-422_Railgun_Base_color.jpg" id="1_tex"]
+[ext_resource type="Texture2D" path="res://assets/textures/railgun/RS-422_Railgun_Metallic.jpg" id="2_tex"]
+[ext_resource type="Texture2D" path="res://assets/textures/railgun/RS-422_Railgun_Roughness.jpg" id="3_tex"]
+[ext_resource type="Texture2D" path="res://assets/textures/railgun/RS-422_Railgun_Normal.jpg" id="4_tex"]
+[ext_resource type="Texture2D" path="res://assets/textures/railgun/RS-422_Railgun_Mixed_AO.jpg" id="5_tex"]
+
+[resource]
+resource_name = "railgun_rs_422_railgun"
+albedo_texture = ExtResource("1_tex")
+metallic = 1.0
+metallic_texture = ExtResource("2_tex")
+metallic_texture_channel = 0
+roughness_texture = ExtResource("3_tex")
+roughness_texture_channel = 0
+normal_enabled = true
+normal_texture = ExtResource("4_tex")
+ao_enabled = true
+ao_texture = ExtResource("5_tex")
+ao_texture_channel = 0

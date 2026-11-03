@@ -17,4 +17,4 @@ func _on_body_entered(body: Node3D) -> void:
 	if target_scene.is_empty():
 		get_tree().call_group("hud", "show_message", locked_message)
 		return
-	get_tree().change_scene_to_file.call_deferred(target_scene)
+	Transition.change_scene(target_scene, Color(0.6, 0.9, 1))

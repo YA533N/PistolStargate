@@ -1,0 +1,12 @@
+[gd_resource type="StandardMaterial3D" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/textures/ares_lmg/AresMagazineTexture.jpg" id="1_tex"]
+[ext_resource type="Texture2D" path="res://assets/textures/ares_lmg/AresMagazineTextureNormal.jpg" id="2_tex"]
+
+[resource]
+resource_name = "ares_lmg_magazine"
+albedo_texture = ExtResource("1_tex")
+metallic = 0.3
+roughness = 0.25
+normal_enabled = true
+normal_texture = ExtResource("2_tex")

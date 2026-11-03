@@ -1,11 +1,21 @@
 class_name NPC
 extends Node3D
-## A character the player can talk to. When the player is inside TalkArea a "[F] Talk" prompt shows;
+## A character the player can talk to. When the player is inside TalkArea a "[E] Talk" prompt shows;
 ## pressing interact opens the DialogueBox with this NPC's lines and freezes the player until it closes.
+## Level scripts can also drive a conversation with say() and ask() (the Proving Grounds does).
 ## Expects children: Model (an imported character), TalkArea (Area3D) and Prompt (Label3D).
+
+## Emitted after a player-started conversation closes.
+signal conversation_finished
 
 @export var speaker_name := "???"
 @export var lines := PackedStringArray()
+## Used instead of lines once the Proving Grounds is done. Leave empty to always use lines.
+@export var lines_after_tutorial := PackedStringArray()
+## Off: no prompt and F does nothing (for NPCs that only talk in scripted scenes).
+@export var can_talk := true
+## Sends the player to this scene after the conversation, with a teleport flash. Empty: stay here.
+@export_file("*.tscn") var send_to_scene := ""
 ## Animation to loop on the model. Leave empty to use the model's first animation.
 @export var idle_animation := ""
 ## Hold the animation's first frame and only move while talking. Off: loop it all the time.
@@ -32,16 +42,36 @@ func _ready() -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	if _player_in_range == null or _talking_to != null or not event.is_action_pressed("interact"):
+	if not can_talk or _player_in_range == null or _talking_to != null or not event.is_action_pressed("talk"):
 		return
-	var box := get_tree().get_first_node_in_group("dialogue_box") as DialogueBox
-	if box == null:
-		push_warning("NPC '%s' has no DialogueBox in the scene to talk through." % speaker_name)
-		return
-	if box.is_open():
+	var box := _dialogue_box()
+	if box == null or box.is_open():
 		return
 	get_viewport().set_input_as_handled()
 	_start_talking(box)
+
+
+## Scripted line(s) for cutscenes: animates, faces the player and returns once the box is closed.
+func say(text: PackedStringArray) -> void:
+	var box := _dialogue_box()
+	if box == null:
+		return
+	_begin_scripted()
+	box.start(speaker_name, text)
+	await box.finished
+	_end_scripted()
+
+
+## Scripted question. Returns the index of the answer the player picked.
+func ask(question: String, options: PackedStringArray) -> int:
+	var box := _dialogue_box()
+	if box == null:
+		return 0
+	_begin_scripted()
+	box.ask(speaker_name, question, options)
+	var answer: int = await box.choice_made
+	_end_scripted()
+	return answer
 
 
 func _start_talking(box: DialogueBox) -> void:
@@ -53,15 +83,43 @@ func _start_talking(box: DialogueBox) -> void:
 	if animate_only_while_talking and _animation_player:
 		_animation_player.play()
 	box.finished.connect(_on_dialogue_finished, CONNECT_ONE_SHOT)
-	box.start(speaker_name, lines)
+	var text := lines_after_tutorial if GameState.proving_grounds_done and not lines_after_tutorial.is_empty() else lines
+	box.start(speaker_name, text)
 
 
 func _on_dialogue_finished() -> void:
-	_talking_to.input_enabled = true
+	var player := _talking_to
 	_talking_to = null
-	_prompt.visible = _player_in_range != null
 	if animate_only_while_talking and _animation_player:
 		_hold_first_frame()
+	conversation_finished.emit()
+	if not send_to_scene.is_empty():
+		# The player stays frozen through the teleport.
+		Effects.flash(self, player.global_position + Vector3.UP, Color(1, 0.6, 0.2), 2.5, 0.6)
+		Transition.change_scene(send_to_scene, Color(1, 0.75, 0.4))
+		return
+	player.input_enabled = true
+	_prompt.visible = _player_in_range != null and can_talk
+
+
+func _begin_scripted() -> void:
+	var player := get_tree().get_first_node_in_group("player") as Player
+	if face_player and player:
+		_turn_toward(player.global_position)
+	if _animation_player:
+		_animation_player.play()
+
+
+func _end_scripted() -> void:
+	if animate_only_while_talking and _animation_player:
+		_hold_first_frame()
+
+
+func _dialogue_box() -> DialogueBox:
+	var box := get_tree().get_first_node_in_group("dialogue_box") as DialogueBox
+	if box == null:
+		push_warning("NPC '%s' has no DialogueBox in the scene to talk through." % speaker_name)
+	return box
 
 
 func _turn_toward(target: Vector3) -> void:
@@ -98,7 +156,7 @@ func _hold_first_frame() -> void:
 func _on_body_entered(body: Node3D) -> void:
 	if body is Player:
 		_player_in_range = body
-		_prompt.visible = _talking_to == null
+		_prompt.visible = _talking_to == null and can_talk
 
 
 func _on_body_exited(body: Node3D) -> void:

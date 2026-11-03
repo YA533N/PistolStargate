@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="WeaponData" format=3]
+
+[ext_resource type="Script" path="res://scripts/weapons/weapon_data.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://assets/models/weapons/space_gun.glb" id="2_model"]
+
+[resource]
+script = ExtResource("1_script")
+id = &"space_gun"
+display_name = "Orbit Seeker"
+weapon_type = "Ray Gun"
+rarity = 2
+level = 6
+description = "Fires slow orbs that home in on the nearest enemy. Aim roughly; the orbs do the rest."
+flavor_text = "It knows where you live."
+model = ExtResource("2_model")
+hold_offset = Vector3(0, 0, -0.13)
+fire_rate = 3.5
+damage = 22
+projectile_speed = 17.0
+projectile_size = 0.2
+projectile_color = Color(1, 0.4, 0.9, 1)
+projectile_range = 45.0
+homing_turn_rate = 4.0
+max_ammo = 70

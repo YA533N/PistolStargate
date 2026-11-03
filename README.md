@@ -31,29 +31,54 @@ Team: Yaseen Gadalla, Mohamed Ashraf, Moataz Hegazi
 | Jump | Space |
 | Dash | Shift |
 | Slide *(not built)* | Ctrl / C |
-| Grapple *(not built)* | E / right mouse |
-| Shoot (hold for auto-fire) | Left mouse |
-| Swap weapon *(not built)* | Q / mouse wheel |
-| Interact / talk / next dialogue line | F |
+| Grapple *(not built)* | Right mouse |
+| Shoot (semi-auto: click, automatic: hold) | Left mouse |
+| Swap weapon | Q / mouse wheel |
+| Select weapon slot | 1 / 2 / 3 |
+| Talk to NPCs / next dialogue line | E |
+| Pick up weapon | F |
+| Answer a dialogue question | Click, or 1 / 2 |
 | Pause | Esc |
-| Debug cheats (debug builds only) | F1 hurt, F2 heal, F3 add currency |
+| Debug cheats (debug builds only) | F1 hurt, F2 heal, F3 add currency, **F4 weapon test menu**, F5 random weapon, F6 training dummy, F7 give/charge Infinite Pistol, F8 refill ammo |
+
+## Weapons and loot
+
+- Weapons are `WeaponData` resources in `resources/weapons/`, listed in `scripts/weapons/weapon_library.gd`.
+  To add one: import the model, make a `.tres` (copy an existing one), and add it to `WeaponLibrary.ALL`.
+- Rarity tiers (Borderlands colours): Common (white), Uncommon (green), Rare (blue), Epic (purple),
+  Legendary (orange), plus the special Infinite tier. Weapons on the floor glow with a beam in their rarity
+  colour, and walking up to one shows an item card (silhouette, rank, damage, stats vs your gun, effect).
+- The player holds 2 weapons plus the **Infinite Pistol**. It one-shots any normal enemy, which then drops
+  2-3 weapons, ammo and cash. It recharges after 3 kills with other guns, and a missed shot returns to the chamber.
+- **F4 opens the weapon test menu** (debug builds): equip any weapon or spawn it on the floor, spawn a
+  training dummy, the chicken or the boss, refill ammo, charge the pistol, drop a jackpot, Infinite Health (take no damage).
+
+## Story flow so far
+
+Main menu → hub (no weapon) → talk to the Orange Trooper → he teleports you to the **Proving Grounds**
+(`scenes/levels/proving_grounds.tscn`) → he gives you the Infinite Pistol → shoot the chicken → grab its
+weapons → fight THE FIRST DESCENDANT among spike traps and low walls → portal back to the hub.
+Dying in the boss fight restarts at the boss.
 
 ## Project structure
 
 ```
 assets/        art, audio, fonts (raw files only, no scripts)
-  textures/    every texture, one folder per asset (metal_044a/, laugo_alien_pistol/, ui/ ...)
+  textures/    every texture, one folder per asset (metal_044a/, railgun/, chicken/, ui/ ...)
   materials/   Godot materials built from those textures
   models/      characters/, environment/, weapons/
+resources/     data files: weapons/ (one WeaponData .tres per gun)
+shaders/       rarity beam and ring shaders for weapons on the floor
 scenes/        .tscn files (Godot's equivalent of Unity prefabs)
-  levels/      hub, arena
-  player/  enemies/  weapons/  ui/  systems/
+  levels/      hub, proving_grounds, props/ (spike trap)
+  player/  enemies/  pickups/  ui/  systems/
 scripts/       .gd files, mirroring scenes/
-  player/  enemies/  weapons/  ui/  systems/  levels/
+  player/  enemies/  weapons/  pickups/  ui/  systems/  levels/
 docs/          MCP journal, test cases, bug log
 ```
 
-Autoloads (global singletons): `GameState` (currencies and run state) and `DebugCheats`.
+Autoloads (global singletons): `GameState` (currencies, the player's weapons between scenes, tutorial progress),
+`DebugCheats` (cheat keys and the F4 menu) and `Transition` (screen fades between scenes).
 
 Physics layers: 1 world, 2 player, 3 enemies, 4 player projectiles, 5 enemy projectiles, 6 pickups.
 
