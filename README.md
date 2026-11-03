@@ -30,8 +30,8 @@ Team: Yaseen Gadalla, Mohamed Ashraf, Moataz Hegazi
 | Aim | Mouse |
 | Jump | Space |
 | Dash | Shift |
-| Slide *(not built)* | Ctrl / C |
-| Grapple *(not built)* | E / right mouse |
+| Slide | Ctrl / C |
+| Grapple | E / right mouse |
 | Shoot (hold for auto-fire) | Left mouse |
 | Swap weapon *(not built)* | Q / mouse wheel |
 | Interact / talk / next dialogue line | F |
