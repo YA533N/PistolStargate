@@ -14,6 +14,7 @@
 [ext_resource type="PackedScene" path="res://scenes/ui/dialogue_box.tscn" id="10_dialogue"]
 [ext_resource type="Material" path="res://assets/materials/metal_062c.tres" id="11_step"]
 [ext_resource type="PackedScene" uid="uid://dm8nsu5y804jf" path="res://assets/models/environment/portal_frame.fbx" id="12_portal_frame"]
+[ext_resource type="PackedScene" uid="uid://cp24615i52mav" path="res://scenes/systems/grapple_point.tscn" id="15_15q0k"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_hub"]
 sky_top_color = Color(0.42, 0.44, 0.5, 1)
@@ -209,6 +210,9 @@ outline_size = 18
 
 [node name="Player" parent="." unique_id=461725433 instance=ExtResource("2_player")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 8)
+slide_duration = 1.0
+swing_acceleration = 15.0
+reel_speed = 1.5
 
 [node name="AlienOrangeTrooper" parent="." unique_id=139801595 instance=ExtResource("9_trooper")]
 transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, 4, 0, 4)
@@ -222,3 +226,17 @@ player = NodePath("../Player")
 [node name="DialogueBox" parent="." unique_id=1292615429 instance=ExtResource("10_dialogue")]
 
 [node name="PauseMenu" parent="." unique_id=633660413 instance=ExtResource("5_pause")]
+
+[node name="GrapplePoints" type="Node3D" parent="." unique_id=585039053]
+
+[node name="GrapplePoint" parent="GrapplePoints" unique_id=1390524768 instance=ExtResource("15_15q0k")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.0653343, -17.90862)
+
+[node name="GrapplePoint2" parent="GrapplePoints" unique_id=2051910183 instance=ExtResource("15_15q0k")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.7780957, 4.2422986, 7.596896)
+
+[node name="GrapplePoint3" parent="GrapplePoints" unique_id=1048814526 instance=ExtResource("15_15q0k")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.7404723, 5.4142494, -3.4429426)
+
+[node name="GrapplePoint4" parent="GrapplePoints" unique_id=708365135 instance=ExtResource("15_15q0k")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.748929, 1.9244761, -11.908354)
