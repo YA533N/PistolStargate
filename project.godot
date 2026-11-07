@@ -36,6 +36,10 @@ window/stretch/aspect="expand"
 
 project/assembly_name="Pistol Stargate"
 
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/lowpolyterrain/plugin.cfg")
+
 [input]
 
 move_forward={

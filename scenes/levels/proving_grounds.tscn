@@ -15,6 +15,7 @@
 [ext_resource type="Material" uid="uid://cwcsvn5cmyv3d" path="res://assets/materials/metal_044a.tres" id="13_wall"]
 [ext_resource type="Material" path="res://assets/materials/metal_062c.tres" id="14_low"]
 [ext_resource type="Material" path="res://assets/materials/crate_metal.tres" id="15_crate"]
+[ext_resource type="PackedScene" uid="uid://cp24615i52mav" path="res://scenes/systems/grapple_point.tscn" id="16_264vp"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_arena"]
 sky_top_color = Color(0.42, 0.42, 0.48, 1)
@@ -375,3 +376,20 @@ player = NodePath("../Player")
 [node name="DialogueBox" parent="." unique_id=718759587 instance=ExtResource("6_dialogue")]
 
 [node name="PauseMenu" parent="." unique_id=1181416129 instance=ExtResource("5_pause")]
+
+[node name="GrapplePoints" type="Node3D" parent="." unique_id=922297030]
+
+[node name="GrapplePoint" parent="GrapplePoints" unique_id=1390524768 instance=ExtResource("16_264vp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.221899, 3.3963633, 14.298276)
+
+[node name="GrapplePoint2" parent="GrapplePoints" unique_id=559919672 instance=ExtResource("16_264vp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.121527, 3.3963633, -6.964877)
+
+[node name="GrapplePoint3" parent="GrapplePoints" unique_id=217070395 instance=ExtResource("16_264vp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.1598854, 3.3963633, 2.8584146)
+
+[node name="GrapplePoint4" parent="GrapplePoints" unique_id=994156884 instance=ExtResource("16_264vp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.1652565, 1.692277, -9.615452)
+
+[node name="GrapplePoint5" parent="GrapplePoints" unique_id=1080397304 instance=ExtResource("16_264vp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.7361336, 7.3656025, -10.536875)

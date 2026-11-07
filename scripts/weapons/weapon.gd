@@ -20,6 +20,7 @@ var _spin := 0.0
 var _kick := 0.0
 
 
+
 func setup(weapon: WeaponData) -> void:
 	data = weapon
 	_model = weapon.build_model()
