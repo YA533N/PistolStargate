@@ -43,6 +43,10 @@ project/assembly_name="Pistol Stargate"
 
 enabled=PackedStringArray("res://addons/lowpolyterrain/plugin.cfg")
 
+[filesystem]
+
+import/blender/enabled=false
+
 [input]
 
 move_forward={

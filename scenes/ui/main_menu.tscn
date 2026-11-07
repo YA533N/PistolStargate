@@ -1,9 +1,10 @@
 [gd_scene format=3 uid="uid://71nyfcb88sux"]
 
 [ext_resource type="Script" uid="uid://3w8f3t05vsj6" path="res://scripts/ui/main_menu.gd" id="1_menu"]
-[ext_resource type="Texture2D" path="res://assets/textures/ui/title_art.jpg" id="2_art"]
-[ext_resource type="Script" path="res://scripts/ui/row_menu.gd" id="3_row_menu"]
-[ext_resource type="FontFile" path="res://assets/fonts/space.ttf" id="4_font"]
+[ext_resource type="Texture2D" uid="uid://c58leknsmty4x" path="res://assets/textures/ui/title_art.jpg" id="2_art"]
+[ext_resource type="Script" uid="uid://0y3jhj0jaorv" path="res://scripts/ui/row_menu.gd" id="3_row_menu"]
+[ext_resource type="FontFile" uid="uid://c4hxnj82au0dp" path="res://assets/fonts/space.ttf" id="4_font"]
+[ext_resource type="AudioStream" uid="uid://x65cm32gbnrt" path="res://assets/audio/music/MenuMusic.mp3" id="5_x2yvf"]
 
 [sub_resource type="Gradient" id="Gradient_shade"]
 offsets = PackedFloat32Array(0, 0.5, 1)
@@ -13,7 +14,7 @@ colors = PackedColorArray(0, 0, 0, 0, 0, 0, 0, 0.1, 0, 0.02, 0.03, 0.85)
 gradient = SubResource("Gradient_shade")
 fill_to = Vector2(0, 1)
 
-[node name="MainMenu" type="Control"]
+[node name="MainMenu" type="Control" unique_id=817625351]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -23,7 +24,7 @@ grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_menu")
 
-[node name="Background" type="ColorRect" parent="."]
+[node name="Background" type="ColorRect" parent="." unique_id=1895114233]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -33,7 +34,7 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0.06, 0.02, 0.05, 1)
 
-[node name="Art" type="TextureRect" parent="."]
+[node name="Art" type="TextureRect" parent="." unique_id=255335256]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -45,7 +46,7 @@ texture = ExtResource("2_art")
 expand_mode = 1
 stretch_mode = 6
 
-[node name="Shade" type="TextureRect" parent="."]
+[node name="Shade" type="TextureRect" parent="." unique_id=957778832]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -56,7 +57,7 @@ mouse_filter = 2
 texture = SubResource("GradientTexture2D_shade")
 expand_mode = 1
 
-[node name="PressPrompt" type="Label" parent="."]
+[node name="PressPrompt" type="Label" parent="." unique_id=1089421748]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 8
@@ -79,7 +80,7 @@ text = "PRESS ANY BUTTON"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Menu" type="VBoxContainer" parent="."]
+[node name="Menu" type="VBoxContainer" parent="." unique_id=1135136519]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 12
@@ -94,7 +95,7 @@ mouse_filter = 2
 script = ExtResource("3_row_menu")
 options = PackedStringArray("Play", "Quit")
 
-[node name="Tagline" type="Label" parent="."]
+[node name="Tagline" type="Label" parent="." unique_id=210198609]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 3
@@ -112,3 +113,8 @@ theme_override_colors/font_color = Color(0.64, 1, 0.96, 0.55)
 theme_override_font_sizes/font_size = 20
 text = "if you click Quit, you a bitch"
 horizontal_alignment = 2
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=982848375]
+stream = ExtResource("5_x2yvf")
+volume_db = -20.0
+autoplay = true
