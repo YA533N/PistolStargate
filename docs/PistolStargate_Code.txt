@@ -1,0 +1,5020 @@
+PISTOL STARGATE - FULL SOURCE CODE
+DMET 909 team project. Yaseen Gadalla 58-1662, Mohamed Ashraf 58-17981, Moataz Hegazi 58-13771
+Engine: Godot 4.7 (GDScript). Repository: https://github.com/YA533N/PistolStargate
+Demo video: https://www.youtube.com/watch?v=nCNs6iRzFj8
+Snapshot of commit 9c2e64c. 48 files, 4674 lines.
+Contains every GDScript file, every shader and the project settings (project.godot: autoloads,
+input map, physics layers). Third-party code is left out: addons/lowpolyterrain (Low Poly Terrain Builder).
+Scenes (.tscn), weapon data (.tres) and art are in the repository.
+
+FILES
+   1. project.godot  (149 lines)
+   2. scripts/audio/audio_manager.gd  (28 lines)
+   3. scripts/enemies/chicken.gd  (96 lines)
+   4. scripts/enemies/enemy.gd  (75 lines)
+   5. scripts/enemies/first_descendant.gd  (266 lines)
+   6. scripts/enemies/training_dummy.gd  (22 lines)
+   7. scripts/levels/hub.gd  (5 lines)
+   8. scripts/levels/proving_grounds.gd  (156 lines)
+   9. scripts/levels/spike_trap.gd  (125 lines)
+  10. scripts/npcs/npc.gd  (165 lines)
+  11. scripts/pickups/loot_pickup.gd  (153 lines)
+  12. scripts/pickups/weapon_pickup.gd  (103 lines)
+  13. scripts/player/player.gd  (333 lines)
+  14. scripts/systems/camera_rig.gd  (52 lines)
+  15. scripts/systems/combat.gd  (80 lines)
+  16. scripts/systems/cursor_animator.gd  (35 lines)
+  17. scripts/systems/debug_cheats.gd  (50 lines)
+  18. scripts/systems/effects.gd  (117 lines)
+  19. scripts/systems/game_state.gd  (46 lines)
+  20. scripts/systems/grid.gd  (9 lines)
+  21. scripts/systems/health.gd  (106 lines)
+  22. scripts/systems/loot.gd  (81 lines)
+  23. scripts/systems/portal.gd  (20 lines)
+  24. scripts/systems/transition.gd  (40 lines)
+  25. scripts/ui/cheat_menu.gd  (224 lines)
+  26. scripts/ui/dialogue_box.gd  (128 lines)
+  27. scripts/ui/hud.gd  (226 lines)
+  28. scripts/ui/main_menu.gd  (48 lines)
+  29. scripts/ui/pause_menu.gd  (42 lines)
+  30. scripts/ui/pistol_charge.gd  (206 lines)
+  31. scripts/ui/row_menu.gd  (99 lines)
+  32. scripts/ui/ui_kit.gd  (73 lines)
+  33. scripts/ui/weapon_card.gd  (173 lines)
+  34. scripts/ui/weapon_panel.gd  (60 lines)
+  35. scripts/weapons/arsenal.gd  (323 lines)
+  36. scripts/weapons/projectile.gd  (165 lines)
+  37. scripts/weapons/rarity.gd  (29 lines)
+  38. scripts/weapons/weapon.gd  (96 lines)
+  39. scripts/weapons/weapon_data.gd  (129 lines)
+  40. scripts/weapons/weapon_library.gd  (60 lines)
+  41. scripts/weapons/weapon_slot.gd  (40 lines)
+  42. assets/materials/Interior/checkered_floor.gdshader  (18 lines)
+  43. shaders/dash_water.gdshader  (27 lines)
+  44. shaders/health_segment.gdshader  (24 lines)
+  45. shaders/rarity_beam.gdshader  (23 lines)
+  46. shaders/rarity_ring.gdshader  (14 lines)
+  47. shaders/slot_coin.gdshader  (60 lines)
+  48. shaders/space_background.gdshader  (75 lines)
+
+
+====================================================================================================
+ 1. project.godot
+====================================================================================================
+
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
+[application]
+
+config/name="Pistol Stargate"
+config/description="Isometric bullet hell looter shooter. DMET 909 final team project."
+config/version="0.1.0"
+run/main_scene="res://scenes/ui/main_menu.tscn"
+config/features=PackedStringArray("4.7", "Forward Plus")
+config/icon="res://icon.png"
+
+[autoload]
+
+GameState="*res://scripts/systems/game_state.gd"
+DebugCheats="*res://scripts/systems/debug_cheats.gd"
+Transition="*res://scripts/systems/transition.gd"
+CursorAnimator="*res://scripts/systems/cursor_animator.gd"
+AudioManager="*uid://dex7y5bj3tfqa"
+
+[display]
+
+window/size/viewport_width=1920
+window/size/viewport_height=1080
+window/size/mode=3
+window/size/window_width_override=1280
+window/size/window_height_override=720
+window/stretch/mode="canvas_items"
+window/stretch/aspect="expand"
+mouse_cursor/custom_image="res://assets/textures/ui/cursor_1.png"
+mouse_cursor/custom_image_hotspot=Vector2(32, 32)
+
+[dotnet]
+
+project/assembly_name="Pistol Stargate"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/lowpolyterrain/plugin.cfg")
+
+[filesystem]
+
+import/blender/enabled=false
+
+[input]
+
+move_forward={
+"deadzone": 0.2,
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":16,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":87,"key_label":0,"unicode":0,"location":0,"echo":false,"script":null)
+, Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":16,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":4194320,"key_label":0,"unicode":0,"location":0,"echo":false,"script":null)
+]
+}
+move_back={
+"deadzone": 0.2,
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":16,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":83,"key_label":0,"unicode":0,"location":0,"echo":false,"script":null)
+, Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":16,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":4194322,"key_label":0,"unicode":0,"location":0,"echo":false,"script":null)
+]
+}
+move_left={
+"deadzone": 0.2,
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":16,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":65,"key_label":0,"unicode":0,"location":0,"echo":false,"script":null)
+, Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":16,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":4194319,"key_label":0,"unicode":0,"location":0,"echo":false,"script":null)
+]
+}
+move_right={
+"deadzone": 0.2,
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":16,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":68,"key_label":0,"unicode":0,"location":0,"echo":false,"script":null)
+, Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":16,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":4194321,"key_label":0,"unicode":0,"location":0,"echo":false,"script":null)
+]
+}
+jump={
+"deadzone": 0.2,
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":16,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":32,"key_label":0,"unicode":0,"location":0,"echo":false,"script":null)
+]
+}
+dash={
+"deadzone": 0.2,
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":16,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":4194325,"key_label":0,"unicode":0,"location":0,"echo":false,"script":null)
+]
+}
+slide={
+"deadzone": 0.2,
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":16,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":4194326,"key_label":0,"unicode":0,"location":0,"echo":false,"script":null)
+, Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":16,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":67,"key_label":0,"unicode":0,"location":0,"echo":false,"script":null)
+]
+}
+grapple={
+"deadzone": 0.2,
+"events": [Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":32,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"button_mask":0,"position":Vector2(0, 0),"global_position":Vector2(0, 0),"factor":1.0,"button_index":2,"canceled":false,"pressed":false,"double_click":false,"script":null)
+]
+}
+shoot={
+"deadzone": 0.2,
+"events": [Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":32,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"button_mask":0,"position":Vector2(0, 0),"global_position":Vector2(0, 0),"factor":1.0,"button_index":1,"canceled":false,"pressed":false,"double_click":false,"script":null)
+]
+}
+swap_weapon={
+"deadzone": 0.2,
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":16,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":81,"key_label":0,"unicode":0,"location":0,"echo":false,"script":null)
+, Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":32,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"button_mask":0,"position":Vector2(0, 0),"global_position":Vector2(0, 0),"factor":1.0,"button_index":4,"canceled":false,"pressed":false,"double_click":false,"script":null)
+, Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":32,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"button_mask":0,"position":Vector2(0, 0),"global_position":Vector2(0, 0),"factor":1.0,"button_index":5,"canceled":false,"pressed":false,"double_click":false,"script":null)
+]
+}
+interact={
+"deadzone": 0.2,
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":16,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":69,"key_label":0,"unicode":0,"location":0,"echo":false,"script":null)
+]
+}
+talk={
+"deadzone": 0.2,
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":16,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":69,"key_label":0,"unicode":0,"location":0,"echo":false,"script":null)
+]
+}
+pause={
+"deadzone": 0.2,
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":16,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":4194305,"key_label":0,"unicode":0,"location":0,"echo":false,"script":null)
+]
+}
+weapon_1={
+"deadzone": 0.2,
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":49,"key_label":0,"unicode":0,"location":0,"echo":false,"script":null)
+]
+}
+weapon_2={
+"deadzone": 0.2,
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":50,"key_label":0,"unicode":0,"location":0,"echo":false,"script":null)
+]
+}
+weapon_3={
+"deadzone": 0.2,
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":51,"key_label":0,"unicode":0,"location":0,"echo":false,"script":null)
+]
+}
+
+[layer_names]
+
+3d_physics/layer_1="world"
+3d_physics/layer_2="player"
+3d_physics/layer_3="enemies"
+3d_physics/layer_4="player_projectiles"
+3d_physics/layer_5="enemy_projectiles"
+3d_physics/layer_6="pickups"
+
+
+====================================================================================================
+ 2. scripts/audio/audio_manager.gd
+====================================================================================================
+
+extends Node
+var _music := AudioStreamPlayer.new()
+
+func _ready() -> void:
+	_music.volume_db = -20.0
+	add_child(_music)
+
+## Plays a song. If that song is already playing, it keeps going instead of restarting.
+func play_music(stream: AudioStream) -> void:
+	if _music.stream == stream and _music.playing:
+		return
+	_music.stream = stream
+	_music.play()
+	
+const SFX = {
+	"health_pickup": preload("res://assets/audio/sfx/HealthPickup.mp3"),
+	"weapon_pickup": preload("res://assets/audio/sfx/WeaponPickup.mp3"),
+	"pistol_reload": preload("res://assets/audio/sfx/PistolReload.mp3"),
+	"shotgun_reload": preload("res://assets/audio/sfx/ShotgunReload.mp3"),
+}
+
+func play_sfx(sfx_name: String, volume_db: float = 0.0) -> void:
+	var p := AudioStreamPlayer.new()
+	p.stream = SFX[sfx_name]
+	p.volume_db = volume_db
+	add_child(p)
+	p.play()
+	p.finished.connect(p.queue_free)
+
+
+====================================================================================================
+ 3. scripts/enemies/chicken.gd
+====================================================================================================
+
+class_name Chicken
+extends Enemy
+## The Proving Grounds' first "enemy". Completely harmless: it wanders, pecks at the floor, clucks,
+## and runs from the player. The model has no animations, so the waddle and pecking are done in code.
+
+const CLUCKS := ["BAWK!", "bok?", "BAWK BAWK!", "bok bok", "...bawk", "BAAAWK!"]
+
+@export var walk_speed := 1.4
+@export var panic_speed := 2.6
+@export var panic_distance := 3.5
+## How far from its spawn point it wanders.
+@export var wander_radius := 3.0
+
+@onready var _model: Node3D = $Model
+@onready var _cluck: Label3D = $Cluck
+
+var _home := Vector3.ZERO
+var _wander_target := Vector3.ZERO
+var _peck_time := 0.0
+var _anim_time := 0.0
+var _cluck_time := 1.5
+
+
+func _ready() -> void:
+	super()
+	_home = global_position
+	_wander_target = _home
+	_cluck.visible = false
+
+
+func _physics_process(delta: float) -> void:
+	apply_gravity(delta)
+	var target_velocity := Vector3.ZERO
+	var player := get_player()
+	var panicking := false
+	if player and player.global_position.distance_to(global_position) < panic_distance:
+		var away := global_position - player.global_position
+		# Don't run off forever: lean back toward home when far from it.
+		away += (_home - global_position) * 0.25
+		away.y = 0.0
+		target_velocity = away.normalized() * panic_speed
+		panicking = true
+		_peck_time = 0.0
+	elif _peck_time > 0.0:
+		_peck_time -= delta
+	else:
+		var to_target := _wander_target - global_position
+		to_target.y = 0.0
+		if to_target.length() < 0.4:
+			_peck_time = randf_range(0.8, 2.0)
+			_pick_wander_target()
+		else:
+			target_velocity = to_target.normalized() * walk_speed
+	velocity.x = move_toward(velocity.x, target_velocity.x, 20.0 * delta)
+	velocity.z = move_toward(velocity.z, target_velocity.z, 20.0 * delta)
+	move_and_slide()
+	if is_on_wall():
+		_pick_wander_target()
+	face(velocity, delta, 12.0)
+	_animate(delta, Vector2(velocity.x, velocity.z).length())
+	_tick_cluck(delta, panicking)
+
+
+func _pick_wander_target() -> void:
+	_wander_target = _home + Vector3(randf_range(-wander_radius, wander_radius), 0.0, randf_range(-wander_radius, wander_radius))
+
+
+func _animate(delta: float, speed: float) -> void:
+	_anim_time += delta * (5.0 + speed * 5.0)
+	var moving := speed > 0.2
+	var hop := absf(sin(_anim_time)) * 0.08 if moving else 0.0
+	var waddle := sin(_anim_time) * 0.14 if moving else 0.0
+	var peck := maxf(0.0, sin(_anim_time * 1.6)) * 0.55 if _peck_time > 0.0 else 0.0
+	_model.position.y = hop
+	_model.rotation.z = lerpf(_model.rotation.z, waddle, 0.3)
+	_model.rotation.x = lerpf(_model.rotation.x, peck, 0.3)
+
+
+func _tick_cluck(delta: float, panicking: bool) -> void:
+	_cluck_time -= delta * (3.0 if panicking else 1.0)
+	if _cluck_time > 0.0:
+		return
+	_cluck_time = randf_range(2.0, 4.0)
+	_cluck.text = CLUCKS.pick_random()
+	_cluck.visible = true
+	_cluck.modulate.a = 1.0
+	var tween := create_tween()
+	tween.tween_interval(0.8)
+	tween.tween_property(_cluck, "modulate:a", 0.0, 0.3)
+	tween.tween_callback(_cluck.hide)
+
+
+func _die() -> void:
+	Effects.flash(self, global_position + Vector3.UP * 0.5, Color(1, 1, 1), 1.4, 0.35)
+	Effects.float_text(self, global_position + Vector3.UP * 1.4, "*bawk...*", Color(1, 0.9, 0.7), 0.9)
+	queue_free()
+
+
+====================================================================================================
+ 4. scripts/enemies/enemy.gd
+====================================================================================================
+
+class_name Enemy
+extends CharacterBody3D
+## Base for everything the player can kill: health, gravity, loot and kill credit.
+## tier decides what the Infinite Pistol does: NORMAL enemies die in one shot and spill a jackpot;
+## ELITE and BOSS enemies only take its elite_damage.
+## Expects a Health child. Put enemies on the "enemies" physics layer (3).
+
+signal killed(enemy: Enemy)
+
+enum Tier { NORMAL, ELITE, BOSS }
+
+@export var display_name := "Enemy"
+@export var tier := Tier.NORMAL
+@export var gravity := 24.0
+
+@export_group("Loot")
+## Cash dropped on a normal kill, from x to y.
+@export var money_drop := Vector2i(3, 8)
+@export_range(0.0, 1.0) var ammo_drop_chance := 0.35
+@export_range(0.0, 1.0) var health_drop_chance := 0.15
+@export_range(0.0, 1.0) var weapon_drop_chance := 0.1
+## Always part of the Infinite Pistol jackpot (the tutorial chicken uses this). Random weapons fill the rest.
+@export var jackpot_weapons: Array[WeaponData] = []
+
+@onready var health: Health = $Health
+
+## Set by Combat when the Infinite Pistol lands the killing shot.
+var killed_by_infinite_pistol := false
+
+
+func _ready() -> void:
+	add_to_group("enemies")
+	health.show_damage_numbers = true
+	health.died.connect(_on_died)
+
+
+func is_dead() -> bool:
+	return health.is_dead()
+
+
+func get_player() -> Player:
+	return get_tree().get_first_node_in_group("player") as Player
+
+
+func apply_gravity(delta: float) -> void:
+	if is_on_floor():
+		velocity.y = minf(velocity.y, 0.0)
+	else:
+		velocity.y -= gravity * delta
+
+
+## Turns smoothly toward direction. Imported characters face +Z, so the yaw is atan2(x, z).
+func face(direction: Vector3, delta: float, sharpness := 10.0) -> void:
+	direction.y = 0.0
+	if direction.length_squared() < 0.0001:
+		return
+	rotation.y = lerp_angle(rotation.y, atan2(direction.x, direction.z), 1.0 - exp(-sharpness * delta))
+
+
+func _on_died() -> void:
+	remove_from_group("enemies")
+	set_deferred("collision_layer", 0)
+	GameState.enemy_killed.emit(self)
+	if killed_by_infinite_pistol:
+		Loot.jackpot(self)
+	else:
+		Loot.normal_drop(self)
+	killed.emit(self)
+	_die()
+
+
+## Default death: a puff and gone. Bigger enemies override this to play an animation.
+func _die() -> void:
+	Effects.flash(self, global_position + Vector3.UP * 0.6, Color(1, 0.95, 0.8), 1.2, 0.3)
+	queue_free()
+
+
+====================================================================================================
+ 5. scripts/enemies/first_descendant.gd
+====================================================================================================
+
+class_name FirstDescendant
+extends Enemy
+## Boss of the Proving Grounds: a heavy with a machine gun. It drops in from the sky, walks to mid range,
+## then alternates two attacks, each telegraphed by a short wind-up (a red "!" and a flashing light):
+##   SWEEP - a spray that sweeps an arc across the player, with gaps to slip through.
+##   BURST - three quick aimed bursts at where the player is standing (punishes standing still).
+## Bullets leave the gun and dip to knee height, below the top of the low walls: walls and crates are cover,
+## and a dash (invincible) or a well-timed jump gets you through.
+## Drops ammo at 75% and 50% health and health at 25%, so the fight can't stall when the player runs dry.
+
+enum State { FALLING, LANDED, WALK, WINDUP, SWEEP, BURST, REST, DEAD }
+
+const ANIM_DEATH := "_Action Stash]"
+const ANIM_WALK := "_Action Stash]_001"
+const ANIM_FIRE := "_Action Stash]_002"
+const MUZZLE_BONE := "FX_Muzzle"
+## Bullets fly this high above the boss's feet: under the top of the 0.8 m low walls, so they block them.
+const BULLET_HEIGHT := 0.5
+
+@export var walk_speed := 2.6
+## Distance it tries to keep from the player.
+@export var preferred_range := 9.0
+
+@export_group("Gun")
+@export var bullet_damage := 6
+@export var bullet_speed := 15.0
+@export var sweep_rate := 12.0
+@export var sweep_duration := 2.0
+@export var sweep_arc_degrees := 70.0
+@export var burst_count := 3
+@export var burst_size := 4
+@export var windup_time := 0.7
+@export var rest_time := 1.4
+
+@onready var _model: Node3D = $Model
+@onready var _warning: Label3D = $Warning
+@onready var _warning_light: OmniLight3D = $WarningLight
+
+var state := State.FALLING
+
+var _state_time := 0.0
+var _walk_time := 0.0
+var _anim: AnimationPlayer
+var _muzzle: Node3D
+var _gun := WeaponData.new()
+var _aim_yaw := 0.0
+var _sweep_direction := 1.0
+var _shot_timer := 0.0
+var _shots_fired := 0
+var _next_attack_is_sweep := true
+## Health fractions where it drops supplies.
+var _drops_left := [0.75, 0.5, 0.25]
+
+
+func _ready() -> void:
+	super()
+	health.invulnerable = true
+	health.changed.connect(_on_health_changed)
+	_gun.damage = bullet_damage
+	_gun.projectile_speed = bullet_speed
+	_gun.projectile_size = 0.2
+	_gun.projectile_color = Color(1, 0.3, 0.15)
+	_gun.projectile_range = 40.0
+	_anim = _model.find_children("*", "AnimationPlayer", true, false)[0]
+	for animation in [ANIM_WALK, ANIM_FIRE]:
+		_anim.get_animation(animation).loop_mode = Animation.LOOP_LINEAR
+	_anim.play(ANIM_WALK)
+	_attach_muzzle()
+	_show_warning(false)
+
+
+func _physics_process(delta: float) -> void:
+	_state_time += delta
+	apply_gravity(delta)
+	var player := get_player()
+	match state:
+		State.FALLING:
+			if is_on_floor():
+				_land()
+		State.LANDED:
+			_set_horizontal(Vector3.ZERO, delta)
+			if _state_time > 1.2:
+				_enter(State.WALK)
+		State.WALK:
+			_walk(delta, player)
+		State.WINDUP:
+			_windup(delta, player)
+		State.SWEEP:
+			_sweep(delta)
+		State.BURST:
+			_burst(delta, player)
+		State.REST:
+			_walk(delta, player, 0.5)
+			if _state_time > rest_time:
+				_enter(State.WALK)
+	move_and_slide()
+
+
+func _enter(new_state: State) -> void:
+	state = new_state
+	_state_time = 0.0
+	_show_warning(new_state == State.WINDUP)
+	match new_state:
+		State.WALK:
+			_anim.play(ANIM_WALK)
+			_walk_time = randf_range(1.2, 2.2)
+		State.WINDUP:
+			_anim.play(ANIM_FIRE)
+			_anim.pause()
+		State.SWEEP:
+			_anim.play(ANIM_FIRE)
+			_shot_timer = 0.0
+			_shots_fired = 0
+			_aim_yaw = _yaw_to_player() - deg_to_rad(sweep_arc_degrees) * 0.5 * _sweep_direction
+		State.BURST:
+			_anim.play(ANIM_FIRE)
+			_shots_fired = 0
+		State.REST:
+			_anim.play(ANIM_WALK)
+
+
+func _land() -> void:
+	health.invulnerable = false
+	Effects.flash(self, global_position + Vector3.UP * 0.3, Color(1, 0.4, 0.2), 5.0, 0.5)
+	Effects.shake(self, 0.8)
+	var player := get_player()
+	if player and player.global_position.distance_to(global_position) < 3.5:
+		player.health.take_damage(15)
+	get_tree().call_group("hud", "track_boss", self)
+	_enter(State.LANDED)
+
+
+## Walks to preferred range, strafing once there. speed_scale slows it down while resting.
+func _walk(delta: float, player: Player, speed_scale := 1.0) -> void:
+	if player == null:
+		_set_horizontal(Vector3.ZERO, delta)
+		return
+	var to_player := player.global_position - global_position
+	to_player.y = 0.0
+	var distance := to_player.length()
+	var move := Vector3.ZERO
+	if distance > preferred_range + 1.5:
+		move = to_player.normalized()
+	elif distance < preferred_range - 3.0:
+		move = -to_player.normalized()
+	else:
+		move = to_player.normalized().cross(Vector3.UP) * _sweep_direction * 0.6
+	_set_horizontal(move * walk_speed * speed_scale, delta)
+	face(to_player, delta, 6.0)
+	if state == State.WALK and _state_time > _walk_time:
+		_enter(State.WINDUP)
+
+
+func _windup(delta: float, player: Player) -> void:
+	_set_horizontal(Vector3.ZERO, delta)
+	if player:
+		face(player.global_position - global_position, delta, 8.0)
+	_warning_light.light_energy = 3.0 + sin(_state_time * 30.0) * 2.0
+	if _state_time >= windup_time:
+		_enter(State.SWEEP if _next_attack_is_sweep else State.BURST)
+		_next_attack_is_sweep = not _next_attack_is_sweep
+
+
+func _sweep(delta: float) -> void:
+	_set_horizontal(Vector3.ZERO, delta)
+	_aim_yaw += _sweep_direction * deg_to_rad(sweep_arc_degrees) / sweep_duration * delta
+	rotation.y = _aim_yaw
+	_shot_timer -= delta
+	while _shot_timer <= 0.0:
+		_shot_timer += 1.0 / sweep_rate
+		_shots_fired += 1
+		# Every 4th bullet is skipped, leaving gaps in the wall of fire.
+		if _shots_fired % 4 != 0:
+			_shoot(_aim_yaw + randf_range(-0.02, 0.02))
+	if _state_time >= sweep_duration:
+		_sweep_direction = -_sweep_direction
+		_enter(State.REST)
+
+
+func _burst(delta: float, player: Player) -> void:
+	_set_horizontal(Vector3.ZERO, delta)
+	if player:
+		face(player.global_position - global_position, delta, 10.0)
+	var total := burst_count * burst_size
+	while _shots_fired < total and _state_time >= _burst_shot_time(_shots_fired):
+		_shoot(_yaw_to_player() + randf_range(-0.06, 0.06))
+		_shots_fired += 1
+	if _shots_fired >= total and _state_time > _burst_shot_time(total - 1) + 0.3:
+		_enter(State.REST)
+
+
+## When the nth bullet of a burst attack is due: bursts 0.45 s apart, bullets 0.07 s apart.
+func _burst_shot_time(n: int) -> float:
+	return floori(float(n) / burst_size) * 0.45 + (n % burst_size) * 0.07
+
+
+func _shoot(yaw: float) -> void:
+	var direction := Vector3(sin(yaw), 0.0, cos(yaw))
+	var bullet := Projectile.new()
+	bullet.cruise_height = global_position.y + BULLET_HEIGHT
+	get_tree().current_scene.add_child(bullet)
+	bullet.launch(_gun, _muzzle.global_position, direction, Combat.ENEMY_SHOT_MASK)
+	Effects.flash(self, _muzzle.global_position, _gun.projectile_color, 0.35, 0.06)
+
+
+## Measured from the muzzle, not the body: the gun is held about 0.6 m to the side, so aiming from the
+## body's centre sent every bullet past the player's shoulder. A player closer than the muzzle (it sticks
+## out 2.5 m) is aimed at from the body instead, or the shots would turn backwards.
+func _yaw_to_player() -> float:
+	var player := get_player()
+	if player == null:
+		return rotation.y
+	var from := _muzzle.global_position
+	if global_position.distance_to(player.global_position) < global_position.distance_to(from) + 1.0:
+		from = global_position
+	var offset := player.global_position - from
+	return atan2(offset.x, offset.z)
+
+
+func _set_horizontal(target: Vector3, delta: float) -> void:
+	velocity.x = move_toward(velocity.x, target.x, 20.0 * delta)
+	velocity.z = move_toward(velocity.z, target.z, 20.0 * delta)
+
+
+func _show_warning(on: bool) -> void:
+	_warning.visible = on
+	_warning_light.visible = on
+
+
+func _attach_muzzle() -> void:
+	var skeletons := _model.find_children("*", "Skeleton3D", true, false)
+	var skeleton := skeletons[0] as Skeleton3D if not skeletons.is_empty() else null
+	if skeleton and skeleton.find_bone(MUZZLE_BONE) >= 0:
+		var attachment := BoneAttachment3D.new()
+		attachment.bone_name = MUZZLE_BONE
+		skeleton.add_child(attachment)
+		_muzzle = attachment
+	else:
+		push_warning("First Descendant model has no %s bone; firing from its chest." % MUZZLE_BONE)
+		_muzzle = Marker3D.new()
+		_muzzle.position = Vector3(0, 1.4, 1.2)
+		add_child(_muzzle)
+
+
+func _on_health_changed(current: int, maximum: int) -> void:
+	while not _drops_left.is_empty() and current > 0 and current <= maximum * _drops_left[0]:
+		var threshold: float = _drops_left.pop_front()
+		var kind := LootPickup.Kind.HEALTH if threshold <= 0.25 else LootPickup.Kind.AMMO
+		for i in 2:
+			Loot.spawn_item(self, kind, 25, global_position + Vector3.UP * 2.0, Loot.landing_spot(self, global_position, 2.5, 4.0))
+		Effects.float_text(self, global_position + Vector3.UP * 4.4, "ARMOR CRACKED!", Color(1, 0.6, 0.2), 1.1)
+
+
+func _die() -> void:
+	state = State.DEAD
+	_show_warning(false)
+	set_physics_process(false)
+	_anim.play(ANIM_DEATH)
+	Effects.shake(self, 0.6)
+	# The prize: an Epic or better weapon on top of the normal drop.
+	Loot.spawn_weapon(self, WeaponSlot.new(WeaponLibrary.random_drop(Rarity.Tier.EPIC)), global_position + Vector3.UP * 2.0,
+		Loot.landing_spot(self, global_position, 2.0, 3.0))
+	var tween := create_tween()
+	tween.tween_interval(3.0)
+	tween.tween_property(self, "position:y", position.y - 3.5, 2.0)
+	tween.tween_callback(queue_free)
+
+
+====================================================================================================
+ 6. scripts/enemies/training_dummy.gd
+====================================================================================================
+
+class_name TrainingDummy
+extends Enemy
+## A target for trying weapons out (spawned from the cheat menu). It never moves, shows damage numbers,
+## and heals back to full reset_delay seconds after the last hit. It counts as a normal enemy, so the
+## Infinite Pistol one-shots it and it counts toward the pistol's recharge when killed.
+
+@export var reset_delay := 3.0
+
+var _since_hit := 0.0
+
+
+func _ready() -> void:
+	super()
+	health.damaged.connect(func(_amount: int, _kind: Health.Kind) -> void: _since_hit = 0.0)
+
+
+func _physics_process(delta: float) -> void:
+	apply_gravity(delta)
+	move_and_slide()
+	_since_hit += delta
+	if _since_hit > reset_delay and health.current < health.max_health:
+		health.reset()
+
+
+====================================================================================================
+ 7. scripts/levels/hub.gd
+====================================================================================================
+
+extends Node3D
+## Level 1, the hub (GDD 14.2): teaches movement before the arena.
+## The shop and shooting range from the GDD are not built yet.
+func _ready() -> void:
+	AudioManager.play_music(preload("res://assets/audio/music/CasinoJazz.mp3"))
+
+
+====================================================================================================
+ 8. scripts/levels/proving_grounds.gd
+====================================================================================================
+
+extends Node3D
+## The Proving Grounds: the tutorial arena the Orange Trooper teleports the player to from the hub.
+##   1. He hands over the Infinite Pistol and asks if you understand that you must be merciless.
+##   2. A chicken appears. You shoot it; the Infinite Pistol makes it spill weapons, ammo and cash.
+##   3. The pistol is now empty, so you grab the chicken's weapons for "the true test":
+##      THE FIRST DESCENDANT drops in. Spike traps and low walls in the arena teach "keep moving" and jumping.
+##   4. Beat it and the exit portal back to the hub opens.
+## Dying during the boss fight restarts at the boss with the chicken's weapons back on the floor.
+
+const CHICKEN := preload("res://scenes/enemies/chicken.tscn")
+const FIRST_DESCENDANT := preload("res://scenes/enemies/first_descendant.tscn")
+## What the chicken always drops, so the boss fight is winnable: an SMG, an explosive and a sniper.
+const TUTORIAL_WEAPONS: Array[WeaponData] = [
+	preload("res://resources/weapons/cyber_smg.tres"),
+	preload("res://resources/weapons/plasma.tres"),
+	preload("res://resources/weapons/sniper.tres"),
+]
+const TROOPER_COLOR := Color(1, 0.6, 0.2)
+
+@onready var _player: Player = $Player
+@onready var _trooper: NPC = $OrangeTrooper
+@onready var _chicken_spawn: Marker3D = $ChickenSpawn
+@onready var _boss_spawn: Marker3D = $BossSpawn
+@onready var _exit_portal: Portal = $ExitPortal
+
+
+func _ready() -> void:
+	AudioManager.play_music(preload("res://assets/audio/music/CasinoJazz.mp3"))
+
+	_set_portal_open(false)
+	if GameState.proving_grounds_checkpoint == "boss":
+		_restart_at_boss.call_deferred()
+	else:
+		_intro.call_deferred()
+
+
+func _intro() -> void:
+	_player.arsenal.clear()
+	_player.input_enabled = false
+	await _wait(0.9)
+	await _trooper.say(PackedStringArray([
+		"Welcome to the Proving Grounds, human.",
+		"Don't look so nervous. This is the nice part.",
+		"Here. Take this.",
+	]))
+	_player.arsenal.give_infinite_pistol(true)
+	Effects.flash(self, _player.global_position + Vector3.UP, Rarity.color(Rarity.Tier.INFINITE), 2.0, 0.5)
+	_message("RECEIVED: THE INFINITE PISTOL", 2.5)
+	await _wait(1.4)
+	await _trooper.say(PackedStringArray([
+		"That's the Infinite Pistol. One shot kills any normal creature instantly...",
+		"...and whatever it kills spills everything it was carrying. Weapons. Ammo. Cash.",
+		"Now. To get free, you have to be merciless.",
+	]))
+	var answer := await _trooper.ask("Do you understand?", PackedStringArray(["Yes.", "No."]))
+	while answer == 1:
+		await _trooper.say(PackedStringArray(["...", "Wrong answer. Let's try that again."]))
+		answer = await _trooper.ask("Do you understand?", PackedStringArray(["Yes.", "No."]))
+	await _trooper.say(PackedStringArray(["Good."]))
+
+	var chicken := _spawn_chicken()
+	await _wait(1.0)
+	await _trooper.say(PackedStringArray([
+		"You have to kill that chicken.",
+		"Now.",
+		"It didn't do anything to you. It doesn't matter. Kill it.",
+	]))
+	_player.input_enabled = true
+	await chicken.killed
+	await _wait(1.8)
+	_player.input_enabled = false
+	await _trooper.say(PackedStringArray([
+		"...See that? It spilled everything it had.",
+		"That's how it works in here. Every life the Infinite Pistol takes pays out.",
+		"But it's empty now. It only recharges after you kill a few things with other guns.",
+		"So grab those weapons off the floor. Walk up to one and press E. Fast hands live longer.",
+		"Now you're ready for the true test.",
+	]))
+	GameState.proving_grounds_checkpoint = "boss"
+	await _trooper.say(PackedStringArray(["I'll be watching. From somewhere very, very safe."]))
+	_set_trooper_present(false)
+	await _wait(0.8)
+	_start_boss_fight()
+
+
+func _restart_at_boss() -> void:
+	_set_trooper_present(false)
+	_player.arsenal.clear()
+	_player.arsenal.give_infinite_pistol(false)
+	for i in TUTORIAL_WEAPONS.size():
+		var angle := TAU * i / TUTORIAL_WEAPONS.size()
+		Loot.spawn_weapon(self, WeaponSlot.new(TUTORIAL_WEAPONS[i]), _chicken_spawn.global_position + Vector3.UP,
+			Loot.landing_spot(_player, _chicken_spawn.global_position, 2.5, 3.0, angle))
+	_message("Round two. Grab the guns!", 2.5)
+	await _wait(2.5)
+	_start_boss_fight()
+
+
+func _start_boss_fight() -> void:
+	_player.input_enabled = true
+	var boss := FIRST_DESCENDANT.instantiate() as FirstDescendant
+	add_child(boss)
+	boss.global_position = _boss_spawn.global_position + Vector3.UP * 14.0
+	_message("THE FIRST DESCENDANT", 2.5)
+	await boss.killed
+	_on_boss_defeated()
+
+
+func _on_boss_defeated() -> void:
+	GameState.proving_grounds_checkpoint = ""
+	GameState.proving_grounds_done = true
+	_message("PROVING GROUNDS CLEARED", 3.0)
+	await _wait(3.5)
+	_trooper.global_position = Loot.landing_spot(_player, _player.global_position, 2.5, 2.5)
+	_set_trooper_present(true)
+	_player.input_enabled = false
+	await _trooper.say(PackedStringArray([
+		"Hm. Not bad, human. Not bad at all.",
+		"Keep the Infinite Pistol. Feed it kills and it'll feed you guns.",
+		"The portal's open. Go back to the hub. The arena will be waiting.",
+	]))
+	_player.input_enabled = true
+	_set_portal_open(true)
+
+
+func _spawn_chicken() -> Chicken:
+	var chicken := CHICKEN.instantiate() as Chicken
+	chicken.jackpot_weapons = TUTORIAL_WEAPONS.duplicate()
+	add_child(chicken)
+	chicken.global_position = _chicken_spawn.global_position
+	chicken.rotation.y = PI
+	Effects.flash(self, chicken.global_position + Vector3.UP * 0.5, Color(1, 1, 1), 1.5, 0.4)
+	return chicken
+
+
+## The trooper teleports in or out with a flash. Hidden, he can't be bumped into or shot.
+func _set_trooper_present(present: bool) -> void:
+	Effects.flash(self, _trooper.global_position + Vector3.UP, TROOPER_COLOR, 2.0, 0.4)
+	_trooper.visible = present
+	# The trooper scene's root is a StaticBody3D.
+	_trooper.set("collision_layer", 1 if present else 0)
+
+
+func _set_portal_open(open: bool) -> void:
+	_exit_portal.visible = open
+	_exit_portal.set_deferred("monitoring", open)
+	if open:
+		Effects.flash(self, _exit_portal.global_position + Vector3.UP * 2.0, Color(0.6, 0.9, 1), 3.0, 0.6)
+
+
+func _message(text: String, duration: float) -> void:
+	get_tree().call_group("hud", "show_message", text, duration)
+
+
+func _wait(seconds: float) -> void:
+	await get_tree().create_timer(seconds).timeout
+
+
+====================================================================================================
+ 9. scripts/levels/spike_trap.gd
+====================================================================================================
+
+class_name SpikeTrap
+extends Area3D
+## Hidden floor spikes that teach "keep moving". Step on one and it clicks and glows red; a moment later the
+## spikes shoot up and hurt whoever is still standing there. With cycle_time set it also fires on its own,
+## so a field of traps with different offsets makes a moving pattern.
+## The imported animation retracts the spikes, so extending them plays it backwards.
+
+enum State { HIDDEN, ARMED, UP, COOLDOWN }
+
+@export var damage := 15
+## Seconds between being triggered and the spikes coming up.
+@export var arm_time := 0.55
+@export var up_time := 1.0
+@export var cooldown := 0.6
+## Above 0, the trap also fires by itself every cycle_time seconds, starting after cycle_offset.
+@export var cycle_time := 0.0
+@export var cycle_offset := 0.0
+## Upward pop given to the player when the spikes hit them.
+@export var launch_speed := 6.0
+
+@onready var _model: Node3D = $Model
+@onready var _glow: OmniLight3D = $Glow
+@onready var _warning: MeshInstance3D = $Warning
+
+var state := State.HIDDEN
+
+var _anim: AnimationPlayer
+var _animation := ""
+var _time := 0.0
+var _cycle := 0.0
+var _bodies: Array[Node3D] = []
+var _already_hit: Array[Node3D] = []
+var _warning_material := StandardMaterial3D.new()
+
+
+func _ready() -> void:
+	_anim = _model.find_children("*", "AnimationPlayer", true, false)[0]
+	_animation = _anim.get_animation_list()[0]
+	# Start with the spikes hidden: the last frame of the retract animation.
+	_anim.play(_animation)
+	_anim.seek(_anim.get_animation(_animation).length, true)
+	_anim.pause()
+	_warning_material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	_warning_material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	_warning_material.albedo_color = Color(1, 0.1, 0.05, 0.0)
+	_warning.material_override = _warning_material
+	_glow.light_energy = 0.0
+	_cycle = -cycle_offset
+	body_entered.connect(_on_body_entered)
+	body_exited.connect(_on_body_exited)
+
+
+func _physics_process(delta: float) -> void:
+	_time += delta
+	match state:
+		State.HIDDEN:
+			if cycle_time > 0.0:
+				_cycle += delta
+				if _cycle >= cycle_time:
+					_cycle = 0.0
+					_arm()
+		State.ARMED:
+			var flash := 0.5 + 0.5 * sin(_time * 28.0)
+			_warning_material.albedo_color.a = 0.25 + 0.35 * flash
+			_glow.light_energy = 2.5 * flash
+			if _time >= arm_time:
+				_extend()
+		State.UP:
+			_hurt_bodies()
+			if _time >= up_time:
+				_retract()
+		State.COOLDOWN:
+			if _time >= cooldown:
+				state = State.HIDDEN
+				if not _bodies.is_empty():
+					_arm()
+
+
+func _arm() -> void:
+	state = State.ARMED
+	_time = 0.0
+
+
+func _extend() -> void:
+	state = State.UP
+	_time = 0.0
+	_already_hit.clear()
+	_anim.play(_animation, -1, -2.5, true)
+	_warning_material.albedo_color.a = 0.15
+	_glow.light_energy = 1.0
+
+
+func _retract() -> void:
+	state = State.COOLDOWN
+	_time = 0.0
+	_anim.play(_animation)
+	_warning_material.albedo_color.a = 0.0
+	_glow.light_energy = 0.0
+
+
+func _hurt_bodies() -> void:
+	# Give the spikes a moment to actually come up before they count.
+	if _time < 0.08:
+		return
+	for body in _bodies:
+		if body in _already_hit:
+			continue
+		_already_hit.append(body)
+		var health := Combat.health_of(body)
+		if health:
+			health.take_damage(damage)
+		var player := body as Player
+		if player and not player.health.invulnerable:
+			player.velocity.y = launch_speed
+
+
+func _on_body_entered(body: Node3D) -> void:
+	if not body in _bodies:
+		_bodies.append(body)
+	if state == State.HIDDEN:
+		_arm()
+
+
+func _on_body_exited(body: Node3D) -> void:
+	_bodies.erase(body)
+
+
+====================================================================================================
+10. scripts/npcs/npc.gd
+====================================================================================================
+
+class_name NPC
+extends Node3D
+## A character the player can talk to. When the player is inside TalkArea a "[E] Talk" prompt shows;
+## pressing interact opens the DialogueBox with this NPC's lines and freezes the player until it closes.
+## Level scripts can also drive a conversation with say() and ask() (the Proving Grounds does).
+## Expects children: Model (an imported character), TalkArea (Area3D) and Prompt (Label3D).
+
+## Emitted after a player-started conversation closes.
+signal conversation_finished
+
+@export var speaker_name := "???"
+@export var lines := PackedStringArray()
+## Used instead of lines once the Proving Grounds is done. Leave empty to always use lines.
+@export var lines_after_tutorial := PackedStringArray()
+## Off: no prompt and E does nothing (for NPCs that only talk in scripted scenes).
+@export var can_talk := true
+## Sends the player to this scene after the conversation, with a teleport flash. Empty: stay here.
+@export_file("*.tscn") var send_to_scene := ""
+## Animation to loop on the model. Leave empty to use the model's first animation.
+@export var idle_animation := ""
+## Hold the animation's first frame and only move while talking. Off: loop it all the time.
+@export var animate_only_while_talking := true
+## Turn toward the player when a conversation starts.
+@export var face_player := true
+
+@onready var _model: Node3D = $Model
+@onready var _talk_area: Area3D = $TalkArea
+@onready var _prompt: Label3D = $Prompt
+
+## The player inside the talk area, or null.
+var _player_in_range: Player
+## The player currently in a conversation with this NPC, or null.
+var _talking_to: Player
+var _animation_player: AnimationPlayer
+
+
+func _ready() -> void:
+	_prompt.visible = false
+	_talk_area.body_entered.connect(_on_body_entered)
+	_talk_area.body_exited.connect(_on_body_exited)
+	_setup_animation()
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	if not can_talk or _player_in_range == null or _talking_to != null or not event.is_action_pressed("talk"):
+		return
+	var box := _dialogue_box()
+	if box == null or box.is_open():
+		return
+	get_viewport().set_input_as_handled()
+	_start_talking(box)
+
+
+## Scripted line(s) for cutscenes: animates, faces the player and returns once the box is closed.
+func say(text: PackedStringArray) -> void:
+	var box := _dialogue_box()
+	if box == null:
+		return
+	_begin_scripted()
+	box.start(speaker_name, text)
+	await box.finished
+	_end_scripted()
+
+
+## Scripted question. Returns the index of the answer the player picked.
+func ask(question: String, options: PackedStringArray) -> int:
+	var box := _dialogue_box()
+	if box == null:
+		return 0
+	_begin_scripted()
+	box.ask(speaker_name, question, options)
+	var answer: int = await box.choice_made
+	_end_scripted()
+	return answer
+
+
+func _start_talking(box: DialogueBox) -> void:
+	_talking_to = _player_in_range
+	_talking_to.input_enabled = false
+	_prompt.visible = false
+	if face_player:
+		_turn_toward(_talking_to.global_position)
+	if animate_only_while_talking and _animation_player:
+		_animation_player.play()
+	box.finished.connect(_on_dialogue_finished, CONNECT_ONE_SHOT)
+	var text := lines_after_tutorial if GameState.proving_grounds_done and not lines_after_tutorial.is_empty() else lines
+	box.start(speaker_name, text)
+
+
+func _on_dialogue_finished() -> void:
+	var player := _talking_to
+	_talking_to = null
+	if animate_only_while_talking and _animation_player:
+		_hold_first_frame()
+	conversation_finished.emit()
+	if not send_to_scene.is_empty():
+		# The player stays frozen through the teleport.
+		Effects.flash(self, player.global_position + Vector3.UP, Color(1, 0.6, 0.2), 2.5, 0.6)
+		Transition.change_scene(send_to_scene, Color(1, 0.75, 0.4))
+		return
+	player.input_enabled = true
+	_prompt.visible = _player_in_range != null and can_talk
+
+
+func _begin_scripted() -> void:
+	var player := get_tree().get_first_node_in_group("player") as Player
+	if face_player and player:
+		_turn_toward(player.global_position)
+	if _animation_player:
+		_animation_player.play()
+
+
+func _end_scripted() -> void:
+	if animate_only_while_talking and _animation_player:
+		_hold_first_frame()
+
+
+func _dialogue_box() -> DialogueBox:
+	var box := get_tree().get_first_node_in_group("dialogue_box") as DialogueBox
+	if box == null:
+		push_warning("NPC '%s' has no DialogueBox in the scene to talk through." % speaker_name)
+	return box
+
+
+func _turn_toward(target: Vector3) -> void:
+	var offset := target - global_position
+	# Imported characters face +Z, so the yaw that points them at the target is atan2(x, z).
+	var target_yaw := atan2(offset.x, offset.z)
+	var start_yaw := rotation.y
+	var tween := create_tween()
+	tween.tween_method(func(t: float) -> void: rotation.y = lerp_angle(start_yaw, target_yaw, t), 0.0, 1.0, 0.25)
+
+
+func _setup_animation() -> void:
+	_animation_player = _model.find_child("AnimationPlayer") as AnimationPlayer
+	if _animation_player == null:
+		return
+	var animation := idle_animation
+	if animation.is_empty() and not _animation_player.get_animation_list().is_empty():
+		animation = _animation_player.get_animation_list()[0]
+	if not _animation_player.has_animation(animation):
+		push_warning("NPC '%s' has no animation called '%s'." % [speaker_name, animation])
+		_animation_player = null
+		return
+	_animation_player.play(animation)
+	if animate_only_while_talking:
+		_hold_first_frame()
+
+
+## Freezes the model on the animation's first frame (a standing pose, not the T-pose).
+func _hold_first_frame() -> void:
+	_animation_player.seek(0.0, true)
+	_animation_player.pause()
+
+
+func _on_body_entered(body: Node3D) -> void:
+	if body is Player:
+		_player_in_range = body
+		_prompt.visible = _talking_to == null and can_talk
+
+
+func _on_body_exited(body: Node3D) -> void:
+	if body == _player_in_range:
+		_player_in_range = null
+		_prompt.visible = false
+
+
+====================================================================================================
+11. scripts/pickups/loot_pickup.gd
+====================================================================================================
+
+class_name LootPickup
+extends Node3D
+## Ammo, cash or health on the floor. Collected by walking over it; it flies to the player when they're close.
+## Ammo is only taken if a held gun can use it, and health only if the player is hurt.
+## With respawn_time > 0 it's a cache that comes back after being taken (arena ammo stations).
+
+enum Kind { AMMO, MONEY, HEALTH }
+
+const MAGNET_RANGE := 3.0
+const MAGNET_SPEED := 14.0
+const COLLECT_DISTANCE := 0.9
+## Share of each gun's maximum ammo that one ammo pickup restores.
+const AMMO_FRACTION := 0.35
+const COLORS := {Kind.AMMO: Color(1, 0.75, 0.2), Kind.MONEY: Color(0.35, 1, 0.45), Kind.HEALTH: Color(1, 0.25, 0.3)}
+
+@export var kind := Kind.AMMO
+## Cash for MONEY, hit points for HEALTH. Unused for AMMO.
+@export var amount := 10
+## Seconds until a taken pickup comes back. 0 = it's gone for good.
+@export var respawn_time := 0.0
+
+var _visual: Node3D
+var _label: Label3D
+var _landed := true
+var _hidden_time := 0.0
+var _time := randf() * TAU
+var _home := Vector3.ZERO
+
+
+func _ready() -> void:
+	_home = position
+	_build_visual()
+
+
+func _physics_process(delta: float) -> void:
+	_time += delta
+	if _hidden_time > 0.0:
+		_hidden_time -= delta
+		if _hidden_time <= 0.0:
+			visible = true
+			position = _home
+		return
+	_visual.rotation.y += delta * 2.0
+	_visual.position.y = 0.45 + sin(_time * 3.0) * 0.06
+	if not _landed:
+		return
+	var player := get_tree().get_first_node_in_group("player") as Player
+	if player == null:
+		return
+	var target := player.global_position + Vector3.UP * 0.5
+	var distance := global_position.distance_to(target)
+	if distance > MAGNET_RANGE or not _wanted_by(player):
+		return
+	if distance < COLLECT_DISTANCE:
+		_collect(player)
+	elif respawn_time <= 0.0:
+		global_position = global_position.move_toward(target, MAGNET_SPEED * delta)
+
+
+func launch(from: Vector3, to: Vector3, duration := 0.6) -> void:
+	_landed = false
+	global_position = from
+	var tween := create_tween()
+	tween.tween_method(func(t: float) -> void: global_position = from.lerp(to, t) + Vector3.UP * 2.0 * 4.0 * t * (1.0 - t), 0.0, 1.0, duration)
+	tween.tween_callback(func() -> void: _landed = true)
+
+
+func _wanted_by(player: Player) -> bool:
+	match kind:
+		Kind.AMMO:
+			for slot in player.arsenal.slots:
+				if not slot.is_full():
+					return true
+			return false
+		Kind.HEALTH:
+			return player.health.current < player.health.max_health
+	return true
+
+
+func _collect(player: Player) -> void:
+	var text := ""
+	match kind:
+		Kind.AMMO:
+			player.arsenal.refill_ammo(AMMO_FRACTION)
+			text = "+AMMO"
+		Kind.MONEY:
+			GameState.add_currency(amount, 0)
+			text = "+$%d" % amount
+		Kind.HEALTH:
+			player.health.heal(amount)
+			text = "+%d HP" % amount
+	Effects.float_text(self, player.global_position + Vector3.UP * 2.0, text, COLORS[kind], 0.8)
+	if respawn_time > 0.0:
+		visible = false
+		_hidden_time = respawn_time
+	else:
+		queue_free()
+
+
+func _build_visual() -> void:
+	_visual = Node3D.new()
+	add_child(_visual)
+	var color: Color = COLORS[kind]
+	var material := StandardMaterial3D.new()
+	material.albedo_color = color
+	material.emission_enabled = true
+	material.emission = color
+	material.emission_energy_multiplier = 1.5
+	material.metallic = 0.6
+	material.roughness = 0.3
+	match kind:
+		Kind.AMMO:
+			_add_box(Vector3(0.5, 0.3, 0.32), Vector3.ZERO, material)
+			_add_box(Vector3(0.52, 0.08, 0.34), Vector3(0, 0.1, 0), Effects.glow_material(Color(0.15, 0.1, 0.05)))
+		Kind.MONEY:
+			var coin := CylinderMesh.new()
+			coin.top_radius = 0.24
+			coin.bottom_radius = 0.24
+			coin.height = 0.07
+			coin.material = material
+			var coin_instance := MeshInstance3D.new()
+			coin_instance.mesh = coin
+			coin_instance.rotation_degrees.x = 90.0
+			_visual.add_child(coin_instance)
+		Kind.HEALTH:
+			_add_box(Vector3(0.5, 0.16, 0.16), Vector3.ZERO, material)
+			_add_box(Vector3(0.16, 0.5, 0.16), Vector3.ZERO, material)
+	var light := OmniLight3D.new()
+	light.light_color = color
+	light.light_energy = 0.8
+	light.omni_range = 1.6
+	light.position.y = 0.5
+	add_child(light)
+	if respawn_time > 0.0:
+		_label = Label3D.new()
+		_label.text = "AMMO" if kind == Kind.AMMO else ""
+		_label.modulate = color
+		_label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+		_label.pixel_size = 0.008
+		_label.font_size = 40
+		_label.outline_size = 12
+		_label.position.y = 1.1
+		add_child(_label)
+
+
+func _add_box(size: Vector3, offset: Vector3, material: Material) -> void:
+	var box := BoxMesh.new()
+	box.size = size
+	box.material = material
+	var instance := MeshInstance3D.new()
+	instance.mesh = box
+	instance.position = offset
+	_visual.add_child(instance)
+
+
+====================================================================================================
+12. scripts/pickups/weapon_pickup.gd
+====================================================================================================
+
+class_name WeaponPickup
+extends Area3D
+## A weapon lying on the floor, spinning above a beam and ring of light in its rarity colour.
+## When the player walks into range, their Arsenal focuses the nearest one (the HUD shows its item card)
+## and interact (E) picks it up.
+
+## For weapons placed in the editor. Code sets slot instead (that keeps the ammo of a dropped gun).
+@export var weapon: WeaponData
+
+var slot: WeaponSlot
+
+@onready var _visual: Node3D = $Visual
+@onready var _beam: MeshInstance3D = $Beam
+@onready var _ring: MeshInstance3D = $Ring
+@onready var _light: OmniLight3D = $Light
+@onready var _name_label: Label3D = $NameLabel
+
+var _time := randf() * TAU
+var _landed := true
+var _base_light := 1.4
+
+
+func _ready() -> void:
+	if slot == null and weapon:
+		slot = WeaponSlot.new(weapon)
+	if slot == null:
+		push_warning("WeaponPickup has no weapon set.")
+		queue_free()
+		return
+	var data := slot.data
+	var color := Rarity.color(data.rarity)
+	_tint(_beam, "beam_color", color)
+	_tint(_ring, "ring_color", color)
+	# Rarer weapons get taller beams and brighter light.
+	var beam_scale := 0.8 + 0.15 * data.rarity
+	_beam.scale = Vector3(1.0, beam_scale, 1.0)
+	_beam.position.y = 3.5 * beam_scale
+	_light.light_color = color
+	_base_light = 1.0 + 0.3 * data.rarity
+	_name_label.text = data.display_name
+	_name_label.modulate = color
+	_name_label.visible = false
+	var model := data.build_model()
+	model.scale = Vector3.ONE * 1.5
+	_visual.add_child(model)
+	body_entered.connect(_on_body_entered)
+	body_exited.connect(_on_body_exited)
+
+
+func _process(delta: float) -> void:
+	_time += delta
+	_visual.rotation.y += delta * 1.3
+	_visual.position.y = 0.8 + sin(_time * 2.2) * 0.08
+	_light.light_energy = _base_light * (0.85 + 0.15 * sin(_time * 3.0))
+
+
+## Throws the pickup in an arc from one point to another (loot bursting out of an enemy).
+func launch(from: Vector3, to: Vector3, duration := 0.7) -> void:
+	_landed = false
+	global_position = from
+	var tween := create_tween()
+	tween.tween_method(_arc.bind(from, to), 0.0, 1.0, duration)
+	tween.tween_callback(func() -> void: _landed = true)
+
+
+func can_be_picked() -> bool:
+	return _landed and slot != null
+
+
+func set_focused(focused: bool) -> void:
+	if slot == null:
+		return
+	_name_label.visible = focused
+	_visual.scale = Vector3.ONE * (1.2 if focused else 1.0)
+
+
+## Removes the pickup and hands over its weapon.
+func take() -> WeaponSlot:
+	var taken := slot
+	slot = null
+	Effects.flash(self, global_position + Vector3.UP * 0.8, Rarity.color(taken.data.rarity), 0.8, 0.2)
+	queue_free()
+	return taken
+
+
+func _arc(t: float, from: Vector3, to: Vector3) -> void:
+	global_position = from.lerp(to, t) + Vector3.UP * 3.0 * 4.0 * t * (1.0 - t)
+
+
+func _tint(mesh_instance: MeshInstance3D, parameter: String, color: Color) -> void:
+	var material := mesh_instance.mesh.surface_get_material(0).duplicate() as ShaderMaterial
+	material.set_shader_parameter(parameter, color)
+	mesh_instance.material_override = material
+
+
+func _on_body_entered(body: Node3D) -> void:
+	if body is Player:
+		(body as Player).arsenal.add_nearby(self)
+
+
+func _on_body_exited(body: Node3D) -> void:
+	if body is Player:
+		(body as Player).arsenal.remove_nearby(self)
+
+
+====================================================================================================
+13. scripts/player/player.gd
+====================================================================================================
+
+class_name Player
+extends CharacterBody3D
+
+
+signal dash_charges_changed(charges: int, max_charges: int)
+
+@export_group("Movement")
+## Metres per second. Placeholder.
+@export var move_speed := 8.0
+@export var ground_acceleration := 70.0
+@export var air_acceleration := 35.0
+
+@export_group("Jump")
+## Placeholder. With gravity 24 this gives a jump height of about 1.3 m.
+@export var jump_velocity := 8.0
+@export var gravity := 24.0
+@export var max_fall_speed := 30.0
+
+@export_group("Dash")
+## GDD: 2 grid units, any direction, on the ground or in the air.
+@export var dash_distance_grid := 2.0
+@export var dash_duration := 0.12
+## Placeholder.
+@export var dash_cooldown := 0.6
+## GDD: one charge.
+@export var max_dash_charges := 1
+## Placeholder: invincibility frames for the whole dash.
+@export var dash_invulnerable := true
+
+@export_group("Slide")
+## Starting speed of a slide. It fades out over the slide. Placeholder.
+@export var slide_speed := 14.0
+## Placeholder.
+@export var slide_duration := 0.5
+
+@export_group("Grapple")
+## Max distance to a grapple point. Placeholder.
+@export var grapple_range := 20.0
+## Sideways push from WASD while swinging. Placeholder.
+@export var swing_acceleration := 30.0
+## How fast the rope shortens while held, in metres per second. Placeholder.
+@export var reel_speed := 3.0
+## The rope never reels in shorter than this. Placeholder.
+@export var min_rope_length := 1.5
+## How strongly a stretched rope pulls you back in. Placeholder.
+@export var rope_stiffness := 10.0
+## Fraction of speed lost per second while swinging. Placeholder.
+@export var rope_drag := 0.3
+
+## Falling below this height respawns the player at their start point.
+@export var kill_height := -20.0
+
+@onready var health: Health = $Health
+@onready var body: Node3D = $Body
+@onready var arsenal: Arsenal = $Arsenal
+
+## Where the mouse cursor points, at the held gun's muzzle height. Weapons fire toward it.
+var aim_point := Vector3.ZERO
+var dash_charges := 0
+## Turned off during dialogue. The player still falls and finishes a dash, but ignores move/jump/dash/shoot.
+var input_enabled := true
+
+var _dash_time_left := 0.0
+var _dash_direction := Vector3.ZERO
+var _recharge_time_left := 0.0
+var _spawn_position := Vector3.ZERO
+var _slide_time_left := 0.0
+var _slide_direction := Vector3.ZERO
+## The grapple_point node we are hanging from. Null when not grappling.
+var _grapple_target: Node3D = null
+var _rope_length := 0.0
+
+
+func _ready() -> void:
+	dash_charges = max_dash_charges
+	_spawn_position = global_position
+	aim_point = global_position - global_basis.z
+	health.died.connect(_on_died)
+
+
+func _physics_process(delta: float) -> void:
+	_update_aim()
+	_tick_dash_recharge(delta)
+
+	if input_enabled and not is_dashing() and dash_charges > 0 and Input.is_action_just_pressed("dash"):
+		_release_grapple()  # dashing cancels the grapple
+		_end_slide()  # and the slide
+		_start_dash()
+
+	if input_enabled and not is_dashing() and not is_grappling() and not is_sliding() and Input.is_action_just_pressed("slide"):
+		_start_slide()
+
+	if input_enabled and not is_dashing() and not is_grappling() and Input.is_action_just_pressed("grapple"):
+		_start_grapple()
+		if is_grappling():
+			_end_slide()
+
+	var was_dashing := is_dashing()
+	if was_dashing:
+		_process_dash(delta)
+	elif is_grappling():
+		_process_grapple(delta)
+	elif is_sliding():
+		_process_slide(delta)
+	else:
+		_process_movement(delta)
+
+	move_and_slide()
+
+	# Ended after moving, so the dash's last partial step still uses dash speed.
+	if was_dashing and not is_dashing():
+		_end_dash()
+
+	arsenal.update(aim_point, input_enabled, delta)
+
+	if global_position.y < kill_height:
+		_respawn()
+
+
+func is_dashing() -> bool:
+	return _dash_time_left > 0.0
+
+
+func is_grappling() -> bool:
+	return _grapple_target != null
+
+
+func is_sliding() -> bool:
+	return _slide_time_left > 0.0
+
+
+## 0 right after a dash, 1 when the next charge is ready. For the HUD.
+func dash_recharge_progress() -> float:
+	if dash_charges >= max_dash_charges or dash_cooldown <= 0.0:
+		return 1.0
+	return 1.0 - _recharge_time_left / dash_cooldown
+
+
+func _process_movement(delta: float) -> void:
+	var input := Vector2.ZERO
+	if input_enabled:
+		input = Input.get_vector("move_left", "move_right", "move_forward", "move_back")
+	var target_velocity := _camera_relative(input) * move_speed
+	var acceleration := ground_acceleration if is_on_floor() else air_acceleration
+	var horizontal := Vector3(velocity.x, 0.0, velocity.z).move_toward(target_velocity, acceleration * delta)
+	velocity.x = horizontal.x
+	velocity.z = horizontal.z
+
+	if is_on_floor():
+		if input_enabled and Input.is_action_just_pressed("jump"):
+			velocity.y = jump_velocity
+	else:
+		velocity.y = maxf(velocity.y - gravity * delta, -max_fall_speed)
+
+
+func _start_dash() -> void:
+	var input := Input.get_vector("move_left", "move_right", "move_forward", "move_back")
+	var direction := _camera_relative(input)
+	if direction == Vector3.ZERO:
+		# No movement key held: dash toward where the player is aiming.
+		direction = -body.global_basis.z
+		direction.y = 0.0
+	_dash_direction = direction.normalized()
+	_dash_time_left = dash_duration
+
+	if dash_charges == max_dash_charges:
+		_recharge_time_left = dash_cooldown
+	dash_charges -= 1
+	health.invulnerable = dash_invulnerable
+	dash_charges_changed.emit(dash_charges, max_dash_charges)
+
+
+func _process_dash(delta: float) -> void:
+	# Scale the last frame's step so the dash covers exactly the set distance.
+	var step := minf(delta, _dash_time_left)
+	var speed := Grid.to_world(dash_distance_grid) / dash_duration
+	# y stays 0, so a dash ignores gravity, including in the air.
+	velocity = _dash_direction * (speed * step / delta)
+	_dash_time_left -= step
+
+
+## Needs a movement key held, so a slide always has a direction.
+func _start_slide() -> void:
+	if not is_on_floor():
+		return
+	var input := Input.get_vector("move_left", "move_right", "move_forward", "move_back")
+	var direction := _camera_relative(input)
+	if direction == Vector3.ZERO:
+		return
+	_slide_direction = direction.normalized()
+	_slide_time_left = slide_duration
+
+
+## Burst of speed that fades out. Jumping, running off a ledge or running out of time ends it.
+func _process_slide(delta: float) -> void:
+	_slide_time_left -= delta
+	if _slide_time_left <= 0.0 or not is_on_floor() or not input_enabled or Input.is_action_just_pressed("jump"):
+		_end_slide()
+		# Hands over to normal movement this same frame, which also handles the jump.
+		_process_movement(delta)
+		return
+
+	var speed := slide_speed * (0.4 + 0.6 * _slide_time_left / slide_duration)
+	velocity.x = _slide_direction.x * speed
+	velocity.z = _slide_direction.z * speed
+	# Keeps the player pressed to the floor on slopes.
+	velocity.y = maxf(velocity.y - gravity * delta, -max_fall_speed)
+
+
+func _end_slide() -> void:
+	_slide_time_left = 0.0
+
+
+## Picks the grapple_point nearest the cursor (measured flat on the ground plane) within range.
+func _start_grapple() -> void:
+	var best: Node3D = null
+	var best_dist := INF
+	for node in get_tree().get_nodes_in_group("grapple_point"):
+		var point := node as Node3D
+		if point == null or point.global_position.distance_to(global_position) > grapple_range:
+			continue
+		var flat := point.global_position
+		flat.y = aim_point.y
+		var d := flat.distance_to(aim_point)
+		if d < best_dist:
+			best_dist = d
+			best = point
+	_grapple_target = best
+	if _grapple_target:
+		_rope_length = _grapple_target.global_position.distance_to(global_position)
+
+
+## Rope swing: gravity and WASD push you around, and the rope only stops you moving away from the anchor.
+func _process_grapple(delta: float) -> void:
+	if not is_instance_valid(_grapple_target) or not input_enabled \
+			or Input.is_action_just_released("grapple") or Input.is_action_just_pressed("jump"):
+		_release_grapple()
+		return
+
+	_rope_length = maxf(_rope_length - reel_speed * delta, min_rope_length)
+
+	var input := Input.get_vector("move_left", "move_right", "move_forward", "move_back")
+	velocity.y = maxf(velocity.y - gravity * delta, -max_fall_speed)
+	velocity += _camera_relative(input) * swing_acceleration * delta
+	velocity *= 1.0 - rope_drag * delta
+
+	var to_anchor := _grapple_target.global_position - global_position
+	var dist := to_anchor.length()
+	if dist > _rope_length and dist > 0.001:
+		var rope_dir := to_anchor / dist
+		# Cancel only the part of the velocity that points away from the anchor.
+		var away := velocity.dot(-rope_dir)
+		if away > 0.0:
+			velocity += rope_dir * away
+		velocity += rope_dir * (dist - _rope_length) * rope_stiffness
+
+
+## Velocity is kept, so letting go flings you along your swing.
+func _release_grapple() -> void:
+	_grapple_target = null
+
+
+func _end_dash() -> void:
+	_dash_time_left = 0.0
+	# Keep some momentum instead of stopping dead.
+	velocity = _dash_direction * move_speed
+	health.invulnerable = false
+
+
+func _tick_dash_recharge(delta: float) -> void:
+	if dash_charges >= max_dash_charges:
+		return
+	_recharge_time_left -= delta
+	if _recharge_time_left <= 0.0:
+		dash_charges += 1
+		_recharge_time_left = dash_cooldown if dash_charges < max_dash_charges else 0.0
+		dash_charges_changed.emit(dash_charges, max_dash_charges)
+
+
+## Turns WASD input into a world direction, so "up" on the keyboard is "up" on screen.
+func _camera_relative(input: Vector2) -> Vector3:
+	var camera := get_viewport().get_camera_3d()
+	if camera == null:
+		return Vector3(input.x, 0.0, input.y)
+	var forward := -camera.global_basis.z
+	forward.y = 0.0
+	var right := camera.global_basis.x
+	right.y = 0.0
+	return (right.normalized() * input.x - forward.normalized() * input.y).limit_length(1.0)
+
+
+func _update_aim() -> void:
+	var camera := get_viewport().get_camera_3d()
+	if camera == null:
+		return
+	var mouse := get_viewport().get_mouse_position()
+	var ray_origin := camera.project_ray_origin(mouse)
+	var ray_normal := camera.project_ray_normal(mouse)
+	# Aim at gun height, not the floor: with the tilted camera, a bullet passing over a floor point shows up
+	# above it on screen, so it would miss the cursor.
+	var muzzle_height := arsenal.held.muzzle_position().y if arsenal.held else global_position.y + 1.0
+	var aim_height := muzzle_height
+	# What's under the cursor: an enemy, or the floor / a prop.
+	var under := get_world_3d().direct_space_state.intersect_ray(
+			PhysicsRayQueryParameters3D.create(ray_origin, ray_origin + ray_normal * 500.0, Combat.PLAYER_SHOT_MASK))
+	var hit: Variant = null
+	if not under.is_empty() and not is_on_floor() and Combat.health_of(under.collider):
+		# In the air (grapple, jump) with the cursor on an enemy: shoot down at exactly that spot on it.
+		hit = under.position
+	else:
+		# Up high, aim at gun height above the ground under the cursor, so shots angle down to enemies below.
+		# Never higher than the gun: on flat ground this is the same height and shots stay flat.
+		if not under.is_empty():
+			aim_height = minf(muzzle_height, under.position.y + muzzle_height - global_position.y)
+		hit = Plane(Vector3.UP, aim_height).intersects_ray(ray_origin, ray_normal)
+	if hit == null:
+		return
+	aim_point = hit
+	var look_target := Vector3(aim_point.x, body.global_position.y, aim_point.z)
+	if body.global_position.distance_squared_to(look_target) > 0.01:
+		body.look_at(look_target, Vector3.UP)
+
+
+func _respawn() -> void:
+	_release_grapple()
+	_end_slide()
+	global_position = _spawn_position
+	velocity = Vector3.ZERO
+
+
+func _on_died() -> void:
+	# Placeholder until restart/checkpoint behaviour is decided (GDD 13.3).
+	get_tree().reload_current_scene.call_deferred()
+
+
+====================================================================================================
+14. scripts/systems/camera_rig.gd
+====================================================================================================
+
+class_name CameraRig
+extends Node3D
+## Isometric camera that follows a target with smoothing, and shakes on big hits (Effects.shake()).
+## The fixed angle (45 degree yaw, 35.264 degree pitch, orthographic) lives on the
+## Yaw/Pitch/Camera3D children in camera_rig.tscn.
+
+@export var target: Node3D
+## Higher is snappier. Frame-rate independent.
+@export var follow_sharpness := 10.0
+## Pulls the camera this fraction of the way toward the player's aim point,
+## so the player sees more of the screen in the direction they're shooting.
+@export_range(0.0, 0.5) var aim_lead := 0.15
+## Largest shake offset in metres, and how fast a shake dies down (per second).
+@export var max_shake := 0.6
+@export var shake_decay := 2.5
+
+@onready var _camera: Camera3D = find_child("Camera3D") as Camera3D
+
+var _trauma := 0.0
+
+
+func _ready() -> void:
+	add_to_group("camera_rig")
+	if target:
+		global_position = target.global_position
+
+
+func _physics_process(delta: float) -> void:
+	if target == null:
+		return
+	var goal := target.global_position
+	var player := target as Player
+	if player and aim_lead > 0.0:
+		# Sideways only: the aim point sits at gun height, which shouldn't lift the camera.
+		var lead := player.aim_point - goal
+		lead.y = 0.0
+		goal += lead * aim_lead
+	global_position = global_position.lerp(goal, 1.0 - exp(-follow_sharpness * delta))
+
+
+func _process(delta: float) -> void:
+	if _camera == null:
+		return
+	_trauma = maxf(_trauma - shake_decay * delta, 0.0)
+	var amount := _trauma * _trauma * max_shake
+	_camera.h_offset = randf_range(-amount, amount)
+	_camera.v_offset = randf_range(-amount, amount)
+
+
+## strength 0-1; shakes add up to a maximum of 1.
+func shake(strength: float) -> void:
+	_trauma = minf(_trauma + strength, 1.0)
+
+
+====================================================================================================
+15. scripts/systems/combat.gd
+====================================================================================================
+
+class_name Combat
+## Damage rules shared by every gun, the player's and the enemies': the Infinite Pistol's instant kill,
+## poison, explosions and chain lightning.
+
+## Player shots hit walls and enemies; enemy shots hit walls and the player (see the layer names in Project Settings).
+const PLAYER_SHOT_MASK := 1 | 4
+const ENEMY_SHOT_MASK := 1 | 2
+
+
+## The Health of a body that was hit, or null for walls and props.
+static func health_of(node: Node) -> Health:
+	if node == null:
+		return null
+	return node.get_node_or_null("Health") as Health
+
+
+## One projectile or beam hitting target.
+static func hit(target: Node, weapon: WeaponData, amount: int, kind := Health.Kind.NORMAL) -> void:
+	var health := health_of(target)
+	if health == null or health.is_dead():
+		return
+	if weapon.instant_kill_normal:
+		var enemy := target as Enemy
+		if enemy and enemy.tier == Enemy.Tier.NORMAL:
+			enemy.killed_by_infinite_pistol = true
+			health.take_damage(health.current, Health.Kind.INSTAKILL)
+			return
+		amount = weapon.elite_damage
+	health.take_damage(amount, kind)
+	if weapon.poison_dps > 0:
+		health.apply_poison(weapon.poison_dps, weapon.poison_duration)
+
+
+## Damages everything on the other team within radius of center.
+static func explode(context: Node, center: Vector3, radius: float, amount: int, color: Color, hurts_enemies := true) -> void:
+	Effects.flash(context, center, color, radius, 0.35)
+	Effects.shake(context, 0.12)
+	var group := "enemies" if hurts_enemies else "player"
+	for node in context.get_tree().get_nodes_in_group(group):
+		var body := node as Node3D
+		if body == null:
+			continue
+		var offset := body.global_position - center
+		offset.y = 0.0
+		if offset.length() <= radius + 0.5:
+			var health := health_of(body)
+			if health:
+				health.take_damage(amount, Health.Kind.EXPLOSION)
+
+
+## Lightning from the enemy that was hit to up to weapon.chain_count others nearby, one after another.
+static func chain(context: Node, first: Node3D, weapon: WeaponData, amount: int) -> void:
+	var already_hit: Array[Node3D] = [first]
+	var from := first
+	for i in weapon.chain_count:
+		var next := nearest_enemy(context, from.global_position, weapon.chain_range, already_hit)
+		if next == null:
+			return
+		Effects.lightning(context, from.global_position + Vector3.UP, next.global_position + Vector3.UP, weapon.projectile_color)
+		var health := health_of(next)
+		if health:
+			health.take_damage(maxi(1, roundi(amount * weapon.chain_damage_factor)), Health.Kind.CHAIN)
+		already_hit.append(next)
+		from = next
+
+
+## Closest living enemy to point on the ground plane, within max_distance. Null if none.
+static func nearest_enemy(context: Node, point: Vector3, max_distance: float, exclude: Array[Node3D] = []) -> Node3D:
+	var best: Node3D = null
+	var best_distance := max_distance
+	for node in context.get_tree().get_nodes_in_group("enemies"):
+		var enemy := node as Node3D
+		if enemy == null or enemy in exclude:
+			continue
+		var offset := enemy.global_position - point
+		offset.y = 0.0
+		if offset.length() < best_distance:
+			best_distance = offset.length()
+			best = enemy
+	return best
+
+
+====================================================================================================
+16. scripts/systems/cursor_animator.gd
+====================================================================================================
+
+extends Node
+## Autoload "CursorAnimator": the team's red crosshair as the mouse cursor everywhere (menus, pause, gameplay),
+## animated by swapping between its two frames. The project setting display/mouse_cursor/custom_image holds
+## frame 1, so the cursor is already there while the game starts.
+
+const FRAMES: Array[Texture2D] = [
+	preload("res://assets/textures/ui/cursor_1.png"),
+	preload("res://assets/textures/ui/cursor_2.png"),
+]
+# Seconds each frame stays up, as timed in the Aseprite animation.
+const DURATIONS: Array[float] = [1.0, 0.5]
+# The centre of the cross, the pixel that clicks.
+const HOTSPOT := Vector2(32, 32)
+
+var _frame := 0
+var _time := 0.0
+
+
+func _ready() -> void:
+	# Keeps animating while the tree is paused, so the pause menu's cursor moves too.
+	process_mode = Node.PROCESS_MODE_ALWAYS
+	_show_frame()
+
+
+func _process(delta: float) -> void:
+	_time += delta
+	if _time < DURATIONS[_frame]:
+		return
+	_time -= DURATIONS[_frame]
+	_frame = (_frame + 1) % FRAMES.size()
+	_show_frame()
+
+
+func _show_frame() -> void:
+	Input.set_custom_mouse_cursor(FRAMES[_frame], Input.CURSOR_ARROW, HOTSPOT)
+
+
+====================================================================================================
+17. scripts/systems/debug_cheats.gd
+====================================================================================================
+
+extends Node
+## Autoload "DebugCheats": test keys for playtesting (GDD 20.7). Disabled in release exports.
+##   F1  hurt the player for 10
+##   F2  heal the player for 25
+##   F3  add 50 weapon currency and 10 relic currency
+##   F4  weapon test menu: equip or spawn any weapon, spawn enemies and a training dummy (see CheatMenu)
+##   F5  spawn a random weapon on the floor in front of the player
+##   F6  spawn a training dummy
+##   F7  give the Infinite Pistol, or recharge it
+##   F8  refill all ammo
+
+var _menu: CheatMenu
+
+
+func _ready() -> void:
+	if not OS.is_debug_build():
+		set_process_unhandled_input(false)
+		return
+	# Keeps working while the game is paused, so F4 can close the menu again.
+	process_mode = Node.PROCESS_MODE_ALWAYS
+	_menu = CheatMenu.new()
+	add_child(_menu)
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	var key := event as InputEventKey
+	if key == null or not key.pressed or key.echo:
+		return
+	var player := get_tree().get_first_node_in_group("player") as Player
+	if key.physical_keycode == KEY_F4:
+		_menu.toggle()
+		get_viewport().set_input_as_handled()
+		return
+	if player == null or get_tree().paused:
+		return
+	match key.physical_keycode:
+		KEY_F1:
+			player.health.take_damage(10)
+		KEY_F2:
+			player.health.heal(25)
+		KEY_F3:
+			GameState.add_currency(50, 10)
+		KEY_F5:
+			_menu.spawn_weapon(WeaponLibrary.random_drop())
+		KEY_F6:
+			_menu.spawn_enemy(CheatMenu.DUMMY)
+		KEY_F7:
+			_menu.charge_pistol()
+		KEY_F8:
+			player.arsenal.refill_ammo(1.0)
+
+
+====================================================================================================
+18. scripts/systems/effects.gd
+====================================================================================================
+
+class_name Effects
+## Small throwaway visuals made in code: flashes, lightning, beams and floating damage numbers.
+## Everything here frees itself when its tween ends.
+
+static var _materials := {}
+
+
+## Unshaded glowing material, cached per colour so hundreds of bullets share a few materials.
+static func glow_material(color: Color, transparent := false) -> StandardMaterial3D:
+	var key := "%s|%s" % [color, transparent]
+	if not _materials.has(key):
+		var material := StandardMaterial3D.new()
+		material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+		material.albedo_color = color
+		if transparent:
+			material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+			material.blend_mode = BaseMaterial3D.BLEND_MODE_ADD
+			material.no_depth_test = false
+		material.disable_receive_shadows = true
+		_materials[key] = material
+	return _materials[key]
+
+
+## A sphere that grows and fades: muzzle flashes, explosions, spawn and teleport puffs.
+static func flash(context: Node, position: Vector3, color: Color, radius := 1.0, duration := 0.3) -> void:
+	var root := _root(context)
+	if root == null:
+		return
+	var mesh := SphereMesh.new()
+	mesh.radius = 1.0
+	mesh.height = 2.0
+	mesh.radial_segments = 16
+	mesh.rings = 8
+	var material := glow_material(color, true).duplicate() as StandardMaterial3D
+	mesh.material = material
+	var instance := MeshInstance3D.new()
+	instance.mesh = mesh
+	instance.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	root.add_child(instance)
+	instance.global_position = position
+	instance.scale = Vector3.ONE * radius * 0.3
+	var tween := instance.create_tween().set_parallel()
+	tween.tween_property(instance, "scale", Vector3.ONE * radius, duration).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
+	tween.tween_property(material, "albedo_color:a", 0.0, duration)
+	tween.chain().tween_callback(instance.queue_free)
+
+
+## A straight glowing line from a to b (railgun beam, lightning arcs).
+static func beam(context: Node, a: Vector3, b: Vector3, color: Color, width := 0.12, duration := 0.25) -> void:
+	var root := _root(context)
+	var length := a.distance_to(b)
+	if root == null or length < 0.01:
+		return
+	var mesh := BoxMesh.new()
+	mesh.size = Vector3(width, width, length)
+	var material := glow_material(color, true).duplicate() as StandardMaterial3D
+	mesh.material = material
+	var instance := MeshInstance3D.new()
+	instance.mesh = mesh
+	instance.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	root.add_child(instance)
+	instance.global_position = (a + b) * 0.5
+	var up := Vector3.UP if absf((b - a).normalized().y) < 0.99 else Vector3.RIGHT
+	instance.look_at(b, up)
+	var tween := instance.create_tween().set_parallel()
+	tween.tween_property(material, "albedo_color:a", 0.0, duration)
+	tween.tween_property(instance, "scale", Vector3(0.2, 0.2, 1.0), duration)
+	tween.chain().tween_callback(instance.queue_free)
+
+
+## Jagged lightning between two points, built from a few short beams.
+static func lightning(context: Node, a: Vector3, b: Vector3, color: Color, duration := 0.22) -> void:
+	var points := [a]
+	var segments := 5
+	for i in range(1, segments):
+		var t := float(i) / segments
+		var jitter := Vector3(randf_range(-0.35, 0.35), randf_range(-0.2, 0.2), randf_range(-0.35, 0.35))
+		points.append(a.lerp(b, t) + jitter)
+	points.append(b)
+	for i in points.size() - 1:
+		beam(context, points[i], points[i + 1], color, 0.07, duration)
+
+
+## Floating text that rises and fades, e.g. damage numbers.
+static func float_text(context: Node, position: Vector3, text: String, color: Color, size := 1.0) -> void:
+	var root := _root(context)
+	if root == null:
+		return
+	var label := Label3D.new()
+	label.text = text
+	label.modulate = color
+	label.outline_modulate = Color(0, 0, 0, 0.85)
+	label.font_size = int(56 * size)
+	label.outline_size = int(14 * size)
+	label.pixel_size = 0.01
+	label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+	label.no_depth_test = true
+	label.render_priority = 10
+	root.add_child(label)
+	label.global_position = position + Vector3(randf_range(-0.3, 0.3), 0, randf_range(-0.3, 0.3))
+	var tween := label.create_tween().set_parallel()
+	tween.tween_property(label, "global_position:y", label.global_position.y + 1.4, 0.8).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD)
+	tween.tween_property(label, "modulate:a", 0.0, 0.35).set_delay(0.45)
+	tween.chain().tween_callback(label.queue_free)
+
+
+## Shakes every camera rig in the scene.
+static func shake(context: Node, strength := 0.3) -> void:
+	if context.is_inside_tree():
+		context.get_tree().call_group("camera_rig", "shake", strength)
+
+
+static func _root(context: Node) -> Node:
+	if context == null or not context.is_inside_tree():
+		return null
+	var tree := context.get_tree()
+	return tree.current_scene if tree.current_scene else tree.root
+
+
+====================================================================================================
+19. scripts/systems/game_state.gd
+====================================================================================================
+
+extends Node
+## Autoload "GameState": run-wide state that survives scene changes.
+## Holds the two currencies from the GDD (weapon currency and relic currency), the player's weapons
+## between scenes, and tutorial progress.
+
+signal currency_changed(weapon_currency: int, relic_currency: int)
+## Every enemy death. The Infinite Pistol charges from these. Emitted by Enemy, not here.
+@warning_ignore("unused_signal")
+signal enemy_killed(enemy: Node)
+
+var weapon_currency := 0
+var relic_currency := 0
+## The player's weapons, written by Arsenal whenever they change. Empty at the start of a run.
+var loadout := {}
+## The Proving Grounds (tutorial) has been beaten at least once this run.
+var proving_grounds_done := false
+## Where the Proving Grounds restarts after the player dies: "" (the beginning) or "boss".
+var proving_grounds_checkpoint := ""
+
+
+func add_currency(weapon: int, relic: int) -> void:
+	weapon_currency += weapon
+	relic_currency += relic
+	currency_changed.emit(weapon_currency, relic_currency)
+
+
+func can_afford(weapon_cost: int, relic_cost: int) -> bool:
+	return weapon_currency >= weapon_cost and relic_currency >= relic_cost
+
+
+## Returns false and spends nothing if the player can't afford it.
+func spend(weapon_cost: int, relic_cost: int) -> bool:
+	if not can_afford(weapon_cost, relic_cost):
+		return false
+	add_currency(-weapon_cost, -relic_cost)
+	return true
+
+
+## A new run: no money, no weapons, tutorial not done.
+func reset_run() -> void:
+	weapon_currency = 0
+	relic_currency = 0
+	loadout = {}
+	proving_grounds_done = false
+	proving_grounds_checkpoint = ""
+	currency_changed.emit(weapon_currency, relic_currency)
+
+
+====================================================================================================
+20. scripts/systems/grid.gd
+====================================================================================================
+
+class_name Grid
+## World measurements. The GDD gives distances in grid units; this converts them to metres.
+
+## Metres per grid unit. Changing this one value rescales every grid-based distance.
+const UNIT := 2.0
+
+
+static func to_world(grid_units: float) -> float:
+	return grid_units * UNIT
+
+
+====================================================================================================
+21. scripts/systems/health.gd
+====================================================================================================
+
+class_name Health
+extends Node
+## Reusable hit points. Add as a child of the player or any enemy and listen to its signals.
+## Also runs poison damage-over-time and can pop up floating damage numbers.
+
+signal changed(current: int, maximum: int)
+signal damaged(amount: int, kind: Kind)
+signal died
+
+## What caused the damage, so damage numbers can be coloured.
+enum Kind { NORMAL, POISON, EXPLOSION, CHAIN, INSTAKILL }
+
+const KIND_COLORS := {
+	Kind.NORMAL: Color(1, 1, 1),
+	Kind.POISON: Color(0.45, 1, 0.3),
+	Kind.EXPLOSION: Color(1, 0.6, 0.2),
+	Kind.CHAIN: Color(0.45, 0.85, 1),
+	Kind.INSTAKILL: Color(0.5, 1, 1),
+}
+const POISON_TICK := 0.5
+
+@export var max_health := 100
+## Floating numbers above the owner when it takes damage (on for enemies).
+@export var show_damage_numbers := false
+## Height of the damage numbers above the owner's origin.
+@export var number_height := 1.8
+
+var current := 0
+## Set by the owner, e.g. during a dash's invincibility frames.
+var invulnerable := false
+## Debug cheat: ignore all damage.
+var infinite_health := false
+
+var _poison_dps := 0
+var _poison_time_left := 0.0
+var _poison_tick_left := 0.0
+
+
+func _ready() -> void:
+	current = max_health
+	set_process(false)
+
+
+func is_dead() -> bool:
+	return current <= 0
+
+
+func is_poisoned() -> bool:
+	return _poison_time_left > 0.0
+
+
+func take_damage(amount: int, kind := Kind.NORMAL) -> void:
+	if invulnerable or infinite_health or is_dead() or amount <= 0:
+		return
+	current = maxi(current - amount, 0)
+	changed.emit(current, max_health)
+	damaged.emit(amount, kind)
+	if show_damage_numbers:
+		_show_number(amount, kind)
+	if current == 0:
+		_poison_time_left = 0.0
+		died.emit()
+
+
+func heal(amount: int) -> void:
+	if is_dead() or amount <= 0:
+		return
+	current = mini(current + amount, max_health)
+	changed.emit(current, max_health)
+
+
+## Fills health back up without any effects (training dummy, cheats).
+func reset() -> void:
+	current = max_health
+	changed.emit(current, max_health)
+
+
+## Poison deals dps every second for duration. A new dose refreshes the timer and keeps the stronger dps.
+func apply_poison(dps: int, duration: float) -> void:
+	if is_dead() or dps <= 0 or duration <= 0.0:
+		return
+	_poison_dps = maxi(_poison_dps, dps) if is_poisoned() else dps
+	_poison_time_left = maxf(_poison_time_left, duration)
+	if not is_processing():
+		_poison_tick_left = POISON_TICK
+	set_process(true)
+
+
+func _process(delta: float) -> void:
+	_poison_time_left -= delta
+	_poison_tick_left -= delta
+	if _poison_tick_left <= 0.0:
+		_poison_tick_left += POISON_TICK
+		take_damage(maxi(1, roundi(_poison_dps * POISON_TICK)), Kind.POISON)
+	if _poison_time_left <= 0.0 or is_dead():
+		_poison_time_left = 0.0
+		set_process(false)
+
+
+func _show_number(amount: int, kind: Kind) -> void:
+	var body := get_parent() as Node3D
+	if body == null:
+		return
+	var text := "INSTAKILL!" if kind == Kind.INSTAKILL else str(amount)
+	var size := 1.5 if kind == Kind.INSTAKILL else (0.8 if kind == Kind.POISON else 1.0)
+	Effects.float_text(self, body.global_position + Vector3.UP * number_height, text, KIND_COLORS[kind], size)
+
+
+====================================================================================================
+22. scripts/systems/loot.gd
+====================================================================================================
+
+class_name Loot
+## Spawns pickups: what enemies drop, the Infinite Pistol's jackpot, weapons the player drops,
+## and weapons spawned by the cheat menu. Pickups burst out in an arc and land on the floor.
+
+const WEAPON_PICKUP := preload("res://scenes/pickups/weapon_pickup.tscn")
+const LOOT_PICKUP := preload("res://scenes/pickups/loot_pickup.tscn")
+
+
+static func spawn_weapon(context: Node3D, slot: WeaponSlot, from: Vector3, to: Vector3) -> WeaponPickup:
+	var pickup := WEAPON_PICKUP.instantiate() as WeaponPickup
+	pickup.slot = slot
+	_root(context).add_child(pickup)
+	pickup.launch(from, to)
+	return pickup
+
+
+static func spawn_item(context: Node3D, kind: LootPickup.Kind, amount: int, from: Vector3, to: Vector3) -> LootPickup:
+	var pickup := LOOT_PICKUP.instantiate() as LootPickup
+	pickup.kind = kind
+	pickup.amount = amount
+	_root(context).add_child(pickup)
+	pickup.launch(from, to)
+	return pickup
+
+
+## What the Infinite Pistol makes a normal enemy spill: 2-3 weapons (jackpot_weapons first, random
+## ones for the rest), ammo, a pile of cash and some health.
+static func jackpot(enemy: Enemy) -> void:
+	var origin := enemy.global_position
+	var weapons: Array[WeaponData] = enemy.jackpot_weapons.duplicate()
+	var count := maxi(weapons.size(), randi_range(2, 3))
+	while weapons.size() < count:
+		weapons.append(WeaponLibrary.random_drop())
+	var start_angle := randf() * TAU
+	for i in weapons.size():
+		var angle := start_angle + TAU * i / weapons.size()
+		spawn_weapon(enemy, WeaponSlot.new(weapons[i]), origin + Vector3.UP, landing_spot(enemy, origin, 2.6, 3.4, angle))
+	for i in 2:
+		spawn_item(enemy, LootPickup.Kind.AMMO, 0, origin + Vector3.UP, landing_spot(enemy, origin, 1.2, 2.2))
+	for i in 4:
+		spawn_item(enemy, LootPickup.Kind.MONEY, randi_range(8, 15), origin + Vector3.UP, landing_spot(enemy, origin, 1.0, 2.5))
+	spawn_item(enemy, LootPickup.Kind.HEALTH, 25, origin + Vector3.UP, landing_spot(enemy, origin, 1.0, 2.0))
+	Effects.flash(enemy, origin + Vector3.UP, Rarity.color(Rarity.Tier.INFINITE), 3.0, 0.5)
+	Effects.shake(enemy, 0.4)
+	enemy.get_tree().call_group("hud", "show_message", "JACKPOT!", 1.5)
+
+
+## A normal kill: some cash, maybe ammo, health or a weapon (chances set on the enemy).
+static func normal_drop(enemy: Enemy) -> void:
+	var origin := enemy.global_position
+	var cash := randi_range(enemy.money_drop.x, enemy.money_drop.y)
+	if cash > 0:
+		spawn_item(enemy, LootPickup.Kind.MONEY, cash, origin + Vector3.UP, landing_spot(enemy, origin, 0.5, 1.5))
+	if randf() < enemy.ammo_drop_chance:
+		spawn_item(enemy, LootPickup.Kind.AMMO, 0, origin + Vector3.UP, landing_spot(enemy, origin, 0.5, 1.5))
+	if randf() < enemy.health_drop_chance:
+		spawn_item(enemy, LootPickup.Kind.HEALTH, 15, origin + Vector3.UP, landing_spot(enemy, origin, 0.5, 1.5))
+	if randf() < enemy.weapon_drop_chance:
+		spawn_weapon(enemy, WeaponSlot.new(WeaponLibrary.random_drop()), origin + Vector3.UP, landing_spot(enemy, origin, 1.5, 2.5))
+
+
+## A point on the floor near origin, min to max metres away (at angle, or a random one),
+## pulled back so it doesn't end up inside or behind a wall.
+static func landing_spot(context: Node3D, origin: Vector3, min_distance: float, max_distance: float, angle := NAN) -> Vector3:
+	var space := context.get_world_3d().direct_space_state
+	if is_nan(angle):
+		angle = randf() * TAU
+	var start := origin + Vector3.UP * 0.5
+	var direction := Vector3(cos(angle), 0.0, sin(angle))
+	var target := start + direction * randf_range(min_distance, max_distance)
+	var wall := space.intersect_ray(PhysicsRayQueryParameters3D.create(start, target, 1))
+	if not wall.is_empty():
+		target = start + direction * maxf(start.distance_to(wall.position) - 0.7, 0.0)
+	var floor_hit := space.intersect_ray(PhysicsRayQueryParameters3D.create(target + Vector3.UP * 2.0, target + Vector3.DOWN * 10.0, 1))
+	target.y = floor_hit.position.y if not floor_hit.is_empty() else origin.y
+	return target
+
+
+static func _root(context: Node) -> Node:
+	var tree := context.get_tree()
+	return tree.current_scene if tree.current_scene else tree.root
+
+
+====================================================================================================
+23. scripts/systems/portal.gd
+====================================================================================================
+
+class_name Portal
+extends Area3D
+## Moves the player to another scene when they walk in (GDD 14.4: areas connect through portals).
+## Leave target_scene empty for a portal that isn't open yet; it shows locked_message instead.
+
+@export_file("*.tscn") var target_scene := ""
+@export var locked_message := "This portal is not open yet."
+
+
+func _ready() -> void:
+	body_entered.connect(_on_body_entered)
+
+
+func _on_body_entered(body: Node3D) -> void:
+	if not body is Player:
+		return
+	if target_scene.is_empty():
+		get_tree().call_group("hud", "show_message", locked_message)
+		return
+	Transition.change_scene(target_scene, Color(0.6, 0.9, 1))
+
+
+====================================================================================================
+24. scripts/systems/transition.gd
+====================================================================================================
+
+extends CanvasLayer
+## Autoload "Transition": full-screen colour fades between scenes (portals, the Orange Trooper's teleport).
+
+var _rect := ColorRect.new()
+var _busy := false
+
+
+func _ready() -> void:
+	layer = 100
+	process_mode = Node.PROCESS_MODE_ALWAYS
+	_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_rect.color = Color(0, 0, 0, 0)
+	add_child(_rect)
+	_rect.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+
+
+## Fades to color, swaps the scene, then fades back in. Ignored while a change is already running.
+func change_scene(path: String, color := Color.BLACK, fade_time := 0.45) -> void:
+	if _busy:
+		return
+	_busy = true
+	_rect.color = Color(color, 0.0)
+	var fade_out := create_tween()
+	fade_out.tween_property(_rect, "color:a", 1.0, fade_time)
+	await fade_out.finished
+	get_tree().paused = false
+	get_tree().change_scene_to_file(path)
+	# Wait for the new scene to be in place before revealing it.
+	await get_tree().process_frame
+	await get_tree().process_frame
+	var fade_in := create_tween()
+	fade_in.tween_property(_rect, "color:a", 0.0, fade_time)
+	await fade_in.finished
+	_busy = false
+
+
+## A quick full-screen flash without changing scene.
+func flash(color: Color, duration := 0.4) -> void:
+	_rect.color = Color(color, 0.8)
+	create_tween().tween_property(_rect, "color:a", 0.0, duration)
+
+
+====================================================================================================
+25. scripts/ui/cheat_menu.gd
+====================================================================================================
+
+class_name CheatMenu
+extends CanvasLayer
+## Weapon test menu (debug builds only, opened with F4 by DebugCheats). Lists every weapon by rarity with
+## buttons to equip it straight into your hands or spawn it on the floor, plus test tools: training dummy,
+## enemies, ammo, the Infinite Pistol and a loot jackpot. The game pauses while it is open.
+
+const DUMMY := preload("res://scenes/enemies/training_dummy.tscn")
+const CHICKEN := preload("res://scenes/enemies/chicken.tscn")
+const FIRST_DESCENDANT := preload("res://scenes/enemies/first_descendant.tscn")
+
+var _health_button: Button
+
+
+func _ready() -> void:
+	layer = 50
+	process_mode = Node.PROCESS_MODE_ALWAYS
+	visible = false
+	_build()
+
+
+func toggle() -> void:
+	if visible:
+		close()
+	# Not over the pause menu: closing would unpause the game behind it.
+	elif _player() and not get_tree().paused:
+		visible = true
+		get_tree().paused = true
+		_refresh_health_label()
+
+
+func close() -> void:
+	visible = false
+	get_tree().paused = false
+
+
+## _input, not _unhandled_input: the level's PauseMenu also takes Esc in _unhandled_input and gets it first,
+## which unpaused the game and left this menu stuck on screen.
+func _input(event: InputEvent) -> void:
+	if visible and event.is_action_pressed("pause"):
+		get_viewport().set_input_as_handled()
+		close()
+
+
+func _build() -> void:
+	var dim := ColorRect.new()
+	dim.color = Color(0, 0, 0, 0.55)
+	add_child(dim)
+	dim.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+
+	var panel := PanelContainer.new()
+	panel.add_theme_stylebox_override("panel", UiKit.panel_style(Color(1, 0.55, 0.15), Color(0.04, 0.03, 0.07, 0.96)))
+	add_child(panel)
+	panel.set_anchors_and_offsets_preset(Control.PRESET_CENTER)
+	panel.custom_minimum_size = Vector2(1500, 880)
+	panel.offset_left = -750.0
+	panel.offset_top = -440.0
+	panel.offset_right = 750.0
+	panel.offset_bottom = 440.0
+	var column := UiKit.vbox(panel, 10)
+	column.mouse_filter = Control.MOUSE_FILTER_PASS
+
+	var header := UiKit.hbox(column)
+	var title := UiKit.label(header, 34, Color(1, 0.6, 0.2), 8)
+	title.text = "WEAPON TEST MENU"
+	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	var hint := UiKit.label(header, 20, Color(0.7, 0.7, 0.75))
+	hint.text = "F4 / Esc to close   •   Equip = straight into your hands   •   Spawn = on the floor in front of you"
+
+	var body := UiKit.hbox(column, 24)
+	body.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	body.mouse_filter = Control.MOUSE_FILTER_PASS
+
+	var scroll := ScrollContainer.new()
+	scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	scroll.size_flags_stretch_ratio = 2.2
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	body.add_child(scroll)
+	var grid := GridContainer.new()
+	grid.columns = 5
+	grid.add_theme_constant_override("h_separation", 14)
+	grid.add_theme_constant_override("v_separation", 8)
+	grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	scroll.add_child(grid)
+	for weapon in WeaponLibrary.ALL:
+		_add_weapon_row(grid, weapon)
+
+	var tools := UiKit.vbox(body, 8)
+	tools.mouse_filter = Control.MOUSE_FILTER_PASS
+	tools.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	var tools_title := UiKit.label(tools, 24, Color(1, 0.85, 0.4), 6)
+	tools_title.text = "TEST TOOLS"
+	_tool(tools, "Spawn ALL weapons around me", _spawn_all)
+	_tool(tools, "Spawn training dummy", spawn_enemy.bind(DUMMY))
+	_tool(tools, "Spawn chicken", spawn_enemy.bind(CHICKEN))
+	_tool(tools, "Spawn First Descendant (boss)", spawn_enemy.bind(FIRST_DESCENDANT, 12.0))
+	_tool(tools, "Refill all ammo", func() -> void: _player().arsenal.refill_ammo(1.0))
+	_tool(tools, "Give / charge Infinite Pistol", charge_pistol)
+	_tool(tools, "Drop an Infinite Pistol jackpot", _jackpot)
+	_tool(tools, "Spawn ammo, cash and health", _spawn_supplies)
+	_tool(tools, "Kill all enemies", _kill_all)
+	_tool(tools, "Clear weapons off the floor", _clear_floor)
+	_tool(tools, "Empty my hands", func() -> void: _player().arsenal.clear())
+	_health_button = _tool(tools, "", _toggle_infinite_health)
+	_tool(tools, "Close", close)
+
+
+func _add_weapon_row(grid: GridContainer, weapon: WeaponData) -> void:
+	var color := Rarity.color(weapon.rarity)
+	var name_label := UiKit.label(grid, 22, color, 6)
+	name_label.text = weapon.display_name
+	name_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	var rarity := UiKit.label(grid, 18, color)
+	rarity.text = "%s (rank %s)" % [Rarity.display_name(weapon.rarity), Rarity.rank_text(weapon.rarity)]
+	var tags := UiKit.label(grid, 16, Color(0.75, 0.75, 0.8))
+	tags.text = weapon.weapon_type + ("  •  " + ", ".join(UiKit.weapon_tags(weapon)) if not UiKit.weapon_tags(weapon).is_empty() else "")
+	tags.custom_minimum_size.x = 330.0
+	tags.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_button(grid, "Equip", _equip.bind(weapon))
+	_button(grid, "Spawn", spawn_weapon.bind(weapon))
+
+
+func _tool(parent: Node, text: String, callback: Callable) -> Button:
+	var button := _button(parent, text, callback)
+	button.alignment = HORIZONTAL_ALIGNMENT_LEFT
+	return button
+
+
+func _button(parent: Node, text: String, callback: Callable) -> Button:
+	var button := Button.new()
+	button.text = text
+	button.add_theme_font_size_override("font_size", 20)
+	button.custom_minimum_size = Vector2(90, 40)
+	button.pressed.connect(callback)
+	parent.add_child(button)
+	return button
+
+
+func _player() -> Player:
+	return get_tree().get_first_node_in_group("player") as Player
+
+
+## A point on the floor a few metres in front of the player, toward their aim.
+func _in_front(distance := 3.0) -> Vector3:
+	var player := _player()
+	var forward := player.aim_point - player.global_position
+	forward.y = 0.0
+	forward = forward.normalized() if forward.length() > 0.1 else Vector3.FORWARD
+	return Loot.landing_spot(player, player.global_position, distance, distance, atan2(forward.z, forward.x))
+
+
+func _equip(weapon: WeaponData) -> void:
+	var arsenal := _player().arsenal
+	if weapon == WeaponLibrary.INFINITE_PISTOL:
+		arsenal.give_infinite_pistol(true)
+	else:
+		arsenal.add_weapon(WeaponSlot.new(weapon))
+
+
+func spawn_weapon(weapon: WeaponData) -> void:
+	var player := _player()
+	Loot.spawn_weapon(player, WeaponSlot.new(weapon), player.global_position + Vector3.UP, _in_front())
+
+
+func _spawn_all() -> void:
+	var player := _player()
+	var weapons := WeaponLibrary.ALL
+	for i in weapons.size():
+		var angle := TAU * i / weapons.size()
+		Loot.spawn_weapon(player, WeaponSlot.new(weapons[i]), player.global_position + Vector3.UP,
+			Loot.landing_spot(player, player.global_position, 4.0, 4.0, angle))
+
+
+func spawn_enemy(scene: PackedScene, drop_height := 0.0) -> void:
+	var enemy := scene.instantiate() as Node3D
+	get_tree().current_scene.add_child(enemy)
+	enemy.global_position = _in_front(5.0) + Vector3.UP * (drop_height + 0.1)
+
+
+func charge_pistol() -> void:
+	var arsenal := _player().arsenal
+	if arsenal.pistol == null:
+		arsenal.give_infinite_pistol(true)
+	else:
+		arsenal.charge_pistol()
+
+
+func _jackpot() -> void:
+	# A stand-in "enemy" at the cursor so the real jackpot code runs.
+	var stand_in := Enemy.new()
+	var health := Health.new()
+	health.name = "Health"
+	stand_in.add_child(health)
+	get_tree().current_scene.add_child(stand_in)
+	stand_in.global_position = _in_front(4.0)
+	Loot.jackpot(stand_in)
+	stand_in.queue_free()
+
+
+func _spawn_supplies() -> void:
+	var player := _player()
+	for kind in [LootPickup.Kind.AMMO, LootPickup.Kind.MONEY, LootPickup.Kind.HEALTH]:
+		Loot.spawn_item(player, kind, 20, player.global_position + Vector3.UP, _in_front(2.5 + kind))
+
+
+func _kill_all() -> void:
+	for enemy in get_tree().get_nodes_in_group("enemies"):
+		(enemy as Enemy).health.take_damage(99999)
+
+
+func _clear_floor() -> void:
+	for node in get_tree().current_scene.find_children("*", "WeaponPickup", true, false):
+		node.queue_free()
+
+
+func _toggle_infinite_health() -> void:
+	var health := _player().health
+	health.infinite_health = not health.infinite_health
+	_refresh_health_label()
+
+
+func _refresh_health_label() -> void:
+	var player := _player()
+	if _health_button and player:
+		_health_button.text = "Infinite Health: %s" % ("ON" if player.health.infinite_health else "OFF")
+
+
+====================================================================================================
+26. scripts/ui/dialogue_box.gd
+====================================================================================================
+
+class_name DialogueBox
+extends CanvasLayer
+## Dialogue panel along the bottom of the screen, with typewriter text.
+## Call start() with a speaker and lines. E (talk) shows the whole line, then moves to the next one.
+## Emits finished after the last line is closed.
+## ask() shows one line with answer buttons (click, or press 1/2/3) and emits choice_made with the index.
+
+signal started
+signal finished
+signal choice_made(index: int)
+
+## Characters revealed per second.
+@export var reveal_speed := 45.0
+
+@onready var _speaker_label: Label = %SpeakerLabel
+@onready var _text_label: Label = %TextLabel
+@onready var _continue_hint: Label = %ContinueHint
+@onready var _choice_row: HBoxContainer = %ChoiceRow
+
+var _lines := PackedStringArray()
+var _index := 0
+var _revealed := 0.0
+## Answers for the current question; empty for normal lines.
+var _choices := PackedStringArray()
+
+
+func _ready() -> void:
+	add_to_group("dialogue_box")
+	visible = false
+	set_process(false)
+
+
+func is_open() -> bool:
+	return visible
+
+
+func start(speaker: String, lines: PackedStringArray) -> void:
+	if lines.is_empty():
+		push_warning("DialogueBox.start() called with no lines.")
+		return
+	_speaker_label.text = speaker
+	_lines = lines
+	_choices = PackedStringArray()
+	_choice_row.visible = false
+	visible = true
+	set_process(true)
+	_show_line(0)
+	started.emit()
+
+
+## A question with answers. Await choice_made for the picked index.
+func ask(speaker: String, question: String, options: PackedStringArray) -> void:
+	start(speaker, PackedStringArray([question]))
+	_choices = options
+
+
+func close() -> void:
+	visible = false
+	set_process(false)
+	_choice_row.visible = false
+	finished.emit()
+
+
+func _process(delta: float) -> void:
+	if not _is_line_done():
+		_revealed += reveal_speed * delta
+		_text_label.visible_characters = int(_revealed)
+	var waiting_for_answer := not _choices.is_empty()
+	_continue_hint.visible = _is_line_done() and not waiting_for_answer
+	if waiting_for_answer and _is_line_done() and not _choice_row.visible:
+		_show_choices()
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	if not visible:
+		return
+	if not _choices.is_empty() and _choice_row.visible:
+		var key := event as InputEventKey
+		if key and key.pressed and not key.echo:
+			var index := key.physical_keycode - KEY_1
+			if index >= 0 and index < _choices.size():
+				get_viewport().set_input_as_handled()
+				_pick(index)
+		return
+	if not event.is_action_pressed("talk"):
+		return
+	get_viewport().set_input_as_handled()
+	if not _is_line_done():
+		_text_label.visible_characters = -1
+	elif not _choices.is_empty():
+		return
+	elif _index + 1 < _lines.size():
+		_show_line(_index + 1)
+	else:
+		close()
+
+
+func _show_line(index: int) -> void:
+	_index = index
+	_text_label.text = _lines[index]
+	_text_label.visible_characters = 0
+	_revealed = 0.0
+	_continue_hint.visible = false
+	_continue_hint.text = "[E] continue" if index + 1 < _lines.size() else "[E] close"
+
+
+func _show_choices() -> void:
+	for child in _choice_row.get_children():
+		child.queue_free()
+	for i in _choices.size():
+		var button := Button.new()
+		button.text = "[%d]  %s" % [i + 1, _choices[i]]
+		button.add_theme_font_size_override("font_size", 28)
+		button.custom_minimum_size = Vector2(220, 56)
+		button.pressed.connect(_pick.bind(i))
+		_choice_row.add_child(button)
+	_choice_row.visible = true
+	(_choice_row.get_child(0) as Button).grab_focus.call_deferred()
+
+
+func _pick(index: int) -> void:
+	_choices = PackedStringArray()
+	close()
+	choice_made.emit(index)
+
+
+func _is_line_done() -> bool:
+	return _text_label.visible_characters < 0 or _text_label.visible_characters >= _text_label.get_total_character_count()
+
+
+====================================================================================================
+27. scripts/ui/hud.gd
+====================================================================================================
+
+extends CanvasLayer
+## Gameplay HUD: the health/dash bar (the team's sprite: three red health segments and a green dash block that
+## refills like water, see shaders/), currencies, current objective and short pop-up messages,
+## plus the weapon panel, the item card for weapons on the floor, a boss health bar and a red flash when hurt.
+## Top right: the Infinite Pistol's charge coins (PistolCharge).
+## The weapon card, panel, pistol coins and boss bar are built in code (see WeaponCard, WeaponPanel, PistolCharge).
+## The style meter gets added here later.
+
+## Gap between a pickup's position on screen and its item card.
+const CARD_OFFSET := Vector2(70, -40)
+const SCREEN_MARGIN := 16.0
+
+@export var player: Player
+
+@onready var _root: Control = $Root
+@onready var _health_segments: Array[TextureRect] = [%HealthSegment1, %HealthSegment2, %HealthSegment3]
+@onready var _dash_fill: TextureRect = %DashFill
+@onready var _currency_label: Label = %CurrencyLabel
+@onready var _objective_label: Label = %ObjectiveLabel
+@onready var _message_label: Label = %MessageLabel
+
+var _message_tween: Tween
+var _weapon_panel: WeaponPanel
+var _pistol_charge: PistolCharge
+var _card: WeaponCard
+var _card_target: WeaponPickup
+var _boss: Enemy
+var _boss_box: VBoxContainer
+var _boss_name: Label
+var _boss_bar: ProgressBar
+var _hurt_flash: ColorRect
+var _health := 0
+var _max_health := 1
+## Health shown pale in the segments: lags behind real health after a hit, then drains down to it.
+var _ghost_health := 0.0
+var _ghost_tween: Tween
+var _dash_level := 1.0
+
+
+func _ready() -> void:
+	add_to_group("hud")
+	_message_label.modulate.a = 0.0
+	_build_weapon_ui()
+	_build_boss_bar()
+	_build_hurt_flash()
+	GameState.currency_changed.connect(_on_currency_changed)
+	_on_currency_changed(GameState.weapon_currency, GameState.relic_currency)
+
+	if player == null:
+		push_warning("HUD has no player assigned.")
+		return
+	if not player.is_node_ready():
+		await player.ready
+	player.health.changed.connect(_on_health_changed)
+	player.health.damaged.connect(_on_player_damaged)
+	_on_health_changed(player.health.current, player.health.max_health)
+	player.arsenal.changed.connect(_refresh_weapons)
+	player.arsenal.focus_changed.connect(_on_focus_changed)
+	_pistol_charge.watch(player.arsenal)
+	_refresh_weapons()
+
+
+func _process(_delta: float) -> void:
+	if player:
+		_set_dash_level(player.dash_recharge_progress())
+	_place_card()
+	if _boss_box.visible and not is_instance_valid(_boss):
+		_boss_box.visible = false
+
+
+func set_objective(text: String) -> void:
+	_objective_label.text = text
+
+
+## Shows text in the middle of the screen for a moment, then fades it out.
+func show_message(text: String, duration := 2.5) -> void:
+	_message_label.text = text
+	if _message_tween:
+		_message_tween.kill()
+	_message_label.modulate.a = 1.0
+	_message_tween = create_tween()
+	_message_tween.tween_interval(duration)
+	_message_tween.tween_property(_message_label, "modulate:a", 0.0, 0.5)
+
+
+## Shows a health bar for this enemy at the top of the screen until it dies.
+func track_boss(enemy: Enemy) -> void:
+	_boss = enemy
+	_boss_name.text = enemy.display_name
+	_boss_bar.max_value = enemy.health.max_health
+	_boss_bar.value = enemy.health.current
+	_boss_box.visible = true
+	enemy.health.changed.connect(func(current: int, _maximum: int) -> void: _boss_bar.value = current)
+	enemy.killed.connect(func(_enemy: Enemy) -> void: _boss_box.visible = false)
+
+
+func _refresh_weapons() -> void:
+	_weapon_panel.refresh(player.arsenal)
+	_pistol_charge.refresh(player.arsenal)
+	if is_instance_valid(_card_target):
+		_on_focus_changed(_card_target)
+
+
+func _on_focus_changed(pickup: WeaponPickup) -> void:
+	_card_target = pickup
+	if pickup == null or pickup.slot == null:
+		_card.visible = false
+		return
+	_card.show_weapon(pickup.slot, player.arsenal.current(), player.arsenal.slot_to_replace())
+	_place_card()
+
+
+## Keeps the item card beside its pickup on screen, inside the screen edges.
+func _place_card() -> void:
+	if not _card.visible:
+		return
+	if not is_instance_valid(_card_target) or _card_target.slot == null:
+		_card.visible = false
+		return
+	var camera := get_viewport().get_camera_3d()
+	if camera == null:
+		return
+	var screen := camera.unproject_position(_card_target.global_position + Vector3.UP)
+	var view := _root.size
+	var position := screen + CARD_OFFSET
+	if position.x + _card.size.x > view.x - SCREEN_MARGIN:
+		position.x = screen.x - CARD_OFFSET.x - _card.size.x
+	position.x = clampf(position.x, SCREEN_MARGIN, view.x - _card.size.x - SCREEN_MARGIN)
+	position.y = clampf(position.y - _card.size.y * 0.5, SCREEN_MARGIN, view.y - _card.size.y - SCREEN_MARGIN)
+	_card.position = position
+
+
+func _on_health_changed(current: int, maximum: int) -> void:
+	_health = current
+	_max_health = maxi(maximum, 1)
+	if _ghost_tween:
+		_ghost_tween.kill()
+	if current >= _ghost_health:
+		_ghost_health = current
+	else:
+		_ghost_tween = create_tween()
+		_ghost_tween.tween_interval(0.35)
+		_ghost_tween.tween_method(_set_ghost_health, _ghost_health, float(current), 0.3)
+	_update_health_segments()
+
+
+func _set_ghost_health(value: float) -> void:
+	_ghost_health = value
+	_update_health_segments()
+
+
+## Each segment holds a third of max health and drains from its right edge, the last segment first.
+func _update_health_segments() -> void:
+	var per_segment := float(_max_health) / _health_segments.size()
+	for i in _health_segments.size():
+		var material := _health_segments[i].material as ShaderMaterial
+		material.set_shader_parameter("fill", clampf((_health - i * per_segment) / per_segment, 0.0, 1.0))
+		material.set_shader_parameter("ghost", clampf((_ghost_health - i * per_segment) / per_segment, 0.0, 1.0))
+
+
+## The dash block fills like water while recharging and flashes when the dash is ready again.
+func _set_dash_level(level: float) -> void:
+	if is_equal_approx(level, _dash_level):
+		return
+	if level >= 1.0 and _dash_level < 1.0:
+		_dash_fill.modulate = Color(2.2, 2.2, 2.2)
+		create_tween().tween_property(_dash_fill, "modulate", Color.WHITE, 0.3)
+	_dash_level = level
+	(_dash_fill.material as ShaderMaterial).set_shader_parameter("level", level)
+
+
+func _on_player_damaged(_amount: int, _kind: Health.Kind) -> void:
+	_hurt_flash.color.a = 0.35
+	create_tween().tween_property(_hurt_flash, "color:a", 0.0, 0.35)
+
+
+func _on_currency_changed(weapon: int, relic: int) -> void:
+	_currency_label.text = "Weapon $%d     Relic %d" % [weapon, relic]
+
+
+func _build_weapon_ui() -> void:
+	_weapon_panel = WeaponPanel.new()
+	_root.add_child(_weapon_panel)
+	_weapon_panel.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_RIGHT, Control.PRESET_MODE_MINSIZE, 32)
+	_weapon_panel.grow_horizontal = Control.GROW_DIRECTION_BEGIN
+	_weapon_panel.grow_vertical = Control.GROW_DIRECTION_BEGIN
+	_card = WeaponCard.new()
+	_root.add_child(_card)
+	_pistol_charge = PistolCharge.new()
+	_root.add_child(_pistol_charge)
+	# Pinned 32 px from the top right corner; grows to the left as wide as its coins.
+	_pistol_charge.set_anchors_and_offsets_preset(Control.PRESET_TOP_RIGHT, Control.PRESET_MODE_MINSIZE, 32)
+	_pistol_charge.grow_horizontal = Control.GROW_DIRECTION_BEGIN
+
+
+func _build_boss_bar() -> void:
+	_boss_box = UiKit.vbox(_root, 4)
+	_boss_box.set_anchors_and_offsets_preset(Control.PRESET_CENTER_TOP)
+	_boss_box.offset_left = -480.0
+	_boss_box.offset_right = 480.0
+	_boss_box.offset_top = 90.0
+	_boss_name = UiKit.label(_boss_box, 30, Color(1, 0.45, 0.3), 8)
+	_boss_name.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_boss_bar = ProgressBar.new()
+	_boss_bar.custom_minimum_size = Vector2(960, 24)
+	_boss_bar.show_percentage = false
+	_boss_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var background := StyleBoxFlat.new()
+	background.bg_color = Color(0.08, 0.04, 0.06, 0.85)
+	background.set_corner_radius_all(4)
+	var fill := StyleBoxFlat.new()
+	fill.bg_color = Color(0.9, 0.25, 0.15)
+	fill.set_corner_radius_all(4)
+	_boss_bar.add_theme_stylebox_override("background", background)
+	_boss_bar.add_theme_stylebox_override("fill", fill)
+	_boss_box.add_child(_boss_bar)
+	_boss_box.visible = false
+
+
+func _build_hurt_flash() -> void:
+	_hurt_flash = ColorRect.new()
+	_hurt_flash.color = Color(0.9, 0.05, 0.05, 0.0)
+	_hurt_flash.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_root.add_child(_hurt_flash)
+	_hurt_flash.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_root.move_child(_hurt_flash, 0)
+
+
+====================================================================================================
+28. scripts/ui/main_menu.gd
+====================================================================================================
+
+extends Control
+## Title screen: the key art with a pulsing PRESS ANY BUTTON. Any key, mouse button or pad button brings
+## up the menu (Play, Quit); see RowMenu.
+
+const HUB_SCENE := "res://scenes/levels/hub.tscn"
+
+@onready var _prompt: Label = %PressPrompt
+@onready var _menu: RowMenu = %Menu
+
+var _pulse: Tween
+
+
+func _ready() -> void:
+	_menu.visible = false
+	_menu.chosen.connect(_on_menu_chosen)
+	_pulse = create_tween().set_loops()
+	_pulse.tween_property(_prompt, "modulate:a", 0.25, 0.8).set_trans(Tween.TRANS_SINE)
+	_pulse.tween_property(_prompt, "modulate:a", 1.0, 0.8).set_trans(Tween.TRANS_SINE)
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	if _menu.visible or not _is_button_press(event):
+		return
+	get_viewport().set_input_as_handled()
+	_show_menu()
+
+
+func _is_button_press(event: InputEvent) -> bool:
+	if event is InputEventKey:
+		return event.pressed and not event.echo
+	return (event is InputEventMouseButton or event is InputEventJoypadButton) and event.pressed
+
+
+func _show_menu() -> void:
+	_pulse.kill()
+	_prompt.visible = false
+	_menu.visible = true
+	_menu.modulate.a = 0.0
+	create_tween().tween_property(_menu, "modulate:a", 1.0, 0.25)
+
+
+func _on_menu_chosen(index: int) -> void:
+	match index:
+		0:
+			GameState.reset_run()
+			get_tree().change_scene_to_file(HUB_SCENE)
+		1:
+			get_tree().quit()
+
+
+====================================================================================================
+29. scripts/ui/pause_menu.gd
+====================================================================================================
+
+extends CanvasLayer
+## Esc toggles pause. This node's process_mode is Always, so it still runs while the tree is paused.
+## Shows the title art with Resume / Restart / Main Menu / Quit (see RowMenu).
+
+const MAIN_MENU := "res://scenes/ui/main_menu.tscn"
+
+@onready var _menu: RowMenu = %Menu
+
+
+func _ready() -> void:
+	visible = false
+	_menu.visible = false
+	_menu.chosen.connect(_on_menu_chosen)
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("pause"):
+		_set_paused(not get_tree().paused)
+		get_viewport().set_input_as_handled()
+
+
+func _set_paused(paused: bool) -> void:
+	get_tree().paused = paused
+	visible = paused
+	# Hidden with the layer too, so it ignores up/down/accept during play.
+	_menu.visible = paused
+	if paused:
+		_menu.reset()
+
+
+func _on_menu_chosen(index: int) -> void:
+	match index:
+		0:
+			_set_paused(false)
+		1:
+			_set_paused(false)
+			get_tree().reload_current_scene()
+		2:
+			_set_paused(false)
+			get_tree().change_scene_to_file(MAIN_MENU)
+		3:
+			get_tree().quit()
+
+
+====================================================================================================
+30. scripts/ui/pistol_charge.gd
+====================================================================================================
+
+class_name PistolCharge
+extends Control
+## Top-right HUD row for the Infinite Pistol: one coin per kill it needs (kills_per_charge, 7: the gambler's
+## lucky number). Coins are cyan while empty. Each kill with another gun fills the next coin with gold, which
+## then hops (the team's Aseprite animation). When the last coin fills, every coin spins like a slot machine
+## reel and they stop one by one, left to right, on gold: the pistol is loaded. Firing it empties the row.
+## Art: assets/textures/ui/pistol_charge/. Shader: shaders/slot_coin.gdshader. Built by the HUD.
+
+const GOLD := preload("res://assets/textures/ui/pistol_charge/coin_gold.png")
+const GOLD_HOP := preload("res://assets/textures/ui/pistol_charge/coin_gold_hop.png")
+const EMPTY := preload("res://assets/textures/ui/pistol_charge/coin_empty.png")
+const SHADER := preload("res://shaders/slot_coin.gdshader")
+
+## Screen pixels per art pixel.
+const PIXEL_SCALE := 4
+## Art pixels from one coin to the next (16 px coin, 1 px gap), and the coin sprite's size.
+const COIN_STEP := 17
+const COIN_SIZE := Vector2(16, 18)
+## The Aseprite animation: gold coins rest for 1 s, then hop up a pixel for 0.1 s.
+const REST_TIME := 1.0
+const HOP_TIME := 0.1
+## Seconds for gold to fill a coin, and between coins when several fill at once.
+const FILL_TIME := 0.3
+const FILL_STAGGER := 0.08
+## Slot machine: the first reel spins SPIN_TURNS coins in SPIN_TIME seconds; each reel after it spins
+## SPIN_TURNS_STEP more and SPIN_TIME_STEP longer, so they stop left to right. Turns must stay even (gold).
+const SPIN_TURNS := 12
+const SPIN_TURNS_STEP := 2
+const SPIN_TIME := 0.9
+const SPIN_TIME_STEP := 0.14
+## How fast (coins per second) a reel must spin for full motion blur.
+const FULL_BLUR_SPEED := 30.0
+
+var _coins: Array[TextureRect] = []
+## Per coin: its gold level (0 to 1), and its reel position now and last frame.
+var _fill: Array[float] = []
+var _spin: Array[float] = []
+var _last_spin: Array[float] = []
+## Coins shown (or filling to) gold.
+var _filled := 0
+var _shown_once := false
+## Set by Arsenal.pistol_charged: the next refresh plays the slot machine.
+var _jackpot_pending := false
+var _spinning := false
+var _idle_time := 0.0
+## Running fill and spin animations, stopped when the row resets.
+var _tweens: Array[Tween] = []
+
+
+func _ready() -> void:
+	mouse_filter = MOUSE_FILTER_IGNORE
+	visible = false
+
+
+## Hooks the row to the player's weapons. Called once by the HUD.
+func watch(arsenal: Arsenal) -> void:
+	arsenal.pistol_charged.connect(func() -> void: _jackpot_pending = true)
+
+
+func refresh(arsenal: Arsenal) -> void:
+	visible = arsenal.pistol != null
+	if not visible:
+		_shown_once = false
+		return
+	var count := arsenal.pistol.data.kills_per_charge
+	if count != _coins.size():
+		_build(count)
+	var loaded := not arsenal.pistol.is_out_of_ammo()
+	var target := count if loaded else mini(arsenal.pistol_kills, count)
+	if not _shown_once:
+		# First time on screen (level loaded): show the current charge without animating.
+		_shown_once = true
+		_jackpot_pending = false
+		_filled = target
+		for i in count:
+			_set_fill(1.0 if i < target else 0.0, i)
+		return
+	if target < _filled:
+		# Fired (or reset): every coin goes back to cyan.
+		for tween in _tweens:
+			tween.kill()
+		_tweens.clear()
+		_stop_spin()
+		for i in count:
+			_set_fill(1.0 if i < target else 0.0, i)
+		_filled = target
+	var delay := 0.0
+	for i in range(_filled, target):
+		var tween := _new_tween()
+		tween.tween_interval(delay)
+		tween.tween_method(_set_fill.bind(i), 0.0, 1.0, FILL_TIME)
+		tween.tween_callback(_hop.bind(i))
+		delay += FILL_STAGGER
+	_filled = target
+	if loaded and _jackpot_pending:
+		_jackpot_pending = false
+		_new_tween().tween_interval(delay + FILL_TIME + 0.1).finished.connect(_play_slot_machine)
+
+
+func _process(delta: float) -> void:
+	if not visible:
+		return
+	# Idle hop from the Aseprite file, for every full gold coin.
+	_idle_time = fmod(_idle_time + delta, REST_TIME + HOP_TIME)
+	var hopping := _idle_time >= REST_TIME and not _spinning
+	for i in _coins.size():
+		var material := _coins[i].material as ShaderMaterial
+		if _fill[i] >= 1.0 and not _coins[i].has_meta("hop"):
+			material.set_shader_parameter("gold_tex", GOLD_HOP if hopping else GOLD)
+		# Motion blur follows how fast each reel turns.
+		var speed := absf(_spin[i] - _last_spin[i]) / maxf(delta, 0.001)
+		_last_spin[i] = _spin[i]
+		material.set_shader_parameter("blur", clampf(speed / FULL_BLUR_SPEED, 0.0, 1.0))
+
+
+func _build(count: int) -> void:
+	for coin in _coins:
+		coin.queue_free()
+	_coins.clear()
+	_fill.clear()
+	_spin.clear()
+	_last_spin.clear()
+	var coin_size := COIN_SIZE * PIXEL_SCALE
+	for i in count:
+		var coin := TextureRect.new()
+		coin.texture = GOLD
+		coin.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+		coin.stretch_mode = TextureRect.STRETCH_SCALE
+		coin.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		coin.mouse_filter = MOUSE_FILTER_IGNORE
+		coin.position = Vector2(i * COIN_STEP * PIXEL_SCALE, 0)
+		coin.size = coin_size
+		var material := ShaderMaterial.new()
+		material.shader = SHADER
+		material.set_shader_parameter("gold_tex", GOLD)
+		material.set_shader_parameter("empty_tex", EMPTY)
+		coin.material = material
+		add_child(coin)
+		_coins.append(coin)
+		_fill.append(0.0)
+		_spin.append(0.0)
+		_last_spin.append(0.0)
+	custom_minimum_size = Vector2(((count - 1) * COIN_STEP + COIN_SIZE.x) * PIXEL_SCALE, coin_size.y)
+
+
+func _set_fill(value: float, index: int) -> void:
+	_fill[index] = value
+	(_coins[index].material as ShaderMaterial).set_shader_parameter("fill", value)
+
+
+## A coin that just turned gold hops once, like the Aseprite's second frame.
+func _hop(index: int) -> void:
+	var material := _coins[index].material as ShaderMaterial
+	_coins[index].set_meta("hop", true)
+	material.set_shader_parameter("gold_tex", GOLD_HOP)
+	await get_tree().create_timer(HOP_TIME).timeout
+	if is_instance_valid(_coins[index]):
+		_coins[index].remove_meta("hop")
+		material.set_shader_parameter("gold_tex", GOLD)
+
+
+## All coins spin like slot machine reels and stop left to right on gold, each with a small bounce and a flash.
+func _play_slot_machine() -> void:
+	if _filled < _coins.size():
+		return
+	_spinning = true
+	for i in _coins.size():
+		var material := _coins[i].material as ShaderMaterial
+		var turns := float(SPIN_TURNS + SPIN_TURNS_STEP * i)
+		_spin[i] = 0.0
+		_last_spin[i] = 0.0
+		material.set_shader_parameter("reel", 1.0)
+		var tween := _new_tween()
+		tween.tween_method(_set_spin.bind(i), 0.0, turns + 0.15, SPIN_TIME + SPIN_TIME_STEP * i) \
+				.set_trans(Tween.TRANS_QUART).set_ease(Tween.EASE_OUT)
+		tween.tween_method(_set_spin.bind(i), turns + 0.15, turns, 0.12).set_trans(Tween.TRANS_SINE)
+		tween.tween_callback(material.set_shader_parameter.bind("flash", 1.0))
+		tween.tween_method(func(v: float) -> void: material.set_shader_parameter("flash", v), 1.0, 0.0, 0.3)
+		tween.parallel().tween_method(func(v: float) -> void: material.set_shader_parameter("reel", v), 1.0, 0.0, 0.15)
+		if i == _coins.size() - 1:
+			tween.tween_callback(_stop_spin)
+
+
+func _new_tween() -> Tween:
+	for i in range(_tweens.size() - 1, -1, -1):
+		if not _tweens[i].is_valid():
+			_tweens.remove_at(i)
+	var tween := create_tween()
+	_tweens.append(tween)
+	return tween
+
+
+func _set_spin(value: float, index: int) -> void:
+	_spin[index] = value
+	(_coins[index].material as ShaderMaterial).set_shader_parameter("spin", value)
+
+
+func _stop_spin() -> void:
+	_spinning = false
+	for i in _coins.size():
+		var material := _coins[i].material as ShaderMaterial
+		_spin[i] = 0.0
+		_last_spin[i] = 0.0
+		material.set_shader_parameter("spin", 0.0)
+		material.set_shader_parameter("reel", 0.0)
+		material.set_shader_parameter("flash", 0.0)
+
+
+====================================================================================================
+31. scripts/ui/row_menu.gd
+====================================================================================================
+
+class_name RowMenu
+extends VBoxContainer
+## Menu options as full-width rows with right-aligned text, laid out like RUINER's menu but in cyan.
+## The selected row gets a cyan bar with dark text. chosen is emitted when an option is picked.
+## Mouse: hover to select, click to choose. Keys/pad: up/down to select, accept (Enter/Space) to choose.
+
+signal chosen(index: int)
+
+const CYAN := Color(0.64, 1.0, 0.96)
+const DARK := Color(0.02, 0.05, 0.07)
+const FONT := preload("res://assets/fonts/space.ttf")
+const ROW_HEIGHT := 60.0
+const RIGHT_MARGIN := 110.0
+
+@export var options := PackedStringArray()
+@export var font_size := 34
+
+var _rows: Array[Row] = []
+var _selected := 0
+
+
+class Row:
+	var root: Control
+	var bar: ColorRect
+	var label: Label
+
+
+func _ready() -> void:
+	mouse_filter = MOUSE_FILTER_IGNORE
+	add_theme_constant_override("separation", 4)
+	for i in options.size():
+		_rows.append(_build_row(options[i], i))
+	_refresh()
+
+
+## Back to the first option (e.g. each time the pause menu opens).
+func reset() -> void:
+	_select(0)
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	if not is_visible_in_tree() or _rows.is_empty():
+		return
+	if event.is_action_pressed("ui_down"):
+		_select(wrapi(_selected + 1, 0, _rows.size()))
+	elif event.is_action_pressed("ui_up"):
+		_select(wrapi(_selected - 1, 0, _rows.size()))
+	elif event.is_action_pressed("ui_accept"):
+		chosen.emit(_selected)
+	else:
+		return
+	get_viewport().set_input_as_handled()
+
+
+func _build_row(text: String, index: int) -> Row:
+	var row := Row.new()
+	row.root = Control.new()
+	row.root.custom_minimum_size.y = ROW_HEIGHT
+	add_child(row.root)
+	row.root.mouse_entered.connect(_select.bind(index))
+	row.root.gui_input.connect(_on_row_input.bind(index))
+
+	row.bar = ColorRect.new()
+	row.bar.color = CYAN
+	row.bar.mouse_filter = MOUSE_FILTER_IGNORE
+	row.bar.set_anchors_preset(PRESET_FULL_RECT)
+	row.root.add_child(row.bar)
+
+	row.label = Label.new()
+	row.label.text = text.to_upper()
+	row.label.add_theme_font_override("font", FONT)
+	row.label.add_theme_font_size_override("font_size", font_size)
+	row.label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	row.label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	row.label.mouse_filter = MOUSE_FILTER_IGNORE
+	row.label.set_anchors_preset(PRESET_FULL_RECT)
+	row.label.offset_right = -RIGHT_MARGIN
+	row.root.add_child(row.label)
+	return row
+
+
+func _on_row_input(event: InputEvent, index: int) -> void:
+	var click := event as InputEventMouseButton
+	if click and click.pressed and click.button_index == MOUSE_BUTTON_LEFT:
+		accept_event()
+		_select(index)
+		chosen.emit(index)
+
+
+func _select(index: int) -> void:
+	_selected = index
+	_refresh()
+
+
+func _refresh() -> void:
+	for i in _rows.size():
+		var selected := i == _selected
+		_rows[i].bar.visible = selected
+		_rows[i].label.add_theme_color_override("font_color", DARK if selected else CYAN)
+
+
+====================================================================================================
+32. scripts/ui/ui_kit.gd
+====================================================================================================
+
+class_name UiKit
+## Small helpers for HUD pieces built in code (weapon card, weapon panel, cheat menu), so they share one look.
+
+
+static func label(parent: Node, font_size: int, color := Color.WHITE, outline := 0) -> Label:
+	var result := Label.new()
+	result.add_theme_font_size_override("font_size", font_size)
+	result.add_theme_color_override("font_color", color)
+	if outline > 0:
+		result.add_theme_constant_override("outline_size", outline)
+		result.add_theme_color_override("font_outline_color", Color(0, 0, 0, 1))
+	result.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	parent.add_child(result)
+	return result
+
+
+static func panel_style(border: Color, background := Color(0.03, 0.03, 0.06, 0.92), border_width := 3) -> StyleBoxFlat:
+	var style := StyleBoxFlat.new()
+	style.bg_color = background
+	style.border_color = border
+	style.set_border_width_all(border_width)
+	style.set_corner_radius_all(8)
+	style.content_margin_left = 18.0
+	style.content_margin_right = 18.0
+	style.content_margin_top = 14.0
+	style.content_margin_bottom = 14.0
+	return style
+
+
+static func vbox(parent: Node, separation := 6) -> VBoxContainer:
+	var box := VBoxContainer.new()
+	box.add_theme_constant_override("separation", separation)
+	box.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	parent.add_child(box)
+	return box
+
+
+static func hbox(parent: Node, separation := 10) -> HBoxContainer:
+	var box := HBoxContainer.new()
+	box.add_theme_constant_override("separation", separation)
+	box.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	parent.add_child(box)
+	return box
+
+
+## Short tags for what makes a weapon special, e.g. ["Pierce 3", "Explodes 2.4 m"].
+static func weapon_tags(weapon: WeaponData) -> PackedStringArray:
+	var tags := PackedStringArray()
+	if weapon.instant_kill_normal:
+		tags.append("Instant kill")
+	if weapon.automatic:
+		tags.append("Automatic")
+	if weapon.pellets > 1:
+		tags.append("%d pellets" % weapon.pellets)
+	if weapon.hitscan:
+		tags.append("Beam")
+	if weapon.pierce < 0:
+		tags.append("Pierces all")
+	elif weapon.pierce > 0:
+		tags.append("Pierce %d" % weapon.pierce)
+	if weapon.bounces > 0:
+		tags.append("Ricochet x%d" % weapon.bounces)
+	if weapon.explosion_radius > 0.0:
+		tags.append("Explodes %.1f m" % weapon.explosion_radius)
+	if weapon.poison_dps > 0:
+		tags.append("Poison %d/s" % weapon.poison_dps)
+	if weapon.chain_count > 0:
+		tags.append("Chain x%d" % weapon.chain_count)
+	if weapon.homing_turn_rate > 0.0:
+		tags.append("Homing")
+	if weapon.max_fire_rate > weapon.fire_rate:
+		tags.append("Spin-up")
+	return tags
+
+
+====================================================================================================
+33. scripts/ui/weapon_card.gd
+====================================================================================================
+
+class_name WeaponCard
+extends PanelContainer
+## Borderlands-style item card for the weapon on the floor the player is about to pick up: the gun's
+## silhouette, name, rarity and rank, damage, stats compared with the equipped gun (green/red arrows),
+## what it does and its flavour text. The HUD places it next to the focused WeaponPickup.
+
+const WIDTH := 470.0
+const PREVIEW_SIZE := Vector2i(434, 150)
+const BETTER := Color(0.35, 1, 0.4)
+const WORSE := Color(1, 0.35, 0.3)
+
+var _style: StyleBoxFlat
+var _name: Label
+var _type: Label
+var _rarity: Label
+var _rank: Label
+var _rank_style: StyleBoxFlat
+var _damage: Label
+var _damage_caption: Label
+var _stats: GridContainer
+var _tags: Label
+var _description: Label
+var _flavor: Label
+var _footer: Label
+var _viewport: SubViewport
+var _camera: Camera3D
+var _pivot: Node3D
+var _silhouette_material := StandardMaterial3D.new()
+var _time := 0.0
+
+
+func _ready() -> void:
+	custom_minimum_size.x = WIDTH
+	mouse_filter = MOUSE_FILTER_IGNORE
+	_style = UiKit.panel_style(Color.WHITE)
+	add_theme_stylebox_override("panel", _style)
+	var column := UiKit.vbox(self, 6)
+
+	_name = UiKit.label(column, 32, Color.WHITE, 8)
+	var type_row := UiKit.hbox(column)
+	_type = UiKit.label(type_row, 20, Color(0.75, 0.75, 0.8))
+	_type.size_flags_horizontal = SIZE_EXPAND_FILL
+	_rarity = UiKit.label(type_row, 22, Color.WHITE, 6)
+	_rank = UiKit.label(type_row, 20, Color(0.05, 0.05, 0.08))
+	_rank_style = StyleBoxFlat.new()
+	_rank_style.set_corner_radius_all(4)
+	_rank_style.content_margin_left = 8.0
+	_rank_style.content_margin_right = 8.0
+	_rank.add_theme_stylebox_override("normal", _rank_style)
+
+	_build_preview(column)
+
+	var damage_row := UiKit.hbox(column, 14)
+	_damage = UiKit.label(damage_row, 52, Color.WHITE, 8)
+	_damage_caption = UiKit.label(damage_row, 18, Color(0.75, 0.75, 0.8))
+	_damage_caption.size_flags_vertical = SIZE_SHRINK_CENTER
+	_stats = GridContainer.new()
+	_stats.columns = 3
+	_stats.add_theme_constant_override("h_separation", 14)
+	_stats.mouse_filter = MOUSE_FILTER_IGNORE
+	_stats.size_flags_horizontal = SIZE_EXPAND_FILL
+	damage_row.add_child(_stats)
+
+	_tags = UiKit.label(column, 19, Color.WHITE)
+	_description = UiKit.label(column, 19, Color(0.92, 0.92, 0.95))
+	_flavor = UiKit.label(column, 18, Color(1, 0.4, 0.3))
+	# Wrapped labels need a fixed width, or the card measures them one letter wide and grows very tall.
+	for wrapped in [_tags, _description, _flavor]:
+		wrapped.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		wrapped.custom_minimum_size.x = WIDTH - 36.0
+	_footer = UiKit.label(column, 22, Color(1, 0.85, 0.35), 6)
+	_footer.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	visible = false
+
+
+func _process(delta: float) -> void:
+	_time += delta
+	if _pivot:
+		_pivot.rotation.y = sin(_time * 1.2) * 0.25
+
+
+## equipped: the gun in the player's hand (for the stat arrows). replaces: the gun picking this up would swap out.
+func show_weapon(slot: WeaponSlot, equipped: WeaponSlot, replaces: WeaponSlot) -> void:
+	var weapon := slot.data
+	var color := Rarity.color(weapon.rarity)
+	_style.border_color = color
+	_name.text = weapon.display_name
+	_name.add_theme_color_override("font_color", color)
+	_type.text = "%s   Lv %s" % [weapon.weapon_type, "??" if weapon.level >= 99 else str(weapon.level)]
+	_rarity.text = Rarity.display_name(weapon.rarity).to_upper()
+	_rarity.add_theme_color_override("font_color", color)
+	_rank.text = "RANK %s" % Rarity.rank_text(weapon.rarity)
+	_rank_style.bg_color = color
+
+	var compare := equipped.data if equipped and equipped.data != weapon else null
+	if weapon.instant_kill_normal:
+		_damage.text = "∞"
+		_damage_caption.text = "INSTANT KILL\n(normal enemies)"
+	else:
+		_damage.text = str(weapon.damage) + ("x%d" % weapon.pellets if weapon.pellets > 1 else "")
+		_damage_caption.text = "DAMAGE" + _arrow_text(weapon.damage_per_shot(), float(compare.damage_per_shot()) if compare else -1.0)
+	_damage.add_theme_color_override("font_color", color.lerp(Color.WHITE, 0.4))
+
+	for child in _stats.get_children():
+		child.queue_free()
+	var rate := maxf(weapon.fire_rate, weapon.max_fire_rate)
+	_add_stat("Fire rate", "%.1f/s" % rate, rate, maxf(compare.fire_rate, compare.max_fire_rate) if compare else -1.0)
+	_add_stat("Accuracy", "%d%%" % weapon.accuracy_percent(), weapon.accuracy_percent(), float(compare.accuracy_percent()) if compare else -1.0)
+	_add_stat("Ammo", "%d/%d" % [slot.ammo, weapon.max_ammo], slot.ammo, -1.0)
+
+	_tags.text = "  •  ".join(UiKit.weapon_tags(weapon))
+	_tags.add_theme_color_override("font_color", color)
+	_description.text = weapon.description
+	_flavor.text = weapon.flavor_text
+	_flavor.visible = not weapon.flavor_text.is_empty()
+	_footer.text = "[E] Swap for %s" % replaces.data.display_name if replaces else "[E] Pick up"
+	_set_preview(weapon, color)
+	visible = true
+	size = Vector2.ZERO
+	reset_size.call_deferred()
+
+
+func _add_stat(caption: String, value: String, mine: float, theirs: float) -> void:
+	UiKit.label(_stats, 17, Color(0.7, 0.7, 0.75)).text = caption
+	UiKit.label(_stats, 19, Color.WHITE).text = value
+	var arrow := UiKit.label(_stats, 17, Color.WHITE)
+	arrow.text = ""
+	if theirs >= 0.0 and not is_equal_approx(mine, theirs):
+		arrow.text = "▲" if mine > theirs else "▼"
+		arrow.add_theme_color_override("font_color", BETTER if mine > theirs else WORSE)
+
+
+func _arrow_text(mine: float, theirs: float) -> String:
+	if theirs < 0.0 or is_equal_approx(mine, theirs):
+		return ""
+	return "  ▲" if mine > theirs else "  ▼"
+
+
+func _build_preview(parent: Node) -> void:
+	var container := SubViewportContainer.new()
+	container.stretch = true
+	container.custom_minimum_size = Vector2(PREVIEW_SIZE)
+	container.mouse_filter = MOUSE_FILTER_IGNORE
+	parent.add_child(container)
+	_viewport = SubViewport.new()
+	_viewport.own_world_3d = true
+	_viewport.transparent_bg = true
+	_viewport.size = PREVIEW_SIZE
+	_viewport.render_target_update_mode = SubViewport.UPDATE_WHEN_VISIBLE
+	container.add_child(_viewport)
+	_camera = Camera3D.new()
+	_camera.projection = Camera3D.PROJECTION_ORTHOGONAL
+	_viewport.add_child(_camera)
+	# Looking from +X toward the origin, so a barrel pointing along -Z faces screen right.
+	_camera.look_at_from_position(Vector3(4, 0, 0), Vector3.ZERO, Vector3.UP)
+	_silhouette_material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+
+
+## Rebuilds the silhouette: the weapon's model in one flat colour, centred and sized to fit.
+func _set_preview(weapon: WeaponData, color: Color) -> void:
+	if _pivot:
+		_pivot.queue_free()
+	_pivot = Node3D.new()
+	_viewport.add_child(_pivot)
+	var model := weapon.build_model()
+	_pivot.add_child(model)
+	var bounds := WeaponData.mesh_bounds(model)
+	model.position = -bounds.get_center()
+	_silhouette_material.albedo_color = color.lerp(Color.WHITE, 0.35)
+	for mesh in model.find_children("*", "MeshInstance3D", true, false):
+		(mesh as MeshInstance3D).material_override = _silhouette_material
+	var aspect := float(PREVIEW_SIZE.x) / PREVIEW_SIZE.y
+	_camera.size = maxf(bounds.size.z * 1.15 / aspect, bounds.size.y * 1.25)
+
+
+====================================================================================================
+34. scripts/ui/weapon_panel.gd
+====================================================================================================
+
+class_name WeaponPanel
+extends PanelContainer
+## Bottom-right HUD block: the weapon in hand (name in rarity colour, big ammo count) and the other slots.
+## The Infinite Pistol's charge is the coin row in the top right (PistolCharge).
+
+var _style: StyleBoxFlat
+var _name: Label
+var _ammo: Label
+var _ammo_max: Label
+var _slots: VBoxContainer
+var _hint: Label
+
+
+func _ready() -> void:
+	mouse_filter = MOUSE_FILTER_IGNORE
+	custom_minimum_size.x = 400.0
+	_style = UiKit.panel_style(Color(0.4, 0.4, 0.45), Color(0.03, 0.03, 0.06, 0.8), 2)
+	add_theme_stylebox_override("panel", _style)
+	var column := UiKit.vbox(self, 4)
+	_name = UiKit.label(column, 28, Color.WHITE, 6)
+	var ammo_row := UiKit.hbox(column, 6)
+	_ammo = UiKit.label(ammo_row, 54, Color.WHITE, 8)
+	_ammo_max = UiKit.label(ammo_row, 24, Color(0.7, 0.7, 0.75))
+	_ammo_max.size_flags_vertical = SIZE_SHRINK_END
+	_slots = UiKit.vbox(column, 2)
+	_hint = UiKit.label(column, 16, Color(0.6, 0.6, 0.66))
+	_hint.text = "[Q]/wheel swap   [1][2][3] select   [E] pick up"
+
+
+func refresh(arsenal: Arsenal) -> void:
+	var current := arsenal.current()
+	if current == null:
+		_name.text = "UNARMED"
+		_name.add_theme_color_override("font_color", Color(0.6, 0.6, 0.65))
+		_ammo.text = "--"
+		_ammo_max.text = ""
+		_style.border_color = Color(0.4, 0.4, 0.45)
+	else:
+		var color := Rarity.color(current.data.rarity)
+		_name.text = current.data.display_name
+		_name.add_theme_color_override("font_color", color)
+		_style.border_color = color
+		if current == arsenal.pistol:
+			_ammo.text = "READY" if not current.is_out_of_ammo() else "EMPTY"
+			_ammo_max.text = ""
+		else:
+			_ammo.text = "EMPTY" if current.is_out_of_ammo() else str(current.ammo)
+			_ammo_max.text = "/ %d" % current.data.max_ammo
+		_ammo.add_theme_color_override("font_color", Color(1, 0.35, 0.3) if current.is_out_of_ammo() else Color.WHITE)
+
+	for child in _slots.get_children():
+		child.queue_free()
+	var loadout := arsenal.loadout()
+	for i in loadout.size():
+		var slot := loadout[i]
+		var line := UiKit.label(_slots, 19, Rarity.color(slot.data.rarity))
+		var ammo_text := ("ready" if not slot.is_out_of_ammo() else "empty") if slot == arsenal.pistol else str(slot.ammo)
+		line.text = "%s[%d] %s   %s" % ["> " if i == arsenal.active else "   ", i + 1, slot.data.display_name, ammo_text]
+		if i != arsenal.active:
+			line.modulate.a = 0.65
+
+
+====================================================================================================
+35. scripts/weapons/arsenal.gd
+====================================================================================================
+
+class_name Arsenal
+extends Node
+## The player's weapons: SLOT_COUNT slots for guns found on the floor, plus the Infinite Pistol once the
+## Orange Trooper hands it over. Handles shooting, ammo, swapping, picking up and dropping weapons, and
+## charging the Infinite Pistol with kills.
+## Saved to GameState.loadout on every change, so it survives scene changes and reloads.
+## Expects to be a child of the Player.
+
+## Slots, ammo, the active weapon or the pistol's charge changed.
+signal changed
+## The weapon on the floor that E would pick up changed. Null when there is none.
+signal focus_changed(pickup: WeaponPickup)
+## The Infinite Pistol just filled up from kills (or the cheat). The HUD plays its slot machine.
+signal pistol_charged
+
+const SLOT_COUNT := 2
+## Seconds between repeated "out of ammo" messages.
+const WARNING_COOLDOWN := 1.5
+
+## The gun model is parented here (it turns with the player's aim).
+@export var hand: Node3D
+
+var slots: Array[WeaponSlot] = []
+## The Infinite Pistol, or null before the Orange Trooper hands it over.
+var pistol: WeaponSlot
+## Kills since the pistol's last charge.
+var pistol_kills := 0
+## Index into loadout(): the slots first, then the pistol.
+var active := 0
+## The nearest weapon on the floor in reach, or null.
+var focused_pickup: WeaponPickup
+## The gun currently in the hand, or null.
+var held: Weapon
+
+var _nearby: Array[WeaponPickup] = []
+var _shot_queued := false
+var _warning_cooldown := 0.0
+
+@onready var _player := get_parent() as Player
+
+
+func _ready() -> void:
+	GameState.enemy_killed.connect(_on_enemy_killed)
+	changed.connect(_save)
+	_load(GameState.loadout)
+	_equip_active()
+
+
+## Everything the player can switch between, in order: slot 1, slot 2, then the Infinite Pistol.
+func loadout() -> Array[WeaponSlot]:
+	var list: Array[WeaponSlot] = slots.duplicate()
+	if pistol:
+		list.append(pistol)
+	return list
+
+
+func current() -> WeaponSlot:
+	var list := loadout()
+	return list[active] if active >= 0 and active < list.size() else null
+
+
+## Called by the Player every physics frame.
+func update(aim_point: Vector3, input_enabled: bool, delta: float) -> void:
+	_warning_cooldown = maxf(_warning_cooldown - delta, 0.0)
+	_update_focus()
+	var slot := current()
+	var holding := input_enabled and Input.is_action_pressed("shoot")
+	if held:
+		held.trigger_held = holding and slot != null and not slot.is_out_of_ammo()
+	# Semi-automatic guns fire once per click (queued from the input event so fast clicks aren't lost);
+	# automatic guns fire for as long as the button is held.
+	var wants_shot := _shot_queued or (holding and slot != null and slot.data.automatic)
+	_shot_queued = false
+	if not input_enabled or not wants_shot:
+		return
+	if slot == null:
+		_warn("No weapon! Find one first.")
+		return
+	if slot.is_out_of_ammo():
+		_warn_empty(slot)
+		return
+	var on_miss := _refund_pistol if slot == pistol and slot.data.refund_on_miss else Callable()
+	if held.fire(aim_point, on_miss):
+		slot.ammo -= slot.data.ammo_per_shot
+		changed.emit()
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	if _player == null or not _player.input_enabled:
+		return
+	if event.is_action_pressed("shoot"):
+		_shot_queued = true
+	elif event.is_action_pressed("interact") and focused_pickup:
+		get_viewport().set_input_as_handled()
+		pick_up(focused_pickup)
+	elif event.is_action_pressed("swap_weapon"):
+		var mouse := event as InputEventMouseButton
+		cycle(-1 if mouse and mouse.button_index == MOUSE_BUTTON_WHEEL_UP else 1)
+	elif event.is_action_pressed("weapon_1"):
+		select(0)
+	elif event.is_action_pressed("weapon_2"):
+		select(1)
+	elif event.is_action_pressed("weapon_3"):
+		select(2)
+
+
+func select(index: int) -> void:
+	if index == active or index < 0 or index >= loadout().size():
+		return
+	active = index
+	_equip_active()
+	changed.emit()
+
+
+func cycle(step: int) -> void:
+	var count := loadout().size()
+	if count < 2:
+		return
+	active = posmod(active + step, count)
+	_equip_active()
+	changed.emit()
+
+
+func pick_up(pickup: WeaponPickup) -> void:
+	if not is_instance_valid(pickup) or not pickup.can_be_picked():
+		return
+	var slot := pickup.take()
+	AudioManager.play_sfx("weapon_pickup")
+	add_weapon(slot)
+	_message("Picked up %s" % slot.data.display_name, 1.2)
+
+
+## Puts a weapon in a slot and equips it: a free slot first, then one that's out of ammo, then the
+## active one. The weapon it replaces is dropped on the floor (or thrown away if it was empty).
+func add_weapon(slot: WeaponSlot) -> void:
+	var index := _slot_for_new_weapon()
+	if index < slots.size():
+		_drop(slots[index])
+		slots[index] = slot
+	else:
+		slots.append(slot)
+		index = slots.size() - 1
+	active = index
+	_equip_active()
+	changed.emit()
+
+
+func give_infinite_pistol(charged := true) -> void:
+	pistol = WeaponSlot.new(WeaponLibrary.INFINITE_PISTOL, 1 if charged else 0)
+	pistol_kills = 0
+	active = loadout().size() - 1
+	_equip_active()
+	changed.emit()
+
+
+func charge_pistol() -> void:
+	if pistol:
+		pistol.ammo = pistol.data.max_ammo
+		pistol_kills = 0
+		pistol_charged.emit()
+		changed.emit()
+
+
+## Adds fraction of each slot weapon's max ammo (not the pistol's). Returns false if all were full.
+func refill_ammo(fraction: float) -> bool:
+	var refilled := false
+	for slot in slots:
+		refilled = slot.refill(fraction) or refilled
+	if refilled:
+		changed.emit()
+	return refilled
+
+
+func clear() -> void:
+	slots.clear()
+	pistol = null
+	pistol_kills = 0
+	active = 0
+	_equip_active()
+	changed.emit()
+
+
+## The weapon a pickup would swap out right now, or null if there's a free slot.
+func slot_to_replace() -> WeaponSlot:
+	var index := _slot_for_new_weapon()
+	return slots[index] if index < slots.size() else null
+
+
+## Kills still needed for the next pistol shot (0 when it's loaded).
+func pistol_kills_needed() -> int:
+	if pistol == null or not pistol.is_out_of_ammo():
+		return 0
+	return pistol.data.kills_per_charge - pistol_kills
+
+
+func add_nearby(pickup: WeaponPickup) -> void:
+	if not pickup in _nearby:
+		_nearby.append(pickup)
+
+
+func remove_nearby(pickup: WeaponPickup) -> void:
+	_nearby.erase(pickup)
+
+
+func _update_focus() -> void:
+	var best: WeaponPickup = null
+	var best_distance := INF
+	for pickup in _nearby.duplicate():
+		if not is_instance_valid(pickup):
+			_nearby.erase(pickup)
+			continue
+		if not pickup.can_be_picked():
+			continue
+		var distance: float = pickup.global_position.distance_squared_to(_player.global_position)
+		if distance < best_distance:
+			best_distance = distance
+			best = pickup
+	if best == focused_pickup:
+		return
+	if is_instance_valid(focused_pickup):
+		focused_pickup.set_focused(false)
+	focused_pickup = best
+	if best:
+		best.set_focused(true)
+	focus_changed.emit(best)
+
+
+func _slot_for_new_weapon() -> int:
+	if slots.size() < SLOT_COUNT:
+		return slots.size()
+	for i in slots.size():
+		if slots[i].is_out_of_ammo():
+			return i
+	return active if active < slots.size() else 0
+
+
+func _drop(slot: WeaponSlot) -> void:
+	var origin := _player.global_position
+	if slot.is_out_of_ammo():
+		Effects.float_text(_player, origin + Vector3.UP * 2.2, "Tossed the empty %s" % slot.data.display_name, Color(0.8, 0.8, 0.8), 0.6)
+		return
+	Loot.spawn_weapon(_player, slot, origin + Vector3.UP, Loot.landing_spot(_player, origin, 1.6, 2.2))
+
+
+func _equip_active() -> void:
+	if held:
+		held.queue_free()
+		held = null
+	var slot := current()
+	if slot == null or hand == null:
+		return
+	held = Weapon.new()
+	hand.add_child(held)
+	held.setup(slot.data)
+
+
+func _on_enemy_killed(enemy: Node) -> void:
+	if pistol == null or pistol.is_full():
+		return
+	# Kills made by the pistol itself don't recharge it.
+	if enemy is Enemy and (enemy as Enemy).killed_by_infinite_pistol:
+		return
+	pistol_kills += 1
+	if pistol_kills >= pistol.data.kills_per_charge:
+		pistol_kills = 0
+		pistol.ammo = pistol.data.max_ammo
+		_message("INFINITE PISTOL CHARGED!  [%s]" % _pistol_key(), 2.0)
+		pistol_charged.emit()
+	changed.emit()
+
+
+func _refund_pistol() -> void:
+	if pistol == null or pistol.is_full():
+		return
+	pistol.ammo += 1
+	changed.emit()
+	Effects.float_text(_player, _player.global_position + Vector3.UP * 2.2, "Missed! The bullet returns to the chamber.", Color(0.6, 1, 1), 0.6)
+
+
+func _warn_empty(slot: WeaponSlot) -> void:
+	if slot == pistol:
+		_warn("Infinite Pistol is empty: %d more kill(s) with other guns to recharge." % pistol_kills_needed())
+	else:
+		_warn("%s is out of ammo! Grab another weapon [E] or swap [Q]." % slot.data.display_name)
+
+
+func _warn(text: String) -> void:
+	if _warning_cooldown > 0.0:
+		return
+	_warning_cooldown = WARNING_COOLDOWN
+	_message(text, 1.5)
+
+
+func _message(text: String, duration: float) -> void:
+	get_tree().call_group("hud", "show_message", text, duration)
+
+
+func _pistol_key() -> String:
+	return str(loadout().find(pistol) + 1)
+
+
+func _save() -> void:
+	var saved_slots := []
+	for slot in slots:
+		saved_slots.append(slot.to_dict())
+	GameState.loadout = {
+		"slots": saved_slots,
+		"pistol": pistol.ammo if pistol else -1,
+		"pistol_kills": pistol_kills,
+		"active": active,
+	}
+
+
+func _load(saved: Dictionary) -> void:
+	slots.clear()
+	for entry in saved.get("slots", []):
+		var slot := WeaponSlot.from_dict(entry)
+		if slot and slots.size() < SLOT_COUNT:
+			slots.append(slot)
+	var pistol_ammo: int = saved.get("pistol", -1)
+	pistol = WeaponSlot.new(WeaponLibrary.INFINITE_PISTOL, pistol_ammo) if pistol_ammo >= 0 else null
+	pistol_kills = saved.get("pistol_kills", 0)
+	active = clampi(saved.get("active", 0), 0, maxi(loadout().size() - 1, 0))
+
+
+====================================================================================================
+36. scripts/weapons/projectile.gd
+====================================================================================================
+
+class_name Projectile
+extends Node3D
+## One bullet, orb or shard. Each physics frame it ray-casts along the step it is about to move, so fast
+## bullets can't skip through thin walls (and it works the same with Jolt or Godot physics).
+## Its behaviour - damage, pierce, ricochet, explosion, poison, chain lightning, homing - comes from a WeaponData.
+## Made in code by Weapon.fire(); no scene needed.
+
+## How far homing projectiles look for a target.
+const HOMING_RANGE := 14.0
+
+var weapon: WeaponData
+var collision_mask := Combat.PLAYER_SHOT_MASK
+## Height the projectile dips to after leaving the muzzle (at 45 degrees), then holds. NAN keeps the muzzle's
+## height. Lets a gun held at chest height fire bullets low enough for low walls to block.
+var cruise_height := NAN
+
+var _velocity := Vector3.ZERO
+var _age := 0.0
+var _pierce_left := 0
+var _bounces_left := 0
+var _hit_an_enemy := false
+var _exclude: Array[RID] = []
+var _on_miss := Callable()
+
+
+## Call right after adding the projectile to the scene. on_miss runs if it ends without hitting anyone.
+func launch(data: WeaponData, origin: Vector3, direction: Vector3, mask: int, on_miss := Callable()) -> void:
+	weapon = data
+	collision_mask = mask
+	_on_miss = on_miss
+	_pierce_left = data.pierce
+	_bounces_left = data.bounces
+	global_position = origin
+	# Keeps any downward angle (the player shooting from the grapple); enemies pass flat directions.
+	_velocity = direction.normalized() * data.projectile_speed
+	_build_mesh()
+	_face_velocity()
+
+
+## Instant beam (railgun): damages every enemy on the line up to the first wall.
+## Returns true if it hit at least one enemy.
+static func fire_beam(context: Node3D, data: WeaponData, origin: Vector3, direction: Vector3, mask: int) -> bool:
+	var space := context.get_world_3d().direct_space_state
+	var end := origin + direction * data.projectile_range
+	var exclude: Array[RID] = []
+	var hit_enemy := false
+	var pierce_left := data.pierce
+	for i in 32:
+		var hit := space.intersect_ray(PhysicsRayQueryParameters3D.create(origin, end, mask, exclude))
+		if hit.is_empty():
+			break
+		var collider := hit.collider as Node
+		if Combat.health_of(collider) == null:
+			end = hit.position
+			break
+		hit_enemy = true
+		Combat.hit(collider, data, data.damage)
+		Effects.flash(context, hit.position, data.projectile_color, 0.6, 0.15)
+		exclude.append(hit.rid)
+		if pierce_left == 0:
+			end = hit.position
+			break
+		pierce_left -= 1
+	Effects.beam(context, origin, end, data.projectile_color * 1.5, 0.22, 0.35)
+	Effects.beam(context, origin, end, Color(1, 1, 1), 0.07, 0.2)
+	return hit_enemy
+
+
+func _physics_process(delta: float) -> void:
+	if weapon.homing_turn_rate > 0.0:
+		_steer(delta)
+	var from := global_position
+	var to := from + _velocity * delta
+	if not is_nan(cruise_height):
+		to.y = move_toward(from.y, cruise_height, weapon.projectile_speed * delta)
+	var query := PhysicsRayQueryParameters3D.create(from, to, collision_mask, _exclude)
+	var hit := get_world_3d().direct_space_state.intersect_ray(query)
+	if hit.is_empty():
+		global_position = to
+	elif not _on_hit(hit):
+		_finish()
+		return
+	_age += delta
+	if _age >= weapon.lifetime():
+		_finish()
+
+
+## Returns true if the projectile keeps flying (pierce or ricochet).
+func _on_hit(hit: Dictionary) -> bool:
+	var collider := hit.collider as Node
+	var point: Vector3 = hit.position
+	var exploding := weapon.explosion_radius > 0.0
+	var hurts_enemies := collision_mask & 4 != 0
+	if Combat.health_of(collider):
+		_hit_an_enemy = true
+		Combat.hit(collider, weapon, weapon.damage)
+		if exploding:
+			Combat.explode(self, point, weapon.explosion_radius, weapon.explosion_damage, weapon.projectile_color, hurts_enemies)
+		if weapon.chain_count > 0 and collider is Node3D:
+			Combat.chain(self, collider, weapon, weapon.damage)
+		Effects.flash(self, point, weapon.projectile_color, 0.4, 0.12)
+		if _pierce_left == 0:
+			return false
+		_pierce_left -= 1
+		_exclude.append(hit.rid)
+		global_position = point
+		return true
+
+	# Hit a wall or prop.
+	var normal: Vector3 = hit.normal
+	normal.y = 0.0
+	if exploding:
+		Combat.explode(self, point + normal * 0.2, weapon.explosion_radius, weapon.explosion_damage, weapon.projectile_color, hurts_enemies)
+	if _bounces_left > 0 and normal.length_squared() > 0.01:
+		_bounces_left -= 1
+		normal = normal.normalized()
+		_velocity = _velocity.bounce(normal)
+		_velocity.y = 0.0
+		global_position = point + normal * 0.05
+		_face_velocity()
+		return true
+	if not exploding:
+		Effects.flash(self, point, weapon.projectile_color, 0.25, 0.1)
+	return false
+
+
+func _finish() -> void:
+	if not _hit_an_enemy and _on_miss.is_valid():
+		_on_miss.call()
+	queue_free()
+
+
+func _steer(delta: float) -> void:
+	var target := Combat.nearest_enemy(self, global_position, HOMING_RANGE)
+	if target == null:
+		return
+	var desired := target.global_position - global_position
+	desired.y = 0.0
+	var angle := _velocity.signed_angle_to(desired, Vector3.UP)
+	var turn := clampf(angle, -weapon.homing_turn_rate * delta, weapon.homing_turn_rate * delta)
+	_velocity = _velocity.rotated(Vector3.UP, turn)
+	_face_velocity()
+
+
+func _face_velocity() -> void:
+	if _velocity.length_squared() > 0.001:
+		# Straight down from the grapple, UP can't be the up vector.
+		var up := Vector3.UP if absf(_velocity.normalized().y) < 0.99 else Vector3.FORWARD
+		look_at(global_position + _velocity, up)
+
+
+func _build_mesh() -> void:
+	var sphere := SphereMesh.new()
+	sphere.radius = weapon.projectile_size
+	sphere.height = weapon.projectile_size * 2.0
+	sphere.radial_segments = 10
+	sphere.rings = 5
+	# Brighter than 1.0 so the environment's glow picks it up.
+	sphere.material = Effects.glow_material(weapon.projectile_color * 2.2)
+	var mesh_instance := MeshInstance3D.new()
+	mesh_instance.mesh = sphere
+	mesh_instance.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	# Fast bullets are stretched along their path so they read as tracers.
+	mesh_instance.scale = Vector3(1.0, 1.0, clampf(weapon.projectile_speed / 16.0, 1.0, 4.0))
+	add_child(mesh_instance)
+
+
+====================================================================================================
+37. scripts/weapons/rarity.gd
+====================================================================================================
+
+class_name Rarity
+## Weapon rarity tiers, colour-coded like Borderlands. The rank shown on item cards is the tier number + 1.
+
+enum Tier { COMMON, UNCOMMON, RARE, EPIC, LEGENDARY, INFINITE }
+
+const NAMES := ["Common", "Uncommon", "Rare", "Epic", "Legendary", "Infinite"]
+const COLORS := [
+	Color(0.92, 0.92, 0.92),
+	Color(0.3, 0.95, 0.35),
+	Color(0.25, 0.6, 1.0),
+	Color(0.72, 0.35, 1.0),
+	Color(1.0, 0.55, 0.1),
+	Color(0.45, 1.0, 0.95),
+]
+## Relative chance of each tier in a random drop. The Infinite Pistol is never dropped.
+const DROP_WEIGHTS := [40.0, 30.0, 18.0, 9.0, 3.0, 0.0]
+
+
+static func color(tier: int) -> Color:
+	return COLORS[clampi(tier, 0, COLORS.size() - 1)]
+
+
+static func display_name(tier: int) -> String:
+	return NAMES[clampi(tier, 0, NAMES.size() - 1)]
+
+
+## "1" to "5", or "∞" for the Infinite tier.
+static func rank_text(tier: int) -> String:
+	return "∞" if tier == Tier.INFINITE else str(tier + 1)
+
+
+====================================================================================================
+38. scripts/weapons/weapon.gd
+====================================================================================================
+
+class_name Weapon
+extends Node3D
+## A gun in someone's hand, built from a WeaponData with setup(). fire() shoots toward a point.
+## Ammo is not tracked here: the player's Arsenal (or an enemy) decides whether a shot is allowed.
+
+signal fired
+
+## Closer than this, the target is beside or behind the muzzle, so fire straight ahead instead.
+const MIN_AIM_DISTANCE := 1.5
+
+var data: WeaponData
+## Set every physics frame by whoever holds the gun. Drives spin-up weapons.
+var trigger_held := false
+var collision_mask := Combat.PLAYER_SHOT_MASK
+
+var _model: Node3D
+var _muzzle_local := Vector3.ZERO
+var _cooldown := 0.0
+var _spin := 0.0
+var _kick := 0.0
+
+
+
+func setup(weapon: WeaponData) -> void:
+	data = weapon
+	_model = weapon.build_model()
+	add_child(_model)
+	_muzzle_local = weapon.muzzle_in(_model)
+
+
+func muzzle_position() -> Vector3:
+	return global_transform * _muzzle_local
+
+
+func current_fire_rate() -> float:
+	if data.max_fire_rate <= data.fire_rate:
+		return data.fire_rate
+	return lerpf(data.fire_rate, data.max_fire_rate, _spin)
+
+
+## 0 to 1, how far a spin-up weapon has wound up.
+func spin() -> float:
+	return _spin
+
+
+func _physics_process(delta: float) -> void:
+	if data == null:
+		return
+	_cooldown = maxf(_cooldown - delta, 0.0)
+	if data.spin_up_time > 0.0:
+		var direction := 1.0 if trigger_held else -2.0
+		_spin = clampf(_spin + direction * delta / data.spin_up_time, 0.0, 1.0)
+	# Recoil: the model jumps back a little on each shot and slides forward again.
+	_kick = move_toward(_kick, 0.0, delta * 1.2)
+	_model.position.z = _kick
+
+
+func can_fire() -> bool:
+	return data != null and _cooldown <= 0.0
+
+
+## Shoots toward target, angled down if it's below the muzzle (shooting from the grapple). Returns false
+## while on cooldown. on_miss runs if the shot hits no enemy (the Infinite Pistol refunds its bullet).
+func fire(target: Vector3, on_miss := Callable()) -> bool:
+	if not can_fire():
+		return false
+	var origin := muzzle_position()
+	var direction := target - origin
+	if direction.length() < MIN_AIM_DISTANCE:
+		direction = -global_basis.z
+		direction.y = 0.0
+	direction = direction.normalized()
+
+	if data.hitscan:
+		if not Projectile.fire_beam(self, data, origin, direction, collision_mask) and on_miss.is_valid():
+			on_miss.call()
+	else:
+		for i in data.pellets:
+			var projectile := Projectile.new()
+			get_tree().current_scene.add_child(projectile)
+			var miss_callback := on_miss if i == 0 else Callable()
+			projectile.launch(data, origin, direction.rotated(Vector3.UP, _spread_angle(i)), collision_mask, miss_callback)
+
+	_cooldown = 1.0 / current_fire_rate()
+	_kick = 0.06 + 0.02 * data.pellets
+	Effects.flash(self, origin, data.projectile_color, 0.22, 0.07)
+	fired.emit()
+	return true
+
+
+func _spread_angle(pellet: int) -> float:
+	var spread := deg_to_rad(data.spread_degrees)
+	if data.pellets <= 1:
+		return randf_range(-0.5, 0.5) * spread
+	# Shotguns: pellets fanned evenly across the cone, with a little jitter.
+	return lerpf(-0.5 * spread, 0.5 * spread, float(pellet) / (data.pellets - 1)) + randf_range(-0.03, 0.03)
+
+
+====================================================================================================
+39. scripts/weapons/weapon_data.gd
+====================================================================================================
+
+class_name WeaponData
+extends Resource
+## One kind of weapon: its model, rarity, card text and how it shoots.
+## Every weapon is a .tres in resources/weapons/ and is listed in WeaponLibrary.
+## A weapon the player actually carries is a WeaponSlot (this data plus the ammo left).
+
+@export var id := &""
+@export var display_name := "Weapon"
+## Shown on the card under the name, e.g. "SMG" or "Railgun".
+@export var weapon_type := "Pistol"
+@export var rarity: Rarity.Tier = Rarity.Tier.COMMON
+## Item level printed on the card (flavour, like Borderlands).
+@export var level := 1
+## What the weapon does, in one or two sentences.
+@export_multiline var description := ""
+## The red joke line at the bottom of the card.
+@export var flavor_text := ""
+
+@export_group("Model")
+@export var model: PackedScene
+@export var model_scale := 1.0
+@export var model_rotation_degrees := Vector3.ZERO
+## Moves the model inside the hand. The imported guns are centred on their bounding box.
+@export var hold_offset := Vector3(0, 0, -0.12)
+## Barrel tip, in the same space as hold_offset. Zero means "front of the model's bounds".
+@export var muzzle_position := Vector3.ZERO
+
+@export_group("Firing")
+## Held trigger keeps firing. Off: one shot per click.
+@export var automatic := false
+## Shots per second.
+@export var fire_rate := 4.0
+## Spin-up guns climb from fire_rate to this while the trigger stays held. 0 turns it off.
+@export var max_fire_rate := 0.0
+@export var spin_up_time := 0.0
+@export var damage := 10
+## Projectiles per shot (shotguns).
+@export var pellets := 1
+## Total cone width in degrees.
+@export var spread_degrees := 0.0
+## Metres per second.
+@export var projectile_speed := 30.0
+@export var projectile_size := 0.15
+@export var projectile_color := Color(1, 1, 1)
+## Metres a projectile flies before it fizzles.
+@export var projectile_range := 40.0
+## Ammo a freshly found copy of this weapon carries, and the most it can hold.
+@export var max_ammo := 60
+@export var ammo_per_shot := 1
+
+@export_group("Special effects")
+## Enemies a projectile passes through before stopping. -1 = all of them.
+@export var pierce := 0
+## Times a projectile ricochets off walls.
+@export var bounces := 0
+@export var explosion_radius := 0.0
+@export var explosion_damage := 0
+## Poison damage per second and how long it lasts. Hitting again refreshes it.
+@export var poison_dps := 0
+@export var poison_duration := 0.0
+## Lightning jumps to this many extra enemies near the one hit.
+@export var chain_count := 0
+@export var chain_range := 6.0
+@export_range(0.0, 1.0) var chain_damage_factor := 0.6
+## How fast projectiles turn toward the nearest enemy, in radians per second. 0 = no homing.
+@export var homing_turn_rate := 0.0
+## Instant beam instead of a projectile (railgun).
+@export var hitscan := false
+
+@export_group("Infinite Pistol")
+## Normal-tier enemies die in one hit and drop a jackpot of loot.
+@export var instant_kill_normal := false
+## What it deals to elites and bosses instead, since they can't be one-shot.
+@export var elite_damage := 0
+## Kills (with other weapons) that earn the next shot. 0 means it uses normal ammo.
+@export var kills_per_charge := 0
+## A shot that hits no enemy goes back into the chamber.
+@export var refund_on_miss := false
+
+
+## Damage of one trigger pull, counting every pellet.
+func damage_per_shot() -> int:
+	return damage * pellets + explosion_damage
+
+
+func accuracy_percent() -> int:
+	return clampi(roundi(100.0 - spread_degrees * 2.0), 5, 100)
+
+
+func lifetime() -> float:
+	return projectile_range / maxf(projectile_speed, 0.1)
+
+
+## The model, scaled and turned for the hand. The barrel points along -Z.
+func build_model() -> Node3D:
+	var holder := Node3D.new()
+	holder.name = "Model"
+	if model:
+		var inst := model.instantiate() as Node3D
+		inst.rotation_degrees = model_rotation_degrees
+		inst.scale = Vector3.ONE * model_scale
+		inst.position = hold_offset
+		holder.add_child(inst)
+	return holder
+
+
+## Barrel tip in build_model()'s space.
+func muzzle_in(model_root: Node3D) -> Vector3:
+	if muzzle_position != Vector3.ZERO:
+		return muzzle_position
+	var bounds := mesh_bounds(model_root)
+	return Vector3(bounds.get_center().x, bounds.position.y + bounds.size.y * 0.72, bounds.position.z)
+
+
+## Bounding box of every mesh under root, in root's space. Works before root is in the tree.
+static func mesh_bounds(root: Node3D) -> AABB:
+	var result := AABB()
+	var first := true
+	for node in root.find_children("*", "MeshInstance3D", true, false):
+		var mesh_instance := node as MeshInstance3D
+		var to_root := Transform3D.IDENTITY
+		var walker: Node = mesh_instance
+		while walker != root and walker is Node3D:
+			to_root = (walker as Node3D).transform * to_root
+			walker = walker.get_parent()
+		var box := to_root * mesh_instance.get_aabb()
+		result = box if first else result.merge(box)
+		first = false
+	return result
+
+
+====================================================================================================
+40. scripts/weapons/weapon_library.gd
+====================================================================================================
+
+class_name WeaponLibrary
+## Every weapon in the game. To add one, make a WeaponData .tres in resources/weapons/ and list it in ALL.
+
+const INFINITE_PISTOL: WeaponData = preload("res://resources/weapons/infinite_pistol.tres")
+
+const ALL: Array[WeaponData] = [
+	preload("res://resources/weapons/capper.tres"),
+	preload("res://resources/weapons/scifi_rifle.tres"),
+	preload("res://resources/weapons/cyber_smg.tres"),
+	preload("res://resources/weapons/toxic.tres"),
+	preload("res://resources/weapons/space_gun.tres"),
+	preload("res://resources/weapons/plasma.tres"),
+	preload("res://resources/weapons/sniper.tres"),
+	preload("res://resources/weapons/collector.tres"),
+	preload("res://resources/weapons/ares_lmg.tres"),
+	preload("res://resources/weapons/railgun.tres"),
+	preload("res://resources/weapons/arc_charger.tres"),
+	preload("res://resources/weapons/toy_gun.tres"),
+	INFINITE_PISTOL,
+]
+
+
+static func find(id: StringName) -> WeaponData:
+	for weapon in ALL:
+		if weapon.id == id:
+			return weapon
+	return null
+
+
+## Everything except the Infinite Pistol, sorted from common to legendary.
+static func droppable() -> Array[WeaponData]:
+	var result: Array[WeaponData] = []
+	for weapon in ALL:
+		if weapon.rarity != Rarity.Tier.INFINITE:
+			result.append(weapon)
+	result.sort_custom(func(a: WeaponData, b: WeaponData) -> bool: return a.rarity < b.rarity)
+	return result
+
+
+## A random weapon, picked by rarity weight (Rarity.DROP_WEIGHTS), at least min_tier.
+static func random_drop(min_tier := Rarity.Tier.COMMON) -> WeaponData:
+	var pool := droppable()
+	var total := 0.0
+	for weapon in pool:
+		if weapon.rarity >= min_tier:
+			total += _weight(weapon, pool)
+	var roll := randf() * total
+	for weapon in pool:
+		if weapon.rarity < min_tier:
+			continue
+		roll -= _weight(weapon, pool)
+		if roll <= 0.0:
+			return weapon
+	return pool.back()
+
+
+## A tier's weight is shared between the weapons in it, so adding guns doesn't change tier odds.
+static func _weight(weapon: WeaponData, pool: Array[WeaponData]) -> float:
+	var same_tier := pool.filter(func(w: WeaponData) -> bool: return w.rarity == weapon.rarity).size()
+	return Rarity.DROP_WEIGHTS[weapon.rarity] / maxf(same_tier, 1.0)
+
+
+====================================================================================================
+41. scripts/weapons/weapon_slot.gd
+====================================================================================================
+
+class_name WeaponSlot
+extends RefCounted
+## One weapon the player owns (or one lying on the floor): which weapon and how much ammo is left.
+
+var data: WeaponData
+var ammo := 0
+
+
+## ammo_left < 0 means a full load.
+func _init(weapon: WeaponData = null, ammo_left := -1) -> void:
+	data = weapon
+	if weapon:
+		ammo = weapon.max_ammo if ammo_left < 0 else mini(ammo_left, weapon.max_ammo)
+
+
+func is_out_of_ammo() -> bool:
+	return ammo < data.ammo_per_shot
+
+
+func is_full() -> bool:
+	return ammo >= data.max_ammo
+
+
+## Adds a share of the weapon's maximum ammo. Returns true if anything was added.
+func refill(fraction: float) -> bool:
+	if is_full():
+		return false
+	ammo = mini(data.max_ammo, ammo + maxi(1, ceili(data.max_ammo * fraction)))
+	return true
+
+
+func to_dict() -> Dictionary:
+	return {"id": String(data.id), "ammo": ammo}
+
+
+static func from_dict(d: Dictionary) -> WeaponSlot:
+	var weapon := WeaponLibrary.find(StringName(d.get("id", "")))
+	if weapon == null:
+		return null
+	return WeaponSlot.new(weapon, int(d.get("ammo", -1)))
+
+
+====================================================================================================
+42. assets/materials/Interior/checkered_floor.gdshader
+====================================================================================================
+
+shader_type spatial;
+
+uniform vec4 color_a : source_color = vec4(0.0, 0.0, 0.0, 1.0);
+uniform vec4 color_b : source_color = vec4(1.0, 1.0, 1.0, 1.0);
+uniform float tile_size = 0.5;
+
+varying vec3 world_pos;
+
+void vertex() {
+	world_pos = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
+}
+
+void fragment() {
+	vec2 cell = floor(world_pos.xz / tile_size);
+	float checker = mod(cell.x + cell.y, 2.0);
+	ALBEDO = mix(color_a.rgb, color_b.rgb, checker);
+	ROUGHNESS = 0.6;
+}
+
+
+====================================================================================================
+43. shaders/dash_water.gdshader
+====================================================================================================
+
+// The green dash block on the HUD, refilling like water: a wavy surface with a light foam line rises
+// from the bottom as level goes from 0 to 1. The waves calm down near empty and full, so a full block is solid.
+shader_type canvas_item;
+
+uniform float level : hint_range(0.0, 1.0) = 1.0;
+uniform vec4 foam_color : source_color = vec4(0.72, 1.0, 0.86, 1.0);
+uniform vec4 deep_color : source_color = vec4(0.04, 0.55, 0.32, 1.0);
+uniform float wave_height = 0.07;
+uniform float wave_speed = 7.0;
+
+void fragment() {
+	// Snap to the sprite's pixels so the water stays crisp pixel art.
+	vec2 uv = (floor(UV / TEXTURE_PIXEL_SIZE) + 0.5) * TEXTURE_PIXEL_SIZE;
+	float calm = smoothstep(1.0, 0.92, level) * smoothstep(0.0, 0.08, level);
+	float wave = 0.6 * sin(uv.x * 14.0 + TIME * wave_speed) + 0.4 * sin(uv.x * 25.0 - TIME * wave_speed * 1.4);
+	float surface = 1.0 - level + wave * wave_height * calm;
+	float depth = uv.y - surface;
+	vec4 tex = texture(TEXTURE, UV);
+	if (depth < 0.0) {
+		COLOR.a = 0.0;
+	} else if (level < 1.0 && depth < TEXTURE_PIXEL_SIZE.y * 3.0) {
+		COLOR = vec4(foam_color.rgb, tex.a * COLOR.a);
+	} else if (level < 1.0) {
+		// Darker towards the bottom while filling, like deeper water.
+		COLOR.rgb = mix(COLOR.rgb, deep_color.rgb, clamp(uv.y - surface, 0.0, 1.0) * 0.5);
+	}
+}
+
+
+====================================================================================================
+44. shaders/health_segment.gdshader
+====================================================================================================
+
+// One red segment of the HUD health bar. Drains from its right edge as fill drops, with the cut slanted
+// like the segment's sides. Health just lost stays pale (ghost) until the HUD catches it up to fill.
+shader_type canvas_item;
+
+uniform float fill : hint_range(0.0, 1.0) = 1.0;
+uniform float ghost : hint_range(0.0, 1.0) = 1.0;
+// How far the bottom edge sits right of the top edge, as a fraction of the texture's width.
+uniform float slant = 0.0;
+uniform vec4 ghost_color : source_color = vec4(1.0, 0.86, 0.8, 1.0);
+
+void fragment() {
+	// Snap to the sprite's pixels so the cut stays crisp pixel art.
+	vec2 uv = (floor(UV / TEXTURE_PIXEL_SIZE) + 0.5) * TEXTURE_PIXEL_SIZE;
+	float along = (uv.x - slant * uv.y) / max(1.0 - slant, 0.001);
+	vec4 tex = texture(TEXTURE, UV);
+	// Exact when full or empty: the sides aren't perfectly parallel, so the slanted cut alone would clip a corner.
+	float shown = fill >= 0.999 ? 2.0 : (fill <= 0.001 ? -2.0 : fill);
+	float pale = ghost >= 0.999 ? 2.0 : (ghost <= 0.001 ? -2.0 : ghost);
+	if (along > max(shown, pale)) {
+		COLOR.a = 0.0;
+	} else if (along > shown) {
+		COLOR = vec4(ghost_color.rgb, tex.a * COLOR.a);
+	}
+}
+
+
+====================================================================================================
+45. shaders/rarity_beam.gdshader
+====================================================================================================
+
+// Vertical light beam above a weapon on the floor, tinted by rarity (looter-shooter style).
+// Used on an uncapped CylinderMesh. Bright in the middle of the cylinder, fading toward the top.
+shader_type spatial;
+render_mode unshaded, blend_add, cull_disabled, depth_draw_never, shadows_disabled;
+
+uniform vec4 beam_color : source_color = vec4(1.0);
+uniform float intensity = 1.6;
+// Must match the mesh height so the fade spans the whole beam.
+uniform float height = 7.0;
+
+varying float v_height;
+
+void vertex() {
+	v_height = clamp(VERTEX.y / height + 0.5, 0.0, 1.0);
+}
+
+void fragment() {
+	float facing = abs(dot(normalize(NORMAL), normalize(VIEW)));
+	float core = pow(facing, 2.0);
+	float fade = pow(1.0 - v_height, 1.6);
+	float stripes = 0.75 + 0.25 * sin(v_height * 40.0 - TIME * 5.0);
+	ALBEDO = beam_color.rgb * intensity * core * fade * stripes;
+}
+
+
+====================================================================================================
+46. shaders/rarity_ring.gdshader
+====================================================================================================
+
+// Pulsing ring of light on the floor under a dropped weapon, tinted by rarity. Used on a PlaneMesh.
+shader_type spatial;
+render_mode unshaded, blend_add, cull_disabled, depth_draw_never, shadows_disabled;
+
+uniform vec4 ring_color : source_color = vec4(1.0);
+uniform float intensity = 1.5;
+
+void fragment() {
+	float d = length(UV - vec2(0.5)) * 2.0;
+	float ring = smoothstep(1.0, 0.9, d) * smoothstep(0.55, 0.9, d);
+	float glow = (1.0 - smoothstep(0.0, 1.0, d)) * 0.35;
+	float pulse = 0.75 + 0.25 * sin(TIME * 3.0);
+	ALBEDO = ring_color.rgb * intensity * (ring + glow) * pulse;
+}
+
+
+====================================================================================================
+47. shaders/slot_coin.gdshader
+====================================================================================================
+
+// One coin of the Infinite Pistol charge row (top right of the HUD, see PistolCharge).
+//   fill: gold rises from the bottom like liquid when a kill lands (0 = cyan coin, 1 = gold coin).
+//   reel/spin: when all coins are gold the coin becomes a slot machine reel. The reel is a drum of gold and
+//   cyan coins taking turns; spin scrolls it down (in coins), reel bends and shades it like a real drum, and
+//   blur smears it while it spins fast. An even whole spin lands on a gold coin.
+//   flash: whitens the coin, used when a reel stops.
+shader_type canvas_item;
+
+uniform sampler2D gold_tex : filter_nearest;
+uniform sampler2D empty_tex : filter_nearest;
+uniform float fill : hint_range(0.0, 1.0) = 0.0;
+uniform float spin = 0.0;
+uniform float reel : hint_range(0.0, 1.0) = 0.0;
+uniform float blur : hint_range(0.0, 1.0) = 0.0;
+uniform float flash : hint_range(0.0, 1.0) = 0.0;
+uniform vec4 liquid_top : source_color = vec4(1.0, 0.99, 0.72, 1.0);
+
+// The reel at height y (in coins): even coins are gold, odd coins are cyan.
+vec4 reel_coin(float x, float y) {
+	vec2 p = vec2(x, fract(y));
+	return mod(floor(y), 2.0) < 0.5 ? texture(gold_tex, p) : texture(empty_tex, p);
+}
+
+void fragment() {
+	vec2 px = TEXTURE_PIXEL_SIZE;
+	// Snap to the sprite's pixels so it stays crisp pixel art.
+	vec2 uv = (floor(UV / px) + 0.5) * px;
+	vec4 col;
+	if (reel > 0.0) {
+		// -1 at the top of the window, 1 at the bottom. The drum squashes coins near the edges.
+		float yc = UV.y * 2.0 - 1.0;
+		float bent = asin(clamp(yc * 0.85, -1.0, 1.0)) / asin(0.85);
+		float y = mix(yc, bent, reel) * 0.5 + 0.5 - spin;
+		col = vec4(0.0);
+		for (int i = 0; i < 5; i++) {
+			col += reel_coin(uv.x, y + (float(i) / 4.0 - 0.5) * blur * 0.7);
+		}
+		col /= 5.0;
+		col.rgb *= 1.0 - 0.55 * reel * yc * yc;
+	} else {
+		vec4 gold = texture(gold_tex, uv);
+		col = texture(empty_tex, uv);
+		if (fill >= 1.0) {
+			col = gold;
+		} else if (fill > 0.0) {
+			// The coin covers sprite rows 1 to 17; the wavy gold surface rises through them.
+			float wave = 0.6 * sin(uv.x * 18.0 + TIME * 9.0) + 0.4 * sin(uv.x * 31.0 - TIME * 13.0);
+			float surface = (mix(17.0, 1.0, fill) + wave * 1.2) * px.y;
+			if (uv.y > surface && gold.a > 0.0) {
+				col = gold;
+				bool outline = dot(gold.rgb, vec3(1.0)) < 0.2;
+				if (!outline && uv.y < surface + px.y * 1.5) {
+					col.rgb = liquid_top.rgb;
+				}
+			}
+		}
+	}
+	col.rgb = mix(col.rgb, vec3(1.0), flash);
+	COLOR = col;
+}
+
+
+====================================================================================================
+48. shaders/space_background.gdshader
+====================================================================================================
+
+
+shader_type canvas_item;
+uniform sampler2D clouds:source_color;
+uniform sampler2D dither_areas:source_color;
+uniform sampler2D rifts:source_color;
+uniform sampler2D stars:source_color;
+uniform sampler2D star_cells:source_color;
+uniform sampler2D color_ramp:source_color;
+uniform float steps = 8;
+uniform float edge_size:hint_range(0,1.) = .01;
+
+// these dithering and decimate functions were likely pulled from lygia, if I remember correctly. Been floating around in my shader files for a while.
+#define DITHER_BAYER_PRECISION 2
+vec3 decimate(vec3 v, float p){ return floor(v*p)/p; }
+float ditherBayer(const in vec2 xy) {
+    float kern[64];
+    kern[ 0] = 0.000; kern[ 1] = 0.500; kern[ 2] = 0.124; kern[ 3] = 0.624; kern[ 4] = 0.028; kern[ 5] = 0.532; kern[ 6] = 0.156; kern[ 7] = 0.656;
+    kern[ 8] = 0.752; kern[ 9] = 0.248; kern[10] = 0.876; kern[11] = 0.376; kern[12] = 0.784; kern[13] = 0.280; kern[14] = 0.908; kern[15] = 0.404;
+    kern[16] = 0.188; kern[17] = 0.688; kern[18] = 0.060; kern[19] = 0.564; kern[20] = 0.216; kern[21] = 0.720; kern[22] = 0.092; kern[23] = 0.596;
+    kern[24] = 0.940; kern[25] = 0.436; kern[26] = 0.812; kern[27] = 0.312; kern[28] = 0.972; kern[29] = 0.468; kern[30] = 0.844; kern[31] = 0.344;
+    kern[32] = 0.044; kern[33] = 0.548; kern[34] = 0.172; kern[35] = 0.672; kern[36] = 0.012; kern[37] = 0.516; kern[38] = 0.140; kern[39] = 0.640;
+    kern[40] = 0.800; kern[41] = 0.296; kern[42] = 0.924; kern[43] = 0.420; kern[44] = 0.768; kern[45] = 0.264; kern[46] = 0.892; kern[47] = 0.392;
+    kern[48] = 0.232; kern[49] = 0.736; kern[50] = 0.108; kern[51] = 0.608; kern[52] = 0.200; kern[53] = 0.704; kern[54] = 0.076; kern[55] = 0.580;
+    kern[56] = 0.988; kern[57] = 0.484; kern[58] = 0.860; kern[59] = 0.360; kern[60] = 0.956; kern[61] = 0.452; kern[62] = 0.828; kern[63] = 0.328;
+    int index = int(mod(xy.x, 8.0)) + (int(mod(xy.y, 8.0)) * 8);
+    return kern[index];
+}
+vec3 ditherBayer(vec3 color, const in vec2 xy, const int pres) {
+    float d = float(pres);
+    vec3 decimated = decimate(color, d);
+    vec3 diff = (color - decimated) * d;
+    vec3 ditherPattern = vec3(ditherBayer(xy));
+    return decimate(color + (step(ditherPattern, diff) / d), d);
+}
+float ditherBayer(const in float val, const in vec2 xy) { return ditherBayer(vec3(val), xy, DITHER_BAYER_PRECISION).r; }
+
+float get_star(in vec2 uv){
+
+	float star_flare = texture(stars, uv).r;
+	float star_cell = texture(star_cells, uv).r;
+	star_flare = star_flare * clamp(sin((TIME/10.+star_cell*PI*2.))*100.-99., star_cell*.005, 1);
+
+	return star_flare;
+}
+
+void fragment() {
+	// Called for every pixel the material is visible on.
+	// 1. Planning + 2. Cloud up
+	// A cellular noise can make some convincing cloud shapes.
+	vec3 cloud = texture(clouds, UV).rgb;
+	
+	// 3. Dither, 4. Layers
+	// figure out the edges, by first doing a bit of posterization
+	vec3 edges = decimate(cloud+edge_size, steps);
+	cloud = decimate(cloud, steps);
+	// mask out an area to dither
+	vec3 dither_area = texture(dither_areas, UV).rgb;
+	float dither_value = ditherBayer(dither_area.r, FRAGCOORD.xy);
+	// multiply the dither area with the edges,
+	float should_dither = clamp(sign(edges.r-cloud.r),0,1);
+	should_dither *= dither_value;
+	
+	// 5. Rift!
+	vec3 rift = texture(rifts, UV).rgb;
+	float rift_mask = decimate(rift, 2).r;
+	float rift_edge = step(.5, rift_mask) - rift_mask;
+	rift_mask = step(.6,rift_mask);
+	cloud.r = max(0, cloud.r-rift_mask);
+	cloud.r = mix(cloud.r, cloud.r * 3., rift_edge);
+	// Apply the dithering to our cloud effect!
+	cloud = mix(cloud, vec3(cloud.r+1./steps), should_dither);
+	float star = get_star(UV);
+	cloud = mix(texture(color_ramp, vec2(cloud.r, 0)).rgb, vec3(1.), smoothstep(.5,1., star));
+	COLOR.rgb = cloud.rgb;
+}
