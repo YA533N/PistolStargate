@@ -1,9 +1,9 @@
-[gd_resource type="StandardMaterial3D" format=3]
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://brhsa8nvdyeo2"]
 
-[ext_resource type="Texture2D" path="res://assets/textures/metal_049a/Metal049A_2K-JPG_Color.jpg" id="1_tex"]
-[ext_resource type="Texture2D" path="res://assets/textures/metal_049a/Metal049A_2K-JPG_Metalness.jpg" id="2_tex"]
-[ext_resource type="Texture2D" path="res://assets/textures/metal_049a/Metal049A_2K-JPG_Roughness.jpg" id="3_tex"]
-[ext_resource type="Texture2D" path="res://assets/textures/metal_049a/Metal049A_2K-JPG_NormalGL.jpg" id="4_tex"]
+[ext_resource type="Texture2D" uid="uid://77bqftf3432h" path="res://assets/textures/metal_049a/Metal049A_2K-JPG_Color.jpg" id="1_tex"]
+[ext_resource type="Texture2D" uid="uid://cp5fwic2thfg2" path="res://assets/textures/metal_049a/Metal049A_2K-JPG_Metalness.jpg" id="2_tex"]
+[ext_resource type="Texture2D" uid="uid://xdepx55583iq" path="res://assets/textures/metal_049a/Metal049A_2K-JPG_Roughness.jpg" id="3_tex"]
+[ext_resource type="Texture2D" uid="uid://ca5lalc5btnml" path="res://assets/textures/metal_049a/Metal049A_2K-JPG_NormalGL.jpg" id="4_tex"]
 
 [resource]
 resource_name = "scifi_rifle_material_001"
@@ -11,9 +11,7 @@ albedo_color = Color(0.75, 0.8, 0.9, 1)
 albedo_texture = ExtResource("1_tex")
 metallic = 1.0
 metallic_texture = ExtResource("2_tex")
-metallic_texture_channel = 0
 roughness_texture = ExtResource("3_tex")
-roughness_texture_channel = 0
 normal_enabled = true
 normal_texture = ExtResource("4_tex")
 uv1_scale = Vector3(3, 3, 3)

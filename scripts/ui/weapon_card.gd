@@ -113,7 +113,7 @@ func show_weapon(slot: WeaponSlot, equipped: WeaponSlot, replaces: WeaponSlot) -
 	_description.text = weapon.description
 	_flavor.text = weapon.flavor_text
 	_flavor.visible = not weapon.flavor_text.is_empty()
-	_footer.text = "[F] Swap for %s" % replaces.data.display_name if replaces else "[F] Pick up"
+	_footer.text = "[E] Swap for %s" % replaces.data.display_name if replaces else "[E] Pick up"
 	_set_preview(weapon, color)
 	visible = true
 	size = Vector2.ZERO

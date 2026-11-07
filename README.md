@@ -36,7 +36,7 @@ Team: Yaseen Gadalla, Mohamed Ashraf, Moataz Hegazi
 | Swap weapon | Q / mouse wheel |
 | Select weapon slot | 1 / 2 / 3 |
 | Talk to NPCs / next dialogue line | E |
-| Pick up weapon | F |
+| Pick up weapon | E |
 | Answer a dialogue question | Click, or 1 / 2 |
 | Pause | Esc |
 | Debug cheats (debug builds only) | F1 hurt, F2 heal, F3 add currency, **F4 weapon test menu**, F5 random weapon, F6 training dummy, F7 give/charge Infinite Pistol, F8 refill ammo |
@@ -49,13 +49,13 @@ Team: Yaseen Gadalla, Mohamed Ashraf, Moataz Hegazi
   Legendary (orange), plus the special Infinite tier. Weapons on the floor glow with a beam in their rarity
   colour, and walking up to one shows an item card (silhouette, rank, damage, stats vs your gun, effect).
 - The player holds 2 weapons plus the **Infinite Pistol**. It one-shots any normal enemy, which then drops
-  2-3 weapons, ammo and cash. It recharges after 3 kills with other guns, and a missed shot returns to the chamber.
+  2-3 weapons, ammo and cash. It recharges after 7 kills with other guns, and a missed shot returns to the chamber.
 - **F4 opens the weapon test menu** (debug builds): equip any weapon or spawn it on the floor, spawn a
   training dummy, the chicken or the boss, refill ammo, charge the pistol, drop a jackpot, Infinite Health (take no damage).
 
 ## Story flow so far
 
-Main menu → hub (no weapon) → talk to the Orange Trooper → he teleports you to the **Proving Grounds**
+Title screen (press any button) → Play → hub (no weapon) → talk to Pickle-yo (the alien) → he teleports you to the **Proving Grounds**
 (`scenes/levels/proving_grounds.tscn`) → he gives you the Infinite Pistol → shoot the chicken → grab its
 weapons → fight THE FIRST DESCENDANT among spike traps and low walls → portal back to the hub.
 Dying in the boss fight restarts at the boss.

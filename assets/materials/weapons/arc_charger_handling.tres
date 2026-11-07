@@ -1,17 +1,15 @@
-[gd_resource type="StandardMaterial3D" format=3]
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://wm0sbvn8665d"]
 
-[ext_resource type="Texture2D" path="res://assets/textures/arc_charger/Blaster_Handling_BaseColor.jpg" id="1_tex"]
-[ext_resource type="Texture2D" path="res://assets/textures/arc_charger/Blaster_Handling_Metallic.jpg" id="2_tex"]
-[ext_resource type="Texture2D" path="res://assets/textures/arc_charger/Blaster_Handling_Roughness.jpg" id="3_tex"]
-[ext_resource type="Texture2D" path="res://assets/textures/arc_charger/Blaster_Handling_Normal.jpg" id="4_tex"]
+[ext_resource type="Texture2D" uid="uid://diefi7ob7558c" path="res://assets/textures/arc_charger/Blaster_Handling_BaseColor.jpg" id="1_tex"]
+[ext_resource type="Texture2D" uid="uid://d0e3vqc1bx0mv" path="res://assets/textures/arc_charger/Blaster_Handling_Metallic.jpg" id="2_tex"]
+[ext_resource type="Texture2D" uid="uid://bo8fxq6xyvmn" path="res://assets/textures/arc_charger/Blaster_Handling_Roughness.jpg" id="3_tex"]
+[ext_resource type="Texture2D" uid="uid://ufn7x418s4iy" path="res://assets/textures/arc_charger/Blaster_Handling_Normal.jpg" id="4_tex"]
 
 [resource]
 resource_name = "arc_charger_handling"
 albedo_texture = ExtResource("1_tex")
 metallic = 1.0
 metallic_texture = ExtResource("2_tex")
-metallic_texture_channel = 0
 roughness_texture = ExtResource("3_tex")
-roughness_texture_channel = 0
 normal_enabled = true
 normal_texture = ExtResource("4_tex")

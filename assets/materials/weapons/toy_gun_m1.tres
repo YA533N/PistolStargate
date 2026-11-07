@@ -1,17 +1,15 @@
-[gd_resource type="StandardMaterial3D" format=3]
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://bvkqyy4r0r7l2"]
 
-[ext_resource type="Texture2D" path="res://assets/textures/toy_gun/M1_BaseColor.jpg" id="1_tex"]
-[ext_resource type="Texture2D" path="res://assets/textures/toy_gun/M1_Metallic.jpg" id="2_tex"]
-[ext_resource type="Texture2D" path="res://assets/textures/toy_gun/M1_Roughness.jpg" id="3_tex"]
-[ext_resource type="Texture2D" path="res://assets/textures/toy_gun/M1_Normal.jpg" id="4_tex"]
+[ext_resource type="Texture2D" uid="uid://c8p73mjwnygu8" path="res://assets/textures/toy_gun/M1_BaseColor.jpg" id="1_tex"]
+[ext_resource type="Texture2D" uid="uid://bq86536d3qxab" path="res://assets/textures/toy_gun/M1_Metallic.jpg" id="2_tex"]
+[ext_resource type="Texture2D" uid="uid://cwyved80xaotd" path="res://assets/textures/toy_gun/M1_Roughness.jpg" id="3_tex"]
+[ext_resource type="Texture2D" uid="uid://sudramy83x4u" path="res://assets/textures/toy_gun/M1_Normal.jpg" id="4_tex"]
 
 [resource]
 resource_name = "toy_gun_m1"
 albedo_texture = ExtResource("1_tex")
 metallic = 1.0
 metallic_texture = ExtResource("2_tex")
-metallic_texture_channel = 0
 roughness_texture = ExtResource("3_tex")
-roughness_texture_channel = 0
 normal_enabled = true
 normal_texture = ExtResource("4_tex")

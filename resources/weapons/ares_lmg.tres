@@ -1,7 +1,7 @@
-[gd_resource type="Resource" script_class="WeaponData" format=3]
+[gd_resource type="Resource" script_class="WeaponData" format=3 uid="uid://dt5khx27c54u8"]
 
-[ext_resource type="Script" path="res://scripts/weapons/weapon_data.gd" id="1_script"]
-[ext_resource type="PackedScene" path="res://assets/models/weapons/ares_lmg.glb" id="2_model"]
+[ext_resource type="Script" uid="uid://drxa31dsrmm8x" path="res://scripts/weapons/weapon_data.gd" id="1_script"]
+[ext_resource type="PackedScene" uid="uid://bjt8shlegtf0m" path="res://assets/models/weapons/ares_lmg.glb" id="2_model"]
 
 [resource]
 script = ExtResource("1_script")

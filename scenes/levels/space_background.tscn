@@ -1,0 +1,104 @@
+[gd_scene format=3 uid="uid://debm4vwo4vigb"]
+
+[ext_resource type="Shader" uid="uid://bab0ix2e4yebs" path="res://shaders/space_background.gdshader" id="1_scy03"]
+
+[sub_resource type="Gradient" id="Gradient_clouds"]
+colors = PackedColorArray(0, 0, 0, 1, 0.85, 0.85, 0.85, 1)
+
+[sub_resource type="FastNoiseLite" id="Noise_clouds"]
+noise_type = 2
+frequency = 0.005
+domain_warp_enabled = true
+
+[sub_resource type="NoiseTexture2D" id="Tex_clouds"]
+width = 1024
+height = 576
+noise = SubResource("Noise_clouds")
+color_ramp = SubResource("Gradient_clouds")
+seamless = true
+
+[sub_resource type="Gradient" id="Gradient_space"]
+offsets = PackedFloat32Array(0, 0.4, 0.7, 0.88, 1)
+colors = PackedColorArray(0.0196, 0.0118, 0.0588, 1, 0.0784, 0.0471, 0.2, 1, 0.18, 0.106, 0.369, 1, 0.416, 0.282, 0.69, 1, 0.247, 0.714, 0.788, 1)
+
+[sub_resource type="GradientTexture1D" id="Tex_ramp"]
+gradient = SubResource("Gradient_space")
+
+[sub_resource type="FastNoiseLite" id="Noise_dither"]
+noise_type = 2
+seed = 7
+frequency = 0.005
+domain_warp_enabled = true
+
+[sub_resource type="NoiseTexture2D" id="Tex_dither"]
+width = 1024
+height = 576
+noise = SubResource("Noise_dither")
+seamless = true
+
+[sub_resource type="Gradient" id="Gradient_rifts"]
+offsets = PackedFloat32Array(0, 0.6, 1)
+colors = PackedColorArray(0, 0, 0, 1, 0.45, 0.45, 0.45, 1, 1, 1, 1, 1)
+
+[sub_resource type="FastNoiseLite" id="Noise_rifts"]
+noise_type = 2
+seed = 21
+frequency = 0.008
+domain_warp_enabled = true
+
+[sub_resource type="NoiseTexture2D" id="Tex_rifts"]
+width = 1024
+height = 576
+noise = SubResource("Noise_rifts")
+color_ramp = SubResource("Gradient_rifts")
+seamless = true
+
+[sub_resource type="FastNoiseLite" id="Noise_star_cells"]
+noise_type = 2
+seed = 3
+frequency = 0.05
+fractal_type = 0
+cellular_return_type = 0
+
+[sub_resource type="NoiseTexture2D" id="Tex_star_cells"]
+width = 1024
+height = 576
+noise = SubResource("Noise_star_cells")
+seamless = true
+
+[sub_resource type="FastNoiseLite" id="Noise_stars"]
+noise_type = 2
+seed = 3
+frequency = 0.05
+fractal_type = 0
+cellular_return_type = 6
+
+[sub_resource type="NoiseTexture2D" id="Tex_stars"]
+width = 1024
+height = 576
+noise = SubResource("Noise_stars")
+seamless = true
+invert = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_elvkf"]
+shader = ExtResource("1_scy03")
+shader_parameter/clouds = SubResource("Tex_clouds")
+shader_parameter/dither_areas = SubResource("Tex_dither")
+shader_parameter/rifts = SubResource("Tex_rifts")
+shader_parameter/stars = SubResource("Tex_stars")
+shader_parameter/star_cells = SubResource("Tex_star_cells")
+shader_parameter/color_ramp = SubResource("Tex_ramp")
+shader_parameter/steps = 8.0
+shader_parameter/edge_size = 0.022000001045
+
+[node name="space_background" type="CanvasLayer" unique_id=113052979]
+layer = -1
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1433696195]
+material = SubResource("ShaderMaterial_elvkf")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2

@@ -1,7 +1,7 @@
-[gd_resource type="Resource" script_class="WeaponData" format=3]
+[gd_resource type="Resource" script_class="WeaponData" format=3 uid="uid://dfhjjqtuoshy6"]
 
-[ext_resource type="Script" path="res://scripts/weapons/weapon_data.gd" id="1_script"]
-[ext_resource type="PackedScene" path="res://assets/models/weapons/toy_gun.glb" id="2_model"]
+[ext_resource type="Script" uid="uid://drxa31dsrmm8x" path="res://scripts/weapons/weapon_data.gd" id="1_script"]
+[ext_resource type="PackedScene" uid="uid://dqgiof6e6jrpi" path="res://assets/models/weapons/toy_gun.glb" id="2_model"]
 
 [resource]
 script = ExtResource("1_script")
@@ -16,11 +16,11 @@ model = ExtResource("2_model")
 hold_offset = Vector3(0, 0, -0.16)
 fire_rate = 2.5
 damage = 20
-explosion_radius = 2.2
-explosion_damage = 22
-bounces = 4
 projectile_speed = 20.0
 projectile_size = 0.26
 projectile_color = Color(1, 0.85, 0.2, 1)
 projectile_range = 60.0
 max_ammo = 50
+bounces = 4
+explosion_radius = 2.2
+explosion_damage = 22

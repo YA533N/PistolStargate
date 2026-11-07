@@ -1,7 +1,7 @@
 class_name DialogueBox
 extends CanvasLayer
 ## Dialogue panel along the bottom of the screen, with typewriter text.
-## Call start() with a speaker and lines. F (interact) shows the whole line, then moves to the next one.
+## Call start() with a speaker and lines. E (talk) shows the whole line, then moves to the next one.
 ## Emits finished after the last line is closed.
 ## ask() shows one line with answer buttons (click, or press 1/2/3) and emits choice_made with the index.
 

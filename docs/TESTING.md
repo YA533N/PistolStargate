@@ -14,15 +14,15 @@ Course requirement (brief §14): at least 10 test cases and at least 3 bugs (at 
 | T06 | Aim | Move the mouse around the player | Player and gun turn toward the cursor | | |
 | T07 | Pause menu | Press Esc | Game freezes and the pause menu appears; Esc or Resume continues | | |
 | T08 | Main menu | Launch, then click Play | Hub loads with the HUD shown and no weapon in hand (weapon panel says UNARMED) | | |
-| T09 | Health / HUD | Press F1 (debug) | HP bar and label drop by 10 | | |
+| T09 | Health / HUD | Press F1 (debug) | The health bar drains by 10 (see T44) | | |
 | T10 | Death | Press F1 ten times | Scene restarts with full HP | | |
 | T11 | Portal (locked) | Walk into the ARENA portal | "The arena isn't built yet." message appears | | |
 | T12 | Out of bounds | Fall below y = -20 | Player respawns at the start | | |
-| T13 | NPC prompt | Walk within 3 m of the Orange Trooper | "[E] Talk" appears above him; disappears when walking away | | |
-| T14 | Dialogue open | Press F near the trooper | Box opens at the bottom, text types out, player can't move, trooper turns to face the player | | |
+| T13 | NPC prompt | Walk within 3 m of Pickle-yo (the alien) | "[E] Talk" appears above him; disappears when walking away | | |
+| T14 | Dialogue open | Press E near the trooper | Box opens at the bottom, text types out, player can't move, trooper turns to face the player | | |
 | T15 | Dialogue advance | Press E while text is typing, then again | First press shows the whole line; second goes to the next line; last line says "[E] close" | | |
-| T16 | Dialogue close | Press F on the last line | Box closes and the player can move again | | |
-| T17 | Dialogue out of range | Press F far from the trooper | Nothing happens | | |
+| T16 | Dialogue close | Press E on the last line | Box closes and the player can move again | | |
+| T17 | Dialogue out of range | Press E far from the trooper | Nothing happens | | |
 | T18 | Shooting | Equip the PX-9 (F4 menu) and hold left mouse | Fires 7 bullets per second toward the cursor; ammo counts down | | |
 | T19 | Bullet impact | Shoot a wall or crate | Bullet disappears on contact, never passes through | | |
 | T20 | Bullet damage | Spawn a training dummy (F6) and shoot it | Damage numbers pop up; it heals 3 s after the last hit | | |
@@ -30,14 +30,14 @@ Course requirement (brief §14): at least 10 test cases and at least 3 bugs (at 
 | T22 | NPC idle | Load the hub, then talk to the trooper | Stands still in his stance; animates only while the box is open; still again after | | |
 | T23 | Rarity beams | F4 -> Spawn ALL weapons around me | Each weapon floats in a beam + ring of its rarity colour (white, green, blue, purple, orange, cyan) | | |
 | T24 | Item card | Walk next to a weapon on the floor | Card shows its silhouette, rarity + RANK number, damage, stats with up/down arrows vs your gun, effect and flavour text | | |
-| T25 | Pick up / swap | With 2 weapons held, press F on a third | It replaces the active gun; the old one drops on the floor with its ammo | | |
+| T25 | Pick up / swap | With 2 weapons held, press E on a third | It replaces the active gun; the old one drops on the floor with its ammo | | |
 | T26 | Weapon switching | Press Q, scroll the wheel, press 1/2/3 | Active weapon changes; HUD panel and gun model update | | |
 | T27 | Out of ammo | Empty a gun, then click | "out of ammo" message; walking over an ammo pickup refills 35% | | |
 | T28 | Weapon effects | Try each gun on 2 dummies (F4) | Poison ticks green, Orbit Seeker homes, Plasma/Toy explode, sniper and railgun pierce, Collector/Toy ricochet, Arc Charger chains, Ares spins up | | |
 | T29 | Infinite Pistol instakill | Shoot a dummy or chicken with a loaded Infinite Pistol | INSTAKILL; it drops 2-3 weapons, ammo, cash and health ("JACKPOT!") | | |
 | T30 | Infinite Pistol miss | Fire the loaded pistol at nothing | "Missed! The bullet returns to the chamber" and it's loaded again | | |
-| T31 | Infinite Pistol recharge | With the pistol empty, kill 3 enemies with another gun | HUD dots fill up, "INFINITE PISTOL CHARGED!" | | |
-| T32 | Teleport | Finish talking to the Orange Trooper in the hub | Orange flash, the Proving Grounds loads | | |
+| T31 | Infinite Pistol recharge | With the pistol empty, kill 7 enemies with another gun | Each kill fills the next coin (top right) with gold; on the 7th all coins spin like a slot machine and stop on gold, "INFINITE PISTOL CHARGED!" | | |
+| T32 | Teleport | Finish talking to Pickle-yo in the hub | Orange flash, the Proving Grounds loads | | |
 | T33 | Question | Answer "No" to "Do you understand?" | "Wrong answer" and he asks again; "Yes" continues | | |
 | T34 | Chicken | Shoot the chicken with the Infinite Pistol | It dies and spills Neon Hornet, Plasma Popper and Longshot X-80 | | |
 | T35 | Boss | Grab the guns and fight THE FIRST DESCENDANT | Drops from the sky, red "!" wind-up, then sweeping sprays and aimed bursts; crates and low walls block his bullets; boss bar at the top | | |
@@ -46,6 +46,13 @@ Course requirement (brief §14): at least 10 test cases and at least 3 bugs (at 
 | T38 | Boss checkpoint | Die during the boss fight | Restart at the boss with an empty pistol and the chicken's 3 weapons on the floor | | |
 | T39 | Exit portal | Kill the boss | Trooper returns, portal opens, it leads back to the hub | | |
 | T40 | Cheat menu | Press F4, click Equip / Spawn | Game pauses; weapon goes into your hands / onto the floor; F4 or Esc closes | | |
+| T41 | Title screen | Start the game, press any key / click / pad button | Title art with a pulsing PRESS ANY BUTTON; the press brings up PLAY and QUIT at the bottom right | | |
+| T42 | Menu rows | Hover or use up/down, then click or press Enter | The selected row gets a full-width cyan bar with dark text; the option runs straight away | | |
+| T43 | Pause menu | Press Esc in a level | Title art with PAUSED and RESUME / RESTART / MAIN MENU / QUIT in the same style; opens on RESUME; Esc closes | | |
+| T44 | Health bar | Take damage (e.g. a spike trap), then heal (F2) | No HP number: three red segments, each a third of max health, drain from the right; the part just lost stays pale for a moment, then drains | | |
+| T45 | Dash bar | Dash | The green block empties, then fills back up from the bottom like water (waves and a light foam line), and flashes when the dash is ready | | |
+| T46 | Aim lines up | On flat ground, point the crosshair at something and shoot | The bullet flies flat at gun height and passes right under the centre of the crosshair | | |
+| T47 | Shoot down | Swing on a grapple point (or jump) and shoot at an enemy or dummy below (F6 spawns one) | The shot angles down from the gun to the spot under the crosshair and hits the target; on the floor, shots stay flat | | |
 
 ## Bugs
 

@@ -59,14 +59,13 @@ func can_fire() -> bool:
 	return data != null and _cooldown <= 0.0
 
 
-## Shoots toward target (flattened to the muzzle's height). Returns false while on cooldown.
-## on_miss runs if the shot hits no enemy (the Infinite Pistol refunds its bullet).
+## Shoots toward target, angled down if it's below the muzzle (shooting from the grapple). Returns false
+## while on cooldown. on_miss runs if the shot hits no enemy (the Infinite Pistol refunds its bullet).
 func fire(target: Vector3, on_miss := Callable()) -> bool:
 	if not can_fire():
 		return false
 	var origin := muzzle_position()
 	var direction := target - origin
-	direction.y = 0.0
 	if direction.length() < MIN_AIM_DISTANCE:
 		direction = -global_basis.z
 		direction.y = 0.0

@@ -1,7 +1,7 @@
-[gd_resource type="Resource" script_class="WeaponData" format=3]
+[gd_resource type="Resource" script_class="WeaponData" format=3 uid="uid://bm6us2epi6neo"]
 
-[ext_resource type="Script" path="res://scripts/weapons/weapon_data.gd" id="1_script"]
-[ext_resource type="PackedScene" path="res://assets/models/weapons/railgun.glb" id="2_model"]
+[ext_resource type="Script" uid="uid://drxa31dsrmm8x" path="res://scripts/weapons/weapon_data.gd" id="1_script"]
+[ext_resource type="PackedScene" uid="uid://b1cudgd6ysuax" path="res://assets/models/weapons/railgun.glb" id="2_model"]
 
 [resource]
 script = ExtResource("1_script")
@@ -16,8 +16,8 @@ model = ExtResource("2_model")
 hold_offset = Vector3(0, 0, -0.23)
 fire_rate = 0.8
 damage = 120
-hitscan = true
-pierce = -1
 projectile_color = Color(0.4, 0.8, 1, 1)
 projectile_range = 60.0
 max_ammo = 16
+pierce = -1
+hitscan = true

@@ -1,7 +1,7 @@
-[gd_resource type="Resource" script_class="WeaponData" format=3]
+[gd_resource type="Resource" script_class="WeaponData" format=3 uid="uid://b6me65iipwtve"]
 
-[ext_resource type="Script" path="res://scripts/weapons/weapon_data.gd" id="1_script"]
-[ext_resource type="PackedScene" path="res://assets/models/weapons/space_gun.glb" id="2_model"]
+[ext_resource type="Script" uid="uid://drxa31dsrmm8x" path="res://scripts/weapons/weapon_data.gd" id="1_script"]
+[ext_resource type="PackedScene" uid="uid://bhflqmev58022" path="res://assets/models/weapons/space_gun.glb" id="2_model"]
 
 [resource]
 script = ExtResource("1_script")
@@ -20,5 +20,5 @@ projectile_speed = 17.0
 projectile_size = 0.2
 projectile_color = Color(1, 0.4, 0.9, 1)
 projectile_range = 45.0
-homing_turn_rate = 4.0
 max_ammo = 70
+homing_turn_rate = 4.0

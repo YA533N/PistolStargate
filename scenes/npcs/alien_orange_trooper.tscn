@@ -13,7 +13,7 @@ radius = 3.0
 
 [node name="AlienOrangeTrooper" type="StaticBody3D"]
 script = ExtResource("1_npc")
-speaker_name = "Orange Trooper"
+speaker_name = "Pickle-yo"
 idle_animation = "mixamo_com"
 lines = PackedStringArray("Glorb vorb lorb slorp Ayanokoji-kun vorp.", "*BEEP* ...I forgot to turn on my English translator.", "So you're the human Hades couldn't handle. Ayanokoji, right?", "Welcome to Stargate. Nobody leaves this prison... unless they survive the arena.", "Out there every kill pays: health, ammo and cash. Stop killing and you're dead.", "But you can't even hold a gun yet. Let's fix that.", "Hold still, human. This might tingle.")
 lines_after_tutorial = PackedStringArray("Back already, Ayanokoji? Want another round in the Proving Grounds?", "Hold still. This might tingle.")

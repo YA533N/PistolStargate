@@ -1,13 +1,12 @@
 class_name WeaponPanel
 extends PanelContainer
-## Bottom-right HUD block: the weapon in hand (name in rarity colour, big ammo count), the other slots,
-## and the Infinite Pistol's charge (kills toward the next shot).
+## Bottom-right HUD block: the weapon in hand (name in rarity colour, big ammo count) and the other slots.
+## The Infinite Pistol's charge is the coin row in the top right (PistolCharge).
 
 var _style: StyleBoxFlat
 var _name: Label
 var _ammo: Label
 var _ammo_max: Label
-var _pistol: Label
 var _slots: VBoxContainer
 var _hint: Label
 
@@ -23,10 +22,9 @@ func _ready() -> void:
 	_ammo = UiKit.label(ammo_row, 54, Color.WHITE, 8)
 	_ammo_max = UiKit.label(ammo_row, 24, Color(0.7, 0.7, 0.75))
 	_ammo_max.size_flags_vertical = SIZE_SHRINK_END
-	_pistol = UiKit.label(column, 22, Rarity.color(Rarity.Tier.INFINITE), 6)
 	_slots = UiKit.vbox(column, 2)
 	_hint = UiKit.label(column, 16, Color(0.6, 0.6, 0.66))
-	_hint.text = "[Q]/wheel swap   [1][2][3] select   [F] pick up"
+	_hint.text = "[Q]/wheel swap   [1][2][3] select   [E] pick up"
 
 
 func refresh(arsenal: Arsenal) -> void:
@@ -49,14 +47,6 @@ func refresh(arsenal: Arsenal) -> void:
 			_ammo.text = "EMPTY" if current.is_out_of_ammo() else str(current.ammo)
 			_ammo_max.text = "/ %d" % current.data.max_ammo
 		_ammo.add_theme_color_override("font_color", Color(1, 0.35, 0.3) if current.is_out_of_ammo() else Color.WHITE)
-
-	_pistol.visible = arsenal.pistol != null
-	if arsenal.pistol:
-		if arsenal.pistol.is_out_of_ammo():
-			var needed := arsenal.pistol.data.kills_per_charge
-			_pistol.text = "∞ PISTOL  charging  %s%s" % ["●".repeat(arsenal.pistol_kills), "○".repeat(needed - arsenal.pistol_kills)]
-		else:
-			_pistol.text = "∞ PISTOL  READY"
 
 	for child in _slots.get_children():
 		child.queue_free()

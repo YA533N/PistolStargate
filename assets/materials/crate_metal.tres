@@ -1,8 +1,8 @@
-[gd_resource type="StandardMaterial3D" format=3]
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://b3yd71nggegvj"]
 
-[ext_resource type="Texture2D" path="res://assets/textures/metal_049a/Metal049A_2K-JPG_Color.jpg" id="1_color"]
-[ext_resource type="Texture2D" path="res://assets/textures/metal_049a/Metal049A_2K-JPG_NormalGL.jpg" id="2_normal"]
-[ext_resource type="Texture2D" path="res://assets/textures/metal_049a/Metal049A_2K-JPG_Roughness.jpg" id="3_roughness"]
+[ext_resource type="Texture2D" uid="uid://77bqftf3432h" path="res://assets/textures/metal_049a/Metal049A_2K-JPG_Color.jpg" id="1_color"]
+[ext_resource type="Texture2D" uid="uid://ca5lalc5btnml" path="res://assets/textures/metal_049a/Metal049A_2K-JPG_NormalGL.jpg" id="2_normal"]
+[ext_resource type="Texture2D" uid="uid://xdepx55583iq" path="res://assets/textures/metal_049a/Metal049A_2K-JPG_Roughness.jpg" id="3_roughness"]
 
 [resource]
 resource_name = "CrateMetal"

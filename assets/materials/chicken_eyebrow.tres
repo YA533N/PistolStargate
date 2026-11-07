@@ -1,10 +1,11 @@
-[gd_resource type="StandardMaterial3D" format=3]
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://cp8mxtcgx3wnb"]
 
-[ext_resource type="Texture2D" path="res://assets/textures/chicken/EyebrowTextures.png" id="1"]
+[ext_resource type="Texture2D" uid="uid://due3e66n0dm10" path="res://assets/textures/chicken/EyebrowTextures.png" id="1"]
 
 [resource]
 resource_name = "ChickenEyebrow"
 transparency = 2
 alpha_scissor_threshold = 0.5
+alpha_antialiasing_mode = 0
 cull_mode = 2
 albedo_texture = ExtResource("1")

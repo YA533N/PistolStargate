@@ -8,8 +8,10 @@ extends Node
 
 ## Slots, ammo, the active weapon or the pistol's charge changed.
 signal changed
-## The weapon on the floor that F would pick up changed. Null when there is none.
+## The weapon on the floor that E would pick up changed. Null when there is none.
 signal focus_changed(pickup: WeaponPickup)
+## The Infinite Pistol just filled up from kills (or the cheat). The HUD plays its slot machine.
+signal pistol_charged
 
 const SLOT_COUNT := 2
 ## Seconds between repeated "out of ammo" messages.
@@ -154,6 +156,7 @@ func charge_pistol() -> void:
 	if pistol:
 		pistol.ammo = pistol.data.max_ammo
 		pistol_kills = 0
+		pistol_charged.emit()
 		changed.emit()
 
 
@@ -261,6 +264,7 @@ func _on_enemy_killed(enemy: Node) -> void:
 		pistol_kills = 0
 		pistol.ammo = pistol.data.max_ammo
 		_message("INFINITE PISTOL CHARGED!  [%s]" % _pistol_key(), 2.0)
+		pistol_charged.emit()
 	changed.emit()
 
 
@@ -276,7 +280,7 @@ func _warn_empty(slot: WeaponSlot) -> void:
 	if slot == pistol:
 		_warn("Infinite Pistol is empty: %d more kill(s) with other guns to recharge." % pistol_kills_needed())
 	else:
-		_warn("%s is out of ammo! Grab another weapon [F] or swap [Q]." % slot.data.display_name)
+		_warn("%s is out of ammo! Grab another weapon [E] or swap [Q]." % slot.data.display_name)
 
 
 func _warn(text: String) -> void:

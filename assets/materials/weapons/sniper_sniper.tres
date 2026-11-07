@@ -1,27 +1,24 @@
-[gd_resource type="StandardMaterial3D" format=3]
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://hcedpkih771l"]
 
-[ext_resource type="Texture2D" path="res://assets/textures/sniper/Sniper_albedo.jpg" id="1_tex"]
-[ext_resource type="Texture2D" path="res://assets/textures/sniper/Sniper_metallic.jpg" id="2_tex"]
-[ext_resource type="Texture2D" path="res://assets/textures/sniper/Sniper_roughness.jpg" id="3_tex"]
-[ext_resource type="Texture2D" path="res://assets/textures/sniper/Sniper_emissive.jpg" id="4_tex"]
-[ext_resource type="Texture2D" path="res://assets/textures/sniper/Sniper_normal.jpg" id="5_tex"]
-[ext_resource type="Texture2D" path="res://assets/textures/sniper/Sniper_AO.jpg" id="6_tex"]
+[ext_resource type="Texture2D" uid="uid://dyja6rt68y8yl" path="res://assets/textures/sniper/Sniper_albedo.jpg" id="1_tex"]
+[ext_resource type="Texture2D" uid="uid://b44acwexa4bds" path="res://assets/textures/sniper/Sniper_metallic.jpg" id="2_tex"]
+[ext_resource type="Texture2D" uid="uid://dlq60y345hxlk" path="res://assets/textures/sniper/Sniper_roughness.jpg" id="3_tex"]
+[ext_resource type="Texture2D" uid="uid://dg8ocvdutxrxv" path="res://assets/textures/sniper/Sniper_emissive.jpg" id="4_tex"]
+[ext_resource type="Texture2D" uid="uid://rx37girsudx6" path="res://assets/textures/sniper/Sniper_normal.jpg" id="5_tex"]
+[ext_resource type="Texture2D" uid="uid://b5wu1i0gt3lsc" path="res://assets/textures/sniper/Sniper_AO.jpg" id="6_tex"]
 
 [resource]
 resource_name = "sniper_sniper"
 albedo_texture = ExtResource("1_tex")
 metallic = 1.0
 metallic_texture = ExtResource("2_tex")
-metallic_texture_channel = 0
 roughness_texture = ExtResource("3_tex")
-roughness_texture_channel = 0
 emission_enabled = true
-emission_operator = 1
 emission = Color(1, 1, 1, 1)
-emission_energy_multiplier = 3
+emission_energy_multiplier = 3.0
+emission_operator = 1
 emission_texture = ExtResource("4_tex")
 normal_enabled = true
 normal_texture = ExtResource("5_tex")
 ao_enabled = true
 ao_texture = ExtResource("6_tex")
-ao_texture_channel = 0

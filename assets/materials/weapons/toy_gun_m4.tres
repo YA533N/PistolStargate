@@ -1,18 +1,18 @@
-[gd_resource type="StandardMaterial3D" format=3]
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://d17l1ms13jdum"]
 
-[ext_resource type="Texture2D" path="res://assets/textures/toy_gun/M4_BaseColor.png" id="1_tex"]
-[ext_resource type="Texture2D" path="res://assets/textures/toy_gun/M4_Metallic.jpg" id="2_tex"]
-[ext_resource type="Texture2D" path="res://assets/textures/toy_gun/M4_Roughness.jpg" id="3_tex"]
-[ext_resource type="Texture2D" path="res://assets/textures/toy_gun/M4_Normal.jpg" id="4_tex"]
+[ext_resource type="Texture2D" uid="uid://mm38kmkr0fr6" path="res://assets/textures/toy_gun/M4_BaseColor.png" id="1_tex"]
+[ext_resource type="Texture2D" uid="uid://s852kjaytxti" path="res://assets/textures/toy_gun/M4_Metallic.jpg" id="2_tex"]
+[ext_resource type="Texture2D" uid="uid://cwplg1qv8ovf" path="res://assets/textures/toy_gun/M4_Roughness.jpg" id="3_tex"]
+[ext_resource type="Texture2D" uid="uid://b0qrdj4rhvtj4" path="res://assets/textures/toy_gun/M4_Normal.jpg" id="4_tex"]
 
 [resource]
 resource_name = "toy_gun_m4"
 transparency = 3
+alpha_hash_scale = 1.0
+alpha_antialiasing_mode = 0
 albedo_texture = ExtResource("1_tex")
 metallic = 1.0
 metallic_texture = ExtResource("2_tex")
-metallic_texture_channel = 0
 roughness_texture = ExtResource("3_tex")
-roughness_texture_channel = 0
 normal_enabled = true
 normal_texture = ExtResource("4_tex")

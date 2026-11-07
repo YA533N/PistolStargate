@@ -1,27 +1,35 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://scripts/ui/hud.gd" id="1_hud"]
+[ext_resource type="Texture2D" path="res://assets/textures/ui/vitals/vitals_base.png" id="2_base"]
+[ext_resource type="Texture2D" path="res://assets/textures/ui/vitals/vitals_health_1.png" id="3_health1"]
+[ext_resource type="Texture2D" path="res://assets/textures/ui/vitals/vitals_health_2.png" id="4_health2"]
+[ext_resource type="Texture2D" path="res://assets/textures/ui/vitals/vitals_health_3.png" id="5_health3"]
+[ext_resource type="Texture2D" path="res://assets/textures/ui/vitals/vitals_dash.png" id="6_dash"]
+[ext_resource type="Shader" path="res://shaders/health_segment.gdshader" id="7_segment"]
+[ext_resource type="Shader" path="res://shaders/dash_water.gdshader" id="8_water"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bg"]
-bg_color = Color(0.08, 0.06, 0.12, 0.8)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_health1"]
+shader = ExtResource("7_segment")
+shader_parameter/fill = 1.0
+shader_parameter/ghost = 1.0
+shader_parameter/slant = 0.29
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_health"]
-bg_color = Color(0.85, 0.2, 0.3, 1)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_health2"]
+shader = ExtResource("7_segment")
+shader_parameter/fill = 1.0
+shader_parameter/ghost = 1.0
+shader_parameter/slant = 0.159
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dash"]
-bg_color = Color(0.3, 0.9, 1, 1)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_health3"]
+shader = ExtResource("7_segment")
+shader_parameter/fill = 1.0
+shader_parameter/ghost = 1.0
+shader_parameter/slant = 0.223
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_dash"]
+shader = ExtResource("8_water")
+shader_parameter/level = 1.0
 
 [node name="HUD" type="CanvasLayer"]
 script = ExtResource("1_hud")
@@ -39,44 +47,73 @@ mouse_filter = 2
 layout_mode = 0
 offset_left = 32.0
 offset_top = 32.0
-offset_right = 452.0
-offset_bottom = 232.0
+offset_right = 610.0
+offset_bottom = 293.0
 mouse_filter = 2
 theme_override_constants/separation = 6
 
-[node name="HealthLabel" type="Label" parent="Root/Stats"]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_font_sizes/font_size = 28
-text = "HP  100 / 100"
-
-[node name="HealthBar" type="ProgressBar" parent="Root/Stats"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(420, 26)
+[node name="Vitals" type="Control" parent="Root/Stats"]
+custom_minimum_size = Vector2(578, 218)
 layout_mode = 2
 mouse_filter = 2
-theme_override_styles/background = SubResource("StyleBoxFlat_bg")
-theme_override_styles/fill = SubResource("StyleBoxFlat_health")
-value = 100.0
-show_percentage = false
 
-[node name="DashLabel" type="Label" parent="Root/Stats"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 22
-text = "DASH"
-
-[node name="DashBar" type="ProgressBar" parent="Root/Stats"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(200, 12)
-layout_mode = 2
-size_flags_horizontal = 0
+[node name="VitalsBase" type="TextureRect" parent="Root/Stats/Vitals"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 578.0
+offset_bottom = 218.0
 mouse_filter = 2
-theme_override_styles/background = SubResource("StyleBoxFlat_bg")
-theme_override_styles/fill = SubResource("StyleBoxFlat_dash")
-max_value = 1.0
-step = 0.001
-value = 1.0
-show_percentage = false
+texture = ExtResource("2_base")
+
+[node name="HealthSegment1" type="TextureRect" parent="Root/Stats/Vitals"]
+unique_name_in_owner = true
+texture_filter = 1
+material = SubResource("ShaderMaterial_health1")
+layout_mode = 0
+offset_left = 34.0
+offset_top = 29.0
+offset_right = 210.0
+offset_bottom = 101.0
+mouse_filter = 2
+texture = ExtResource("3_health1")
+
+[node name="HealthSegment2" type="TextureRect" parent="Root/Stats/Vitals"]
+unique_name_in_owner = true
+texture_filter = 1
+material = SubResource("ShaderMaterial_health2")
+layout_mode = 0
+offset_left = 197.0
+offset_top = 21.0
+offset_right = 376.0
+offset_bottom = 99.0
+mouse_filter = 2
+texture = ExtResource("4_health2")
+
+[node name="HealthSegment3" type="TextureRect" parent="Root/Stats/Vitals"]
+unique_name_in_owner = true
+texture_filter = 1
+material = SubResource("ShaderMaterial_health3")
+layout_mode = 0
+offset_left = 348.0
+offset_top = 19.0
+offset_right = 550.0
+offset_bottom = 104.0
+mouse_filter = 2
+texture = ExtResource("5_health3")
+
+[node name="DashFill" type="TextureRect" parent="Root/Stats/Vitals"]
+unique_name_in_owner = true
+texture_filter = 1
+material = SubResource("ShaderMaterial_dash")
+layout_mode = 0
+offset_left = 78.0
+offset_top = 114.0
+offset_right = 276.0
+offset_bottom = 213.0
+mouse_filter = 2
+texture = ExtResource("6_dash")
 
 [node name="CurrencyLabel" type="Label" parent="Root/Stats"]
 unique_name_in_owner = true

@@ -1,23 +1,21 @@
-[gd_resource type="StandardMaterial3D" format=3]
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://b1o0eb2intnx3"]
 
-[ext_resource type="Texture2D" path="res://assets/textures/plasma/T_pistola_BC.jpg" id="1_tex"]
-[ext_resource type="Texture2D" path="res://assets/textures/plasma/T_pistola_M.jpg" id="2_tex"]
-[ext_resource type="Texture2D" path="res://assets/textures/plasma/T_pistola_R.jpg" id="3_tex"]
-[ext_resource type="Texture2D" path="res://assets/textures/plasma/T_pistola_E.jpg" id="4_tex"]
-[ext_resource type="Texture2D" path="res://assets/textures/plasma/T_pistola_N.jpg" id="5_tex"]
+[ext_resource type="Texture2D" uid="uid://hy1trn5oy38e" path="res://assets/textures/plasma/T_pistola_BC.jpg" id="1_tex"]
+[ext_resource type="Texture2D" uid="uid://dqitpjqgsenbe" path="res://assets/textures/plasma/T_pistola_M.jpg" id="2_tex"]
+[ext_resource type="Texture2D" uid="uid://r4vd77pcx2yv" path="res://assets/textures/plasma/T_pistola_R.jpg" id="3_tex"]
+[ext_resource type="Texture2D" uid="uid://bkg76ijfs5m8q" path="res://assets/textures/plasma/T_pistola_E.jpg" id="4_tex"]
+[ext_resource type="Texture2D" uid="uid://berewitmi6fi8" path="res://assets/textures/plasma/T_pistola_N.jpg" id="5_tex"]
 
 [resource]
 resource_name = "plasma_none"
 albedo_texture = ExtResource("1_tex")
 metallic = 1.0
 metallic_texture = ExtResource("2_tex")
-metallic_texture_channel = 0
 roughness_texture = ExtResource("3_tex")
-roughness_texture_channel = 0
 emission_enabled = true
-emission_operator = 1
 emission = Color(1, 1, 1, 1)
-emission_energy_multiplier = 3
+emission_energy_multiplier = 3.0
+emission_operator = 1
 emission_texture = ExtResource("4_tex")
 normal_enabled = true
 normal_texture = ExtResource("5_tex")

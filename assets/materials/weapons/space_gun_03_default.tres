@@ -1,17 +1,15 @@
-[gd_resource type="StandardMaterial3D" format=3]
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://du705tjxuvbi5"]
 
-[ext_resource type="Texture2D" path="res://assets/textures/space_gun/Spacegun_LP_03_Default_BaseColor.jpg" id="1_tex"]
-[ext_resource type="Texture2D" path="res://assets/textures/space_gun/Spacegun_LP_03_Default_Metallic.jpg" id="2_tex"]
-[ext_resource type="Texture2D" path="res://assets/textures/space_gun/Spacegun_LP_03_Default_Roughness.jpg" id="3_tex"]
-[ext_resource type="Texture2D" path="res://assets/textures/space_gun/Spacegun_LP_03_Default_Normal.jpg" id="4_tex"]
+[ext_resource type="Texture2D" uid="uid://bl8hcu47po56y" path="res://assets/textures/space_gun/Spacegun_LP_03_Default_BaseColor.jpg" id="1_tex"]
+[ext_resource type="Texture2D" uid="uid://bskn4na2wvw1u" path="res://assets/textures/space_gun/Spacegun_LP_03_Default_Metallic.jpg" id="2_tex"]
+[ext_resource type="Texture2D" uid="uid://cfhqaiqa7nb1k" path="res://assets/textures/space_gun/Spacegun_LP_03_Default_Roughness.jpg" id="3_tex"]
+[ext_resource type="Texture2D" uid="uid://b2rf4lq557sgt" path="res://assets/textures/space_gun/Spacegun_LP_03_Default_Normal.jpg" id="4_tex"]
 
 [resource]
 resource_name = "space_gun_03_default"
 albedo_texture = ExtResource("1_tex")
 metallic = 1.0
 metallic_texture = ExtResource("2_tex")
-metallic_texture_channel = 0
 roughness_texture = ExtResource("3_tex")
-roughness_texture_channel = 0
 normal_enabled = true
 normal_texture = ExtResource("4_tex")

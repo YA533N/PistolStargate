@@ -1,60 +1,73 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://scripts/ui/pause_menu.gd" id="1_pause"]
+[ext_resource type="Texture2D" path="res://assets/textures/ui/title_art.jpg" id="2_art"]
+[ext_resource type="Script" path="res://scripts/ui/row_menu.gd" id="3_row_menu"]
+[ext_resource type="FontFile" path="res://assets/fonts/space.ttf" id="4_font"]
+
+[sub_resource type="Gradient" id="Gradient_shade"]
+offsets = PackedFloat32Array(0, 0.4, 1)
+colors = PackedColorArray(0, 0, 0, 0.15, 0, 0, 0, 0.3, 0, 0.02, 0.03, 0.9)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_shade"]
+gradient = SubResource("Gradient_shade")
+fill_to = Vector2(0, 1)
 
 [node name="PauseMenu" type="CanvasLayer"]
 process_mode = 3
 layer = 10
 script = ExtResource("1_pause")
 
-[node name="Dim" type="ColorRect" parent="."]
+[node name="Art" type="TextureRect" parent="."]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0, 0, 0, 0.6)
+mouse_filter = 2
+texture = ExtResource("2_art")
+expand_mode = 1
+stretch_mode = 6
 
-[node name="Center" type="CenterContainer" parent="."]
+[node name="Shade" type="TextureRect" parent="."]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
+texture = SubResource("GradientTexture2D_shade")
+expand_mode = 1
 
-[node name="Buttons" type="VBoxContainer" parent="Center"]
-custom_minimum_size = Vector2(360, 0)
-layout_mode = 2
-theme_override_constants/separation = 14
-
-[node name="Title" type="Label" parent="Center/Buttons"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 64
+[node name="Title" type="Label" parent="."]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -800.0
+offset_top = -440.0
+offset_right = -110.0
+offset_bottom = -370.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.64, 1, 0.96, 1)
+theme_override_fonts/font = ExtResource("4_font")
+theme_override_font_sizes/font_size = 56
 text = "PAUSED"
-horizontal_alignment = 1
+horizontal_alignment = 2
+vertical_alignment = 1
 
-[node name="ResumeButton" type="Button" parent="Center/Buttons"]
+[node name="Menu" type="VBoxContainer" parent="."]
 unique_name_in_owner = true
-layout_mode = 2
-theme_override_font_sizes/font_size = 32
-text = "Resume"
-
-[node name="RestartButton" type="Button" parent="Center/Buttons"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 32
-text = "Restart"
-
-[node name="MainMenuButton" type="Button" parent="Center/Buttons"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 32
-text = "Main Menu"
-
-[node name="QuitButton" type="Button" parent="Center/Buttons"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 32
-text = "Quit"
-
-[connection signal="pressed" from="Center/Buttons/ResumeButton" to="." method="_on_resume_pressed"]
-[connection signal="pressed" from="Center/Buttons/RestartButton" to="." method="_on_restart_pressed"]
-[connection signal="pressed" from="Center/Buttons/MainMenuButton" to="." method="_on_main_menu_pressed"]
-[connection signal="pressed" from="Center/Buttons/QuitButton" to="." method="_on_quit_pressed"]
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -356.0
+offset_bottom = -100.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+script = ExtResource("3_row_menu")
+options = PackedStringArray("Resume", "Restart", "Main Menu", "Quit")

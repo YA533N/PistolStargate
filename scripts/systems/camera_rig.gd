@@ -31,7 +31,10 @@ func _physics_process(delta: float) -> void:
 	var goal := target.global_position
 	var player := target as Player
 	if player and aim_lead > 0.0:
-		goal += (player.aim_point - goal) * aim_lead
+		# Sideways only: the aim point sits at gun height, which shouldn't lift the camera.
+		var lead := player.aim_point - goal
+		lead.y = 0.0
+		goal += lead * aim_lead
 	global_position = global_position.lerp(goal, 1.0 - exp(-follow_sharpness * delta))
 
 

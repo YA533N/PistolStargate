@@ -1,7 +1,7 @@
-[gd_resource type="StandardMaterial3D" format=3]
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://k30u3ai127vq"]
 
-[ext_resource type="Texture2D" path="res://assets/textures/ares_lmg/AresMagazineTexture.jpg" id="1_tex"]
-[ext_resource type="Texture2D" path="res://assets/textures/ares_lmg/AresMagazineTextureNormal.jpg" id="2_tex"]
+[ext_resource type="Texture2D" uid="uid://cxla6emdavvaj" path="res://assets/textures/ares_lmg/AresMagazineTexture.jpg" id="1_tex"]
+[ext_resource type="Texture2D" uid="uid://dfklgc8jpgi0p" path="res://assets/textures/ares_lmg/AresMagazineTextureNormal.jpg" id="2_tex"]
 
 [resource]
 resource_name = "ares_lmg_magazine"
