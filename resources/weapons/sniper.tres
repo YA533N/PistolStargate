@@ -1,7 +1,7 @@
-[gd_resource type="Resource" script_class="WeaponData" format=3]
+[gd_resource type="Resource" script_class="WeaponData" format=3 uid="uid://bqm4nttfb7iki"]
 
-[ext_resource type="Script" path="res://scripts/weapons/weapon_data.gd" id="1_script"]
-[ext_resource type="PackedScene" path="res://assets/models/weapons/sniper.glb" id="2_model"]
+[ext_resource type="Script" uid="uid://drxa31dsrmm8x" path="res://scripts/weapons/weapon_data.gd" id="1_script"]
+[ext_resource type="PackedScene" uid="uid://diqw4irqq8617" path="res://assets/models/weapons/sniper.glb" id="2_model"]
 
 [resource]
 script = ExtResource("1_script")
@@ -20,5 +20,5 @@ projectile_speed = 90.0
 projectile_size = 0.1
 projectile_color = Color(1, 0.7, 0.3, 1)
 projectile_range = 70.0
-pierce = 3
 max_ammo = 24
+pierce = 3

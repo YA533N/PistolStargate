@@ -63,18 +63,15 @@ func _intro() -> void:
 		"Now.",
 		"It didn't do anything to you. It doesn't matter. Kill it.",
 	]))
-	_objective("Kill the chicken with the Infinite Pistol  [Left click]")
 	_player.input_enabled = true
 	await chicken.killed
-
-	_objective("")
 	await _wait(1.8)
 	_player.input_enabled = false
 	await _trooper.say(PackedStringArray([
 		"...See that? It spilled everything it had.",
 		"That's how it works in here. Every life the Infinite Pistol takes pays out.",
 		"But it's empty now. It only recharges after you kill a few things with other guns.",
-		"So grab those weapons off the floor. Walk up to one and press F. Fast hands live longer.",
+		"So grab those weapons off the floor. Walk up to one and press E. Fast hands live longer.",
 		"Now you're ready for the true test.",
 	]))
 	GameState.proving_grounds_checkpoint = "boss"
@@ -99,7 +96,6 @@ func _restart_at_boss() -> void:
 
 func _start_boss_fight() -> void:
 	_player.input_enabled = true
-	_objective("Defeat THE FIRST DESCENDANT   •   grab weapons [F]   •   keep moving!")
 	var boss := FIRST_DESCENDANT.instantiate() as FirstDescendant
 	add_child(boss)
 	boss.global_position = _boss_spawn.global_position + Vector3.UP * 14.0
@@ -111,7 +107,6 @@ func _start_boss_fight() -> void:
 func _on_boss_defeated() -> void:
 	GameState.proving_grounds_checkpoint = ""
 	GameState.proving_grounds_done = true
-	_objective("")
 	_message("PROVING GROUNDS CLEARED", 3.0)
 	await _wait(3.5)
 	_trooper.global_position = Loot.landing_spot(_player, _player.global_position, 2.5, 2.5)
@@ -124,7 +119,6 @@ func _on_boss_defeated() -> void:
 	]))
 	_player.input_enabled = true
 	_set_portal_open(true)
-	_objective("Take the portal back to the hub")
 
 
 func _spawn_chicken() -> Chicken:
@@ -150,10 +144,6 @@ func _set_portal_open(open: bool) -> void:
 	_exit_portal.set_deferred("monitoring", open)
 	if open:
 		Effects.flash(self, _exit_portal.global_position + Vector3.UP * 2.0, Color(0.6, 0.9, 1), 3.0, 0.6)
-
-
-func _objective(text: String) -> void:
-	get_tree().call_group("hud", "set_objective", text)
 
 
 func _message(text: String, duration: float) -> void:

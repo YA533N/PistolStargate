@@ -1,4 +1,4 @@
-[gd_resource type="StandardMaterial3D" format=3]
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://b4yqd12s0m61g"]
 
 [resource]
 resource_name = "ares_lmg_blackrubber"

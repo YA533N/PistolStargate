@@ -1,4 +1,4 @@
-[gd_resource type="StandardMaterial3D" format=3]
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://be2lri7lo88x5"]
 
 [resource]
 resource_name = "FirstDescendantGlow"

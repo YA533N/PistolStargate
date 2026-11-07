@@ -2,7 +2,7 @@ class_name WeaponPickup
 extends Area3D
 ## A weapon lying on the floor, spinning above a beam and ring of light in its rarity colour.
 ## When the player walks into range, their Arsenal focuses the nearest one (the HUD shows its item card)
-## and interact (F) picks it up.
+## and interact (E) picks it up.
 
 ## For weapons placed in the editor. Code sets slot instead (that keeps the ammo of a dropped gun).
 @export var weapon: WeaponData

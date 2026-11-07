@@ -1,13 +1,16 @@
 extends CanvasLayer
 ## Esc toggles pause. This node's process_mode is Always, so it still runs while the tree is paused.
+## Shows the title art with Resume / Restart / Main Menu / Quit (see RowMenu).
 
 const MAIN_MENU := "res://scenes/ui/main_menu.tscn"
 
-@onready var _resume_button: Button = %ResumeButton
+@onready var _menu: RowMenu = %Menu
 
 
 func _ready() -> void:
 	visible = false
+	_menu.visible = false
+	_menu.chosen.connect(_on_menu_chosen)
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -19,23 +22,21 @@ func _unhandled_input(event: InputEvent) -> void:
 func _set_paused(paused: bool) -> void:
 	get_tree().paused = paused
 	visible = paused
+	# Hidden with the layer too, so it ignores up/down/accept during play.
+	_menu.visible = paused
 	if paused:
-		_resume_button.grab_focus()
+		_menu.reset()
 
 
-func _on_resume_pressed() -> void:
-	_set_paused(false)
-
-
-func _on_restart_pressed() -> void:
-	_set_paused(false)
-	get_tree().reload_current_scene()
-
-
-func _on_main_menu_pressed() -> void:
-	_set_paused(false)
-	get_tree().change_scene_to_file(MAIN_MENU)
-
-
-func _on_quit_pressed() -> void:
-	get_tree().quit()
+func _on_menu_chosen(index: int) -> void:
+	match index:
+		0:
+			_set_paused(false)
+		1:
+			_set_paused(false)
+			get_tree().reload_current_scene()
+		2:
+			_set_paused(false)
+			get_tree().change_scene_to_file(MAIN_MENU)
+		3:
+			get_tree().quit()

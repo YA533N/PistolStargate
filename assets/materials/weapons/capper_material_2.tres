@@ -1,6 +1,6 @@
-[gd_resource type="StandardMaterial3D" format=3]
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://bfmnleql5d3wu"]
 
-[ext_resource type="Texture2D" path="res://assets/textures/capper/CAPPER_Final_03.jpg" id="1_tex"]
+[ext_resource type="Texture2D" uid="uid://c6jy17qlni1ht" path="res://assets/textures/capper/CAPPER_Final_03.jpg" id="1_tex"]
 
 [resource]
 resource_name = "capper_material_2"

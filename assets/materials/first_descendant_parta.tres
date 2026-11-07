@@ -1,7 +1,7 @@
-[gd_resource type="StandardMaterial3D" format=3]
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://f0fyjreuth3a"]
 
-[ext_resource type="Texture2D" path="res://assets/textures/first_descendant/MOB_CMN_1020_B001_PartA_C_3.jpg" id="1"]
-[ext_resource type="Texture2D" path="res://assets/textures/first_descendant/MOB_CMN_1020_B001_PartA_N_2.jpg" id="2"]
+[ext_resource type="Texture2D" uid="uid://ckb547mhhcxj" path="res://assets/textures/first_descendant/MOB_CMN_1020_B001_PartA_C_3.jpg" id="1"]
+[ext_resource type="Texture2D" uid="uid://cuxjg7yjc6eqm" path="res://assets/textures/first_descendant/MOB_CMN_1020_B001_PartA_N_2.jpg" id="2"]
 
 [resource]
 resource_name = "FirstDescendantPartA"

@@ -12,7 +12,7 @@ signal conversation_finished
 @export var lines := PackedStringArray()
 ## Used instead of lines once the Proving Grounds is done. Leave empty to always use lines.
 @export var lines_after_tutorial := PackedStringArray()
-## Off: no prompt and F does nothing (for NPCs that only talk in scripted scenes).
+## Off: no prompt and E does nothing (for NPCs that only talk in scripted scenes).
 @export var can_talk := true
 ## Sends the player to this scene after the conversation, with a teleport flash. Empty: stay here.
 @export_file("*.tscn") var send_to_scene := ""

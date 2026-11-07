@@ -31,7 +31,8 @@ func launch(data: WeaponData, origin: Vector3, direction: Vector3, mask: int, on
 	_pierce_left = data.pierce
 	_bounces_left = data.bounces
 	global_position = origin
-	_velocity = Vector3(direction.x, 0.0, direction.z).normalized() * data.projectile_speed
+	# Keeps any downward angle (the player shooting from the grapple); enemies pass flat directions.
+	_velocity = direction.normalized() * data.projectile_speed
 	_build_mesh()
 	_face_velocity()
 
@@ -143,7 +144,9 @@ func _steer(delta: float) -> void:
 
 func _face_velocity() -> void:
 	if _velocity.length_squared() > 0.001:
-		look_at(global_position + _velocity, Vector3.UP)
+		# Straight down from the grapple, UP can't be the up vector.
+		var up := Vector3.UP if absf(_velocity.normalized().y) < 0.99 else Vector3.FORWARD
+		look_at(global_position + _velocity, up)
 
 
 func _build_mesh() -> void:

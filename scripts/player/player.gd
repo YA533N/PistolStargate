@@ -1,10 +1,6 @@
 class_name Player
 extends CharacterBody3D
-## Isometric player controller (GDD 13.1): camera-relative movement, jump, dash and mouse aim.
-## Grapple (hold to swing on a rope) is in. Slide is in too (tap to burst forward on the ground).
-## Weapons live in the Arsenal child (slots, ammo, swapping, pickups).
-## their input actions already exist in the Input Map.
-## Values marked "placeholder" are TBD in the GDD and need tuning in playtests.
+
 
 signal dash_charges_changed(charges: int, max_charges: int)
 
@@ -58,7 +54,7 @@ signal dash_charges_changed(charges: int, max_charges: int)
 @onready var body: Node3D = $Body
 @onready var arsenal: Arsenal = $Arsenal
 
-## Where the mouse cursor points on the player's ground plane. Weapons will fire toward it.
+## Where the mouse cursor points, at the held gun's muzzle height. Weapons fire toward it.
 var aim_point := Vector3.ZERO
 var dash_charges := 0
 ## Turned off during dialogue. The player still falls and finishes a dash, but ignores move/jump/dash/shoot.
@@ -298,8 +294,25 @@ func _update_aim() -> void:
 	if camera == null:
 		return
 	var mouse := get_viewport().get_mouse_position()
-	var ground := Plane(Vector3.UP, global_position.y)
-	var hit: Variant = ground.intersects_ray(camera.project_ray_origin(mouse), camera.project_ray_normal(mouse))
+	var ray_origin := camera.project_ray_origin(mouse)
+	var ray_normal := camera.project_ray_normal(mouse)
+	# Aim at gun height, not the floor: with the tilted camera, a bullet passing over a floor point shows up
+	# above it on screen, so it would miss the cursor.
+	var muzzle_height := arsenal.held.muzzle_position().y if arsenal.held else global_position.y + 1.0
+	var aim_height := muzzle_height
+	# What's under the cursor: an enemy, or the floor / a prop.
+	var under := get_world_3d().direct_space_state.intersect_ray(
+			PhysicsRayQueryParameters3D.create(ray_origin, ray_origin + ray_normal * 500.0, Combat.PLAYER_SHOT_MASK))
+	var hit: Variant = null
+	if not under.is_empty() and not is_on_floor() and Combat.health_of(under.collider):
+		# In the air (grapple, jump) with the cursor on an enemy: shoot down at exactly that spot on it.
+		hit = under.position
+	else:
+		# Up high, aim at gun height above the ground under the cursor, so shots angle down to enemies below.
+		# Never higher than the gun: on flat ground this is the same height and shots stay flat.
+		if not under.is_empty():
+			aim_height = minf(muzzle_height, under.position.y + muzzle_height - global_position.y)
+		hit = Plane(Vector3.UP, aim_height).intersects_ray(ray_origin, ray_normal)
 	if hit == null:
 		return
 	aim_point = hit

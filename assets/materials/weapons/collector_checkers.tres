@@ -1,9 +1,9 @@
-[gd_resource type="StandardMaterial3D" format=3]
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://dt7ayv64jw2vo"]
 
-[ext_resource type="Texture2D" path="res://assets/textures/collector/Checkers_baseColor.jpg" id="1_tex"]
-[ext_resource type="Texture2D" path="res://assets/textures/collector/Checkers_metallicRoughness.jpg" id="2_tex"]
-[ext_resource type="Texture2D" path="res://assets/textures/collector/Checkers_emissive.jpg" id="3_tex"]
-[ext_resource type="Texture2D" path="res://assets/textures/collector/Checkers_normal.jpg" id="4_tex"]
+[ext_resource type="Texture2D" uid="uid://xb608po3jouv" path="res://assets/textures/collector/Checkers_baseColor.jpg" id="1_tex"]
+[ext_resource type="Texture2D" uid="uid://b6e3sr465sg5s" path="res://assets/textures/collector/Checkers_metallicRoughness.jpg" id="2_tex"]
+[ext_resource type="Texture2D" uid="uid://bcmwqnoaigm87" path="res://assets/textures/collector/Checkers_emissive.jpg" id="3_tex"]
+[ext_resource type="Texture2D" uid="uid://bse73ldowhacy" path="res://assets/textures/collector/Checkers_normal.jpg" id="4_tex"]
 
 [resource]
 resource_name = "collector_checkers"
@@ -14,9 +14,9 @@ metallic_texture_channel = 2
 roughness_texture = ExtResource("2_tex")
 roughness_texture_channel = 1
 emission_enabled = true
-emission_operator = 1
 emission = Color(1, 1, 1, 1)
-emission_energy_multiplier = 2
+emission_energy_multiplier = 2.0
+emission_operator = 1
 emission_texture = ExtResource("3_tex")
 normal_enabled = true
 normal_texture = ExtResource("4_tex")

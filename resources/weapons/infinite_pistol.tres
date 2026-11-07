@@ -1,16 +1,15 @@
-[gd_resource type="Resource" script_class="WeaponData" format=3]
+[gd_resource type="Resource" script_class="WeaponData" format=3 uid="uid://ccvnmnam7tosg"]
 
-[ext_resource type="Script" path="res://scripts/weapons/weapon_data.gd" id="1_script"]
-[ext_resource type="PackedScene" path="res://assets/models/weapons/laugo_alien_pistol.glb" id="2_model"]
+[ext_resource type="Script" uid="uid://drxa31dsrmm8x" path="res://scripts/weapons/weapon_data.gd" id="1_script"]
+[ext_resource type="PackedScene" uid="uid://ctg01tjvqe20m" path="res://assets/models/weapons/laugo_alien_pistol.glb" id="2_model"]
 
 [resource]
 script = ExtResource("1_script")
 id = &"infinite_pistol"
 display_name = "The Infinite Pistol"
-weapon_type = "Pistol"
 rarity = 5
 level = 99
-description = "One shot instantly kills any normal enemy and makes it spill 2-3 weapons, ammo and cash. Recharges after 3 kills with other guns. Missed shots return to the chamber."
+description = "One shot instantly kills any normal enemy and makes it spill 2-3 weapons, ammo and cash. Recharges after 7 kills with other guns. Missed shots return to the chamber."
 flavor_text = "Bullets: infinite. Patience: not so much."
 model = ExtResource("2_model")
 model_scale = 2.5
@@ -26,5 +25,5 @@ projectile_range = 50.0
 max_ammo = 1
 instant_kill_normal = true
 elite_damage = 150
-kills_per_charge = 3
+kills_per_charge = 7
 refund_on_miss = true

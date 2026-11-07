@@ -1,4 +1,4 @@
-[gd_resource type="StandardMaterial3D" format=3]
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://bfby2h20jibl1"]
 
 [resource]
 resource_name = "FirstDescendantGlass"

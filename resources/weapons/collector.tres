@@ -1,7 +1,7 @@
-[gd_resource type="Resource" script_class="WeaponData" format=3]
+[gd_resource type="Resource" script_class="WeaponData" format=3 uid="uid://shbegs6pp0lp"]
 
-[ext_resource type="Script" path="res://scripts/weapons/weapon_data.gd" id="1_script"]
-[ext_resource type="PackedScene" path="res://assets/models/weapons/collector.glb" id="2_model"]
+[ext_resource type="Script" uid="uid://drxa31dsrmm8x" path="res://scripts/weapons/weapon_data.gd" id="1_script"]
+[ext_resource type="PackedScene" uid="uid://dns5dn3ahri18" path="res://assets/models/weapons/collector.glb" id="2_model"]
 
 [resource]
 script = ExtResource("1_script")
@@ -18,9 +18,8 @@ fire_rate = 1.8
 damage = 11
 pellets = 7
 spread_degrees = 26.0
-projectile_speed = 30.0
 projectile_size = 0.12
 projectile_color = Color(1, 0.3, 0.35, 1)
 projectile_range = 22.0
-bounces = 1
 max_ammo = 36
+bounces = 1
