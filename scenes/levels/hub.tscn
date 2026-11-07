@@ -14,6 +14,7 @@
 [ext_resource type="PackedScene" path="res://scenes/ui/dialogue_box.tscn" id="10_dialogue"]
 [ext_resource type="Material" path="res://assets/materials/metal_062c.tres" id="11_step"]
 [ext_resource type="PackedScene" uid="uid://dm8nsu5y804jf" path="res://assets/models/environment/portal_frame.fbx" id="12_portal_frame"]
+[ext_resource type="AudioStream" uid="uid://bhgiaqcxjiu" path="res://assets/audio/music/CasinoJazz.mp3" id="15_15q0k"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_hub"]
 sky_top_color = Color(0.42, 0.44, 0.5, 1)
@@ -222,3 +223,8 @@ player = NodePath("../Player")
 [node name="DialogueBox" parent="." unique_id=1292615429 instance=ExtResource("10_dialogue")]
 
 [node name="PauseMenu" parent="." unique_id=633660413 instance=ExtResource("5_pause")]
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1365199338]
+stream = ExtResource("15_15q0k")
+volume_db = -20.0
+autoplay = true

@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://3w8f3t05vsj6" path="res://scripts/ui/main_menu.gd" id="1_menu"]
 [ext_resource type="Texture2D" uid="uid://dlofv2fucthag" path="res://assets/textures/ui/pistol_stargate_poster.jpg" id="2_poster"]
+[ext_resource type="AudioStream" uid="uid://x65cm32gbnrt" path="res://assets/audio/music/MenuMusic.mp3" id="3_1g8jr"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_poster"]
 atlas = ExtResource("2_poster")
@@ -118,6 +119,11 @@ theme_override_styles/pressed = SubResource("StyleBoxFlat_pressed")
 theme_override_styles/hover = SubResource("StyleBoxFlat_hover")
 theme_override_styles/focus = SubResource("StyleBoxFlat_hover")
 text = "Quit"
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=2093306378]
+stream = ExtResource("3_1g8jr")
+volume_db = -20.0
+autoplay = true
 
 [connection signal="pressed" from="Column/PlayButton" to="." method="_on_play_pressed"]
 [connection signal="pressed" from="Column/QuitButton" to="." method="_on_quit_pressed"]

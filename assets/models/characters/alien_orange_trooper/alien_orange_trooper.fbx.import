@@ -4158,7 +4158,7 @@ _subresources={
 "Merged_Suit_LP": {
 "use_external/enabled": true,
 "use_external/fallback_path": "res://assets/materials/alien_orange_trooper.tres",
-"use_external/path": "res://assets/materials/alien_orange_trooper.tres"
+"use_external/path": "uid://deyydyq73iy5o"
 }
 }
 }
