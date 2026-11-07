@@ -22,6 +22,7 @@ config/icon="res://icon.svg"
 GameState="*res://scripts/systems/game_state.gd"
 DebugCheats="*res://scripts/systems/debug_cheats.gd"
 Transition="*res://scripts/systems/transition.gd"
+AudioManager="*uid://dex7y5bj3tfqa"
 
 [display]
 
@@ -39,6 +40,10 @@ project/assembly_name="Pistol Stargate"
 [editor_plugins]
 
 enabled=PackedStringArray("res://addons/lowpolyterrain/plugin.cfg")
+
+[filesystem]
+
+import/blender/enabled=false
 
 [input]
 

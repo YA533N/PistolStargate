@@ -124,6 +124,7 @@ func pick_up(pickup: WeaponPickup) -> void:
 		return
 	var slot := pickup.take()
 	add_weapon(slot)
+	AudioManager.play_sfx("weapon_pickup")
 	_message("Picked up %s" % slot.data.display_name, 1.2)
 
 
