@@ -95,25 +95,6 @@ mouse_filter = 2
 script = ExtResource("3_row_menu")
 options = PackedStringArray("Play", "Quit")
 
-[node name="Tagline" type="Label" parent="." unique_id=210198609]
-unique_name_in_owner = true
-layout_mode = 1
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -800.0
-offset_top = -76.0
-offset_right = -110.0
-offset_bottom = -40.0
-grow_horizontal = 0
-grow_vertical = 0
-theme_override_colors/font_color = Color(0.64, 1, 0.96, 0.55)
-theme_override_font_sizes/font_size = 20
-text = "if you click Quit, you a bitch"
-horizontal_alignment = 2
-
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=982848375]
 stream = ExtResource("5_x2yvf")
 volume_db = -20.0

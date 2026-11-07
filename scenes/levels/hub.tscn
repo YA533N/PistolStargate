@@ -44,7 +44,6 @@
 [ext_resource type="PackedScene" uid="uid://cth8hpfo0bgu7" path="res://assets/models/casino_pack/Casino_Free_Assets_glb/Screens_01.glb" id="42_72vfr"]
 [ext_resource type="Script" uid="uid://dxq4p56omxx80" path="res://addons/lowpolyterrain/LowPolyTerrainManager.gd" id="43_os0an"]
 [ext_resource type="Shader" uid="uid://dq4udl5a5fk1e" path="res://addons/lowpolyterrain/shader/terrain_paint_overlay.gdshader" id="44_w2bvw"]
-[ext_resource type="AudioStream" uid="uid://bhgiaqcxjiu" path="res://assets/audio/music/CasinoJazz.mp3" id="45_w2bvw"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_hub"]
 sky_top_color = Color(0.42, 0.44, 0.5, 1)
@@ -331,7 +330,7 @@ shape = SubResource("BoxShape3D_floor")
 [node name="Model" parent="Geometry/Floor" unique_id=1287824139 instance=ExtResource("6_floor")]
 transform = Transform3D(3.77713, 0, 0, 0, 1, 0, 0, 0, 3.67337, 0.038972378, 0.16067123, -0.067233086)
 
-[node name="Cube" parent="Geometry/Floor/Model" index="0" unique_id=500857096]
+[node name="Cube" parent="Geometry/Floor/Model" index="0" unique_id=1006978268]
 material_override = ExtResource("3_2ej64")
 mesh = SubResource("ArrayMesh_vkb7y")
 surface_material_override/0 = ExtResource("4_8b621")
@@ -516,19 +515,19 @@ omni_range = 8.0
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.18593407, 0, -10.262238)
 
 [node name="Flower_032" parent="Interior/Flowers" unique_id=702266047 instance=ExtResource("33_2hmge")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.6106596, -0.047522813, 20.695082)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.6106596, 0.4135941, 20.695082)
 
 [node name="Flower_033" parent="Interior/Flowers" unique_id=1322007631 instance=ExtResource("33_2hmge")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.6106596, -0.047522813, 28.463337)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.6106596, 0.3584679, 28.463337)
 
 [node name="Flower_034" parent="Interior/Flowers" unique_id=2109830216 instance=ExtResource("33_2hmge")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.6106596, -0.047522813, 15.531687)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.6106596, 0.38477919, 15.531687)
 
 [node name="Flower_035" parent="Interior/Flowers" unique_id=1173693406 instance=ExtResource("33_2hmge")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.0462008, -0.047522813, 21.466518)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.0462008, 0.44738773, 21.466518)
 
 [node name="Flower_036" parent="Interior/Flowers" unique_id=939900460 instance=ExtResource("33_2hmge")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.0462008, -0.047522813, 26.481789)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.0462008, 0.34986356, 26.481789)
 
 [node name="Chairs" type="Node3D" parent="Interior" unique_id=165390257]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.18593407, 0, -10.262238)
@@ -1023,10 +1022,5 @@ player = NodePath("../Player")
 [node name="PauseMenu" parent="." unique_id=633660413 instance=ExtResource("5_pause")]
 
 [node name="space_background" parent="." unique_id=113052979 instance=ExtResource("26_apkjd")]
-
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1018489254]
-stream = ExtResource("45_w2bvw")
-volume_db = -20.0
-autoplay = true
 
 [editable path="Geometry/Floor/Model"]

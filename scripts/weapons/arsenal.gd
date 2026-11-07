@@ -125,6 +125,7 @@ func pick_up(pickup: WeaponPickup) -> void:
 	if not is_instance_valid(pickup) or not pickup.can_be_picked():
 		return
 	var slot := pickup.take()
+	AudioManager.play_sfx("weapon_pickup")
 	add_weapon(slot)
 	_message("Picked up %s" % slot.data.display_name, 1.2)
 

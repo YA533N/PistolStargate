@@ -25,6 +25,8 @@ const TROOPER_COLOR := Color(1, 0.6, 0.2)
 
 
 func _ready() -> void:
+	AudioManager.play_music(preload("res://assets/audio/music/CasinoJazz.mp3"))
+
 	_set_portal_open(false)
 	if GameState.proving_grounds_checkpoint == "boss":
 		_restart_at_boss.call_deferred()
